@@ -435,10 +435,10 @@ Numero subclass: #Entero
 	
 	^self class with: value // aDivisor integerValue! !
 
-!Entero methodsFor: 'arithmetic operations' stamp: 'FG 4/23/2022 11:10:51'!
+!Entero methodsFor: 'arithmetic operations' stamp: 'FG 4/24/2022 15:51:40'!
 fibonacci
 
-	^self subclassResponsibility.
+	self subclassResponsibility.
 		! !
 
 !Entero methodsFor: 'arithmetic operations' stamp: 'HernanWilkinson 5/7/2016 21:00'!
@@ -478,20 +478,20 @@ printOn: aStream
 	aStream print: value ! !
 
 
-!Entero methodsFor: 'testing' stamp: 'NR 9/23/2018 22:17:55'!
+!Entero methodsFor: 'testing' stamp: 'FG 4/24/2022 15:50:53'!
 isNegative
 	
-	^value < 0! !
+	self subclassResponsibility .! !
 
-!Entero methodsFor: 'testing' stamp: 'HernanWilkinson 5/7/2016 20:14'!
+!Entero methodsFor: 'testing' stamp: 'FG 4/24/2022 15:50:56'!
 isOne
 	
-	^value = 1! !
+	self subclassResponsibility .! !
 
-!Entero methodsFor: 'testing' stamp: 'HernanWilkinson 5/7/2016 20:12'!
+!Entero methodsFor: 'testing' stamp: 'FG 4/24/2022 15:50:59'!
 isZero
 	
-	^value = 0! !
+	self subclassResponsibility .! !
 
 
 !Entero methodsFor: 'auxiliar arithmetic operations' stamp: 'FG 4/23/2022 11:21:52'!
@@ -578,6 +578,22 @@ Entero subclass: #Cero
 	poolDictionaries: ''
 	category: 'Numero-Exercise'!
 
+!Cero methodsFor: 'testing' stamp: 'FG 4/24/2022 15:46:58'!
+isNegative
+	
+	^false! !
+
+!Cero methodsFor: 'testing' stamp: 'FG 4/24/2022 15:47:48'!
+isOne
+	
+	^false.! !
+
+!Cero methodsFor: 'testing' stamp: 'FG 4/24/2022 15:47:51'!
+isZero
+	
+	^true.! !
+
+
 !Cero methodsFor: 'arithmetic operations' stamp: 'FG 4/23/2022 11:05:44'!
 fibonacci
 	
@@ -590,6 +606,22 @@ Entero subclass: #Negativo
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'Numero-Exercise'!
+
+!Negativo methodsFor: 'testing' stamp: 'FG 4/24/2022 15:48:10'!
+isNegative
+	
+	^true! !
+
+!Negativo methodsFor: 'testing' stamp: 'FG 4/24/2022 15:48:34'!
+isOne
+
+	^false.! !
+
+!Negativo methodsFor: 'testing' stamp: 'FG 4/24/2022 15:48:22'!
+isZero
+
+	^false.! !
+
 
 !Negativo methodsFor: 'arithmetic operations' stamp: 'FG 4/23/2022 11:02:07'!
 fibonacci
@@ -604,10 +636,26 @@ Entero subclass: #Positivo
 	poolDictionaries: ''
 	category: 'Numero-Exercise'!
 
-!Positivo methodsFor: 'arithmetic operations' stamp: 'FG 4/23/2022 11:11:46'!
+!Positivo methodsFor: 'arithmetic operations' stamp: 'FG 4/24/2022 15:51:46'!
 fibonacci
 
-	^self subclassResponsibility.! !
+	self subclassResponsibility.! !
+
+
+!Positivo methodsFor: 'testing' stamp: 'FG 4/24/2022 15:48:55'!
+isNegative
+	
+	^false! !
+
+!Positivo methodsFor: 'testing' stamp: 'FG 4/24/2022 15:51:06'!
+isOne
+	
+	self subclassResponsibility.! !
+
+!Positivo methodsFor: 'testing' stamp: 'FG 4/24/2022 15:49:06'!
+isZero
+
+	^false.! !
 
 
 !classDefinition: #MayorQueUno category: 'Numero-Exercise'!
@@ -616,6 +664,12 @@ Positivo subclass: #MayorQueUno
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'Numero-Exercise'!
+
+!MayorQueUno methodsFor: 'testing' stamp: 'FG 4/24/2022 15:49:45'!
+isOne
+	
+	^false.! !
+
 
 !MayorQueUno methodsFor: 'arithmetic operations' stamp: 'FG 4/23/2022 11:04:54'!
 fibonacci
@@ -634,6 +688,12 @@ Positivo subclass: #Uno
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'Numero-Exercise'!
+
+!Uno methodsFor: 'testing' stamp: 'FG 4/24/2022 15:50:04'!
+isOne
+	
+	^true! !
+
 
 !Uno methodsFor: 'arithmetic operations' stamp: 'FG 4/23/2022 11:04:44'!
 fibonacci
