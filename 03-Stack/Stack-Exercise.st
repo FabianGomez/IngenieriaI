@@ -144,7 +144,7 @@ TestCase subclass: #SentenceFinderByPrefixTest
 	poolDictionaries: ''
 	category: 'Stack-Exercise'!
 
-!SentenceFinderByPrefixTest methodsFor: 'as yet unclassified' stamp: 'FG 4/27/2022 21:01:59'!
+!SentenceFinderByPrefixTest methodsFor: 'testing' stamp: 'FG 4/27/2022 21:01:59'!
 test1FindExistingString
 	
 	|stack finder collection|
@@ -163,7 +163,7 @@ test1FindExistingString
 
 	! !
 
-!SentenceFinderByPrefixTest methodsFor: 'as yet unclassified' stamp: 'FG 4/27/2022 21:03:26'!
+!SentenceFinderByPrefixTest methodsFor: 'testing' stamp: 'FG 4/27/2022 21:03:26'!
 test2FindTwoExistingStrings
 	
 	|stack finder collection|
@@ -183,7 +183,7 @@ test2FindTwoExistingStrings
 
 	! !
 
-!SentenceFinderByPrefixTest methodsFor: 'as yet unclassified' stamp: 'FG 4/27/2022 21:09:27'!
+!SentenceFinderByPrefixTest methodsFor: 'testing' stamp: 'FG 4/27/2022 21:09:27'!
 test3AssertFindStringWithBlankSpacesThrowsError
 	
 	|stack finder |
@@ -203,7 +203,7 @@ test3AssertFindStringWithBlankSpacesThrowsError
 
 	! !
 
-!SentenceFinderByPrefixTest methodsFor: 'as yet unclassified' stamp: 'FG 4/27/2022 21:03:17'!
+!SentenceFinderByPrefixTest methodsFor: 'testing' stamp: 'FG 4/27/2022 21:03:17'!
 test3NotFoundString
 	
 	|stack finder collection|
@@ -221,7 +221,7 @@ test3NotFoundString
 
 	! !
 
-!SentenceFinderByPrefixTest methodsFor: 'as yet unclassified' stamp: 'FG 4/27/2022 21:08:36'!
+!SentenceFinderByPrefixTest methodsFor: 'testing' stamp: 'FG 4/27/2022 21:08:36'!
 test4FindDifferentCollectionsAfterPop
 	
 	|stack finder collection|
@@ -253,7 +253,7 @@ test4FindDifferentCollectionsAfterPop
 
 	! !
 
-!SentenceFinderByPrefixTest methodsFor: 'as yet unclassified' stamp: 'FG 4/27/2022 21:09:04'!
+!SentenceFinderByPrefixTest methodsFor: 'testing' stamp: 'FG 4/27/2022 21:09:04'!
 testAssert1FindEmptyStringThrowsError
 	
 	|stack finder |
@@ -273,7 +273,7 @@ testAssert1FindEmptyStringThrowsError
 
 	! !
 
-!SentenceFinderByPrefixTest methodsFor: 'as yet unclassified' stamp: 'FG 4/27/2022 21:09:19'!
+!SentenceFinderByPrefixTest methodsFor: 'testing' stamp: 'FG 4/27/2022 21:09:19'!
 testAssert2FindBlankSpaceStringThrowsError
 	
 	|stack finder |
@@ -483,16 +483,40 @@ Object subclass: #SentenceFinderByPrefix
 	poolDictionaries: ''
 	category: 'Stack-Exercise'!
 
-!SentenceFinderByPrefix methodsFor: 'as yet unclassified' stamp: 'FG 4/27/2022 21:01:06'!
+!SentenceFinderByPrefix methodsFor: 'operations' stamp: 'FG 4/28/2022 14:13:04'!
 findByPrefix: aPrefix insideStack: anOOStack
 
-	|auxiliarStack elementsFound|
+	|stackToPushSeenElements elementsFound|
 	
 	aPrefix = '' ifTrue: [self error: self class stringToFindEmpty ].
 	((aPrefix  findString: ' ') > 0) ifTrue: [self error: self class stringToFindHasSpaces ].
 
-	elementsFound := OrderedCollection new.
-	auxiliarStack := OOStack new.
+	stackToPushSeenElements := OOStack new.
+	
+	elementsFound := self selectAllElementsWithPrefix: aPrefix on: anOOStack pullAllElementsAndPushThemBackInto: stackToPushSeenElements	.
+	
+	self pushElementsBackFrom: stackToPushSeenElements To: anOOStack.
+	
+	^elementsFound.
+	! !
+
+
+!SentenceFinderByPrefix methodsFor: 'operations - private' stamp: 'FG 4/28/2022 14:12:51'!
+pushElementsBackFrom: stackToPushSeenElements To: anOOStack.
+	
+	[stackToPushSeenElements isEmpty ] whileFalse: [
+			
+			anOOStack push: (stackToPushSeenElements pop).
+		].
+	
+	^self.
+	! !
+
+!SentenceFinderByPrefix methodsFor: 'operations - private' stamp: 'FG 4/28/2022 14:11:03'!
+selectAllElementsWithPrefix: aPrefix on: anOOStack pullAllElementsAndPushThemBackInto: stackToPushSeenElements	
+	|elementsFound|
+	
+	elementsFound := OrderedCollection  new.
 	
 	[anOOStack isEmpty ] whileFalse: [
 			
@@ -502,13 +526,8 @@ findByPrefix: aPrefix insideStack: anOOStack
 			
 			(element beginsWith: aPrefix) ifTrue: [ elementsFound add: element ].
 			
-			auxiliarStack push: element.	
+			stackToPushSeenElements push: element.	
 		] .
-	
-	[auxiliarStack isEmpty ] whileFalse: [
-			
-			anOOStack push: (auxiliarStack pop).
-		].
 	
 	^elementsFound.
 	! !
