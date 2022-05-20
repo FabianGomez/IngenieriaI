@@ -132,6 +132,102 @@ test07PortfolioBalanceIsTheSumOfAllItsPortfoliosAndAccounts
 	
 	! !
 
+!PortfolioTest methodsFor: 'as yet unclassified' stamp: 'FG 5/19/2022 20:19:40'!
+test08PortfolioHasRegisteredReturnFalseWhenCreated
+
+	|portfolio account transaction|
+	
+	portfolio := Portfolio new.
+
+	account := ReceptiveAccount new.
+	transaction := Deposit register: 56 on: account .
+	
+	self deny: (portfolio hasRegistered: transaction).
+	
+	! !
+
+!PortfolioTest methodsFor: 'as yet unclassified' stamp: 'FG 5/19/2022 20:22:18'!
+test09PortfolioHasRegisteredReturnTrueWhenItsAccountHasTransactions
+
+	|portfolio account transaction|
+	
+	portfolio := Portfolio new.
+
+	account := ReceptiveAccount new.
+	transaction := Deposit register: 56 on: account .
+	
+	portfolio  addAccount: account.
+	
+	self assert: (portfolio hasRegistered: transaction).
+	
+	! !
+
+!PortfolioTest methodsFor: 'as yet unclassified' stamp: 'FG 5/19/2022 20:26:50'!
+test10PortfolioHasRegisteredReturnTrueWhenItsPortfolioHasTransactions
+
+	|portfolio anotherPortfolio account transaction|
+	
+	portfolio := Portfolio new.
+	
+	anotherPortfolio := Portfolio new.
+	account := ReceptiveAccount new.
+	transaction := Deposit register: 56 on: account .
+	anotherPortfolio  addAccount: account.
+	
+	portfolio addPortfolio: anotherPortfolio.
+	
+	self assert: (portfolio hasRegistered: transaction).
+	
+	! !
+
+!PortfolioTest methodsFor: 'as yet unclassified' stamp: 'FG 5/19/2022 20:35:53'!
+test11PortfolioTransactionsDoesNotHaveElementsWhenCreated
+
+	|portfolio account transaction|
+	
+	portfolio := Portfolio new.
+
+	account := ReceptiveAccount new.
+	transaction := Deposit register: 56 on: account .
+	
+	self deny: (portfolio transactions includes: transaction).
+	
+	! !
+
+!PortfolioTest methodsFor: 'as yet unclassified' stamp: 'FG 5/19/2022 21:32:13'!
+test12PortfolioTransactionsContainsItsAccountsTransactions
+
+	|portfolio account |
+	
+	portfolio := Portfolio new.
+
+	account := ReceptiveAccount new.
+	Deposit register: 56 on: account .
+	
+	portfolio addAccount: account.
+	
+	self assert: ((portfolio transactions) includesAllOf: (account transactions)).
+	
+	! !
+
+!PortfolioTest methodsFor: 'as yet unclassified' stamp: 'FG 5/19/2022 21:34:26'!
+test13PortfolioTransactionsContainsItsPortfolioTransactions
+
+	|portfolio anotherPortfolio account|
+	
+	portfolio := Portfolio new.
+	
+	anotherPortfolio := Portfolio new.
+	account := ReceptiveAccount new.
+	Deposit register: 56 on: account .
+	anotherPortfolio  addAccount: account.
+	
+	portfolio addPortfolio: anotherPortfolio.
+	
+	self assert: ((portfolio transactions) includesAllOf: (anotherPortfolio transactions)).
+	
+	! !
+
 
 !classDefinition: #ReceptiveAccountTest category: 'Portfolio-Ejercicio'!
 TestCase subclass: #ReceptiveAccountTest
@@ -308,7 +404,6 @@ initializeFor: aValue
 	value := aValue ! !
 
 
-
 !Withdraw methodsFor: 'value' stamp: 'FG 5/16/2022 20:21:57'!
 addToBalance: aBalanceToBeAddedTo
 
@@ -356,11 +451,26 @@ balance
 	partialBalance		:= partialBalance + (accounts sum: [:anAccount | anAccount balance] ifEmpty: [0]).
 	^partialBalance! !
 
+!Portfolio methodsFor: 'accessing' stamp: 'FG 5/19/2022 20:26:32'!
+hasRegistered: aTransaction 
+	 ^ (accounts anySatisfy: [:anAccount | anAccount hasRegistered: aTransaction ]) or: [portfolios anySatisfy: [:aPortfolio | aPortfolio hasRegistered: aTransaction ]].! !
+
 !Portfolio methodsFor: 'accessing' stamp: 'FG 5/16/2022 21:36:14'!
 initialize
 
 	accounts := OrderedCollection new.
 	portfolios := OrderedCollection new.! !
+
+!Portfolio methodsFor: 'accessing' stamp: 'FG 5/19/2022 21:37:47'!
+transactions
+	|listOfTransactions|
+	
+	listOfTransactions := accounts collect: [:anAccount | anAccount transactions ] andFold: [:aCollection :anotherCollection | aCollection addAllLast: anotherCollection ] ifEmpty: [OrderedCollection new].
+	
+	listOfTransactions addAllLast: (portfolios collect: [:aPortfolio | aPortfolio transactions ] andFold: [:aCollection :anotherCollection | aCollection addAllLast: anotherCollection ] ifEmpty: [OrderedCollection new]).
+	
+	^listOfTransactions.
+! !
 
 
 !classDefinition: #ReceptiveAccount category: 'Portfolio-Ejercicio'!
