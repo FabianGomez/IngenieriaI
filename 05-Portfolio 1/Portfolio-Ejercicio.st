@@ -1,3 +1,11 @@
+!classDefinition: #CannotAddAccountSummary category: 'Portfolio-Ejercicio'!
+Error subclass: #CannotAddAccountSummary
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'Portfolio-Ejercicio'!
+
+
 !classDefinition: #PortfolioTest category: 'Portfolio-Ejercicio'!
 TestCase subclass: #PortfolioTest
 	instanceVariableNames: ''
@@ -5,134 +13,116 @@ TestCase subclass: #PortfolioTest
 	poolDictionaries: ''
 	category: 'Portfolio-Ejercicio'!
 
-!PortfolioTest methodsFor: 'as yet unclassified' stamp: 'FG 5/16/2022 20:43:20'!
-test01PortfolioHaveZeroAsBalanceWhenCreated
+!PortfolioTest methodsFor: 'assertions' stamp: 'FG 5/22/2022 16:09:55'!
+assertPortfolioBalanceEquals: balanceCalculation afterDoing: aClosureOfTransactionsToProcess
 
 	|portfolio|
 	
 	portfolio := Portfolio new.
 	
-	self assert: portfolio balance = 0.! !
-
-!PortfolioTest methodsFor: 'as yet unclassified' stamp: 'FG 5/16/2022 21:51:12'!
-test02AccountWithTransaccionsIncreasePortfolioBalance
-
-	|portfolio account|
+	aClosureOfTransactionsToProcess value: portfolio.
 	
-	account := ReceptiveAccount  new.
-	portfolio := Portfolio new.
+	self assert: portfolio balance = balanceCalculation.! !
+
+!PortfolioTest methodsFor: 'assertions' stamp: 'FG 5/22/2022 16:54:29'!
+should: aClosureToFail raiseCannotAddAccountSummaryAfter: aClosureToProcess
+
+	aClosureToProcess value.
 	
-	Deposit register: 100 on: account.
-	portfolio addAccount: account.
-
-	self assert: portfolio balance equals: account balance.! !
-
-!PortfolioTest methodsFor: 'as yet unclassified' stamp: 'FG 5/16/2022 20:58:05'!
-test03AccountIncreasePortfolioBalanceAfterAdding
-
-	|portfolio account|
+	self should: aClosureToFail raise: CannotAddAccountSummary.
 	
-	account := ReceptiveAccount  new.
-	portfolio := Portfolio new.
+		
+	! !
+
+
+!PortfolioTest methodsFor: 'testing' stamp: 'FG 5/22/2022 16:10:45'!
+test01PortfolioHaveZeroAsBalanceWhenCreated
+
+	self assertPortfolioBalanceEquals: 0 afterDoing: [:portfolio | ^self].! !
+
+!PortfolioTest methodsFor: 'testing' stamp: 'FG 5/22/2022 16:49:19'!
+test02AccountWithTransactionsIncreasePortfolioBalance
+
+	|account|
 	
-	Deposit register: 100 on: account.
-	portfolio addAccount: account.
-	Deposit register: 50 on: account.
+	account := self createAccountWithDeposit: 100.
+	
+	self assertPortfolioBalanceEquals: account balance afterDoing: [:portfolio | portfolio addAccountSummary: account.].! !
 
-	self assert: portfolio balance = 150.! !
-
-!PortfolioTest methodsFor: 'as yet unclassified' stamp: 'FG 5/16/2022 21:00:39'!
+!PortfolioTest methodsFor: 'testing' stamp: 'FG 5/22/2022 16:28:50'!
 test04PortfolioBalanceIsTheSumOfAllItsAccounts
 
-	|portfolio account|
+	|account anotherAccount |
 	
-	account := ReceptiveAccount  new.
-	portfolio := Portfolio new.
-	
-	Deposit register: 100 on: account.
-	portfolio addAccount: account.
-	Deposit register: 50 on: account.
+	account := self createAccountWithDeposit: 100.
+	anotherAccount := self createAccountWithDeposit: 100.
 
-	account := ReceptiveAccount  new.
-	Deposit register: 100 on: account.
-	portfolio addAccount: account.
-	Withdraw register: 150 on: account.
-	
-	self assert: portfolio balance = 100.! !
+	self assertPortfolioBalanceEquals: 100
+	afterDoing:  [:portfolio | 
+		portfolio addAccountSummary: account.
+		Deposit register: 50 on: account.
+		
+		portfolio addAccountSummary: anotherAccount.
+		Withdraw register: 150 on: anotherAccount.
+	].! !
 
-!PortfolioTest methodsFor: 'as yet unclassified' stamp: 'FG 5/16/2022 21:25:48'!
-test05PortfolioWithPositiveBalanceIncreasePortfolioBalanceAfterAdding
+!PortfolioTest methodsFor: 'testing' stamp: 'FG 5/22/2022 17:19:29'!
+test05PortfolioWithPositiveBalanceIncreasePortfolioBalanceAfterBeingAdded
 
-	|account portfolio portfolioToAdd|
+	|account portfolioToAdd|
 	
-	account := ReceptiveAccount new.
-	Deposit register: 100 on: account .
+	account := self createAccountWithDeposit: 100.
+
+	portfolioToAdd := self createPortfolioWithAccountSummary: account.
 	
-	portfolioToAdd := Portfolio new.
-	portfolioToAdd addAccount: account.
-	
-	portfolio := Portfolio new.
-	portfolio addPortfolio: portfolioToAdd .
-	
-	self assert: portfolio balance = 100.
+	self assertPortfolioBalanceEquals: portfolioToAdd balance
+	afterDoing:  [:portfolio | 
+		portfolio addAccountSummary: portfolioToAdd .
+	].
 	
 	! !
 
-!PortfolioTest methodsFor: 'as yet unclassified' stamp: 'FG 5/16/2022 21:34:04'!
+!PortfolioTest methodsFor: 'testing' stamp: 'FG 5/22/2022 16:43:20'!
 test06PortfolioBalanceIsTheSumOfAllItsPortfolios
 
-	|account anotherAccount portfolio portfolioToAdd anotherPortfolioToAdd|
+	|account anotherAccount portfolioToAdd anotherPortfolioToAdd|
 	
-	account := ReceptiveAccount new.
-	Deposit register: 100 on: account .
-	
-	anotherAccount := ReceptiveAccount new.
-	Withdraw register: 20 on: anotherAccount .
-	
-	portfolioToAdd := Portfolio new.
-	portfolioToAdd addAccount: account.
-	
-	anotherPortfolioToAdd := Portfolio new.
-	anotherPortfolioToAdd addAccount: anotherAccount.
-	
-	portfolio := Portfolio new.
-	portfolio addPortfolio: portfolioToAdd .
-	portfolio addPortfolio: anotherPortfolioToAdd .
+	account := self createAccountWithDeposit: 100.
+	anotherAccount  := self createAccountWithWithdraw: 20.
 
-	self assert: portfolio balance = 80.
+	portfolioToAdd := self createPortfolioWithAccountSummary: account.
+	anotherPortfolioToAdd := self createPortfolioWithAccountSummary: anotherAccount.
+
+	self assertPortfolioBalanceEquals: (portfolioToAdd balance + anotherPortfolioToAdd balance)
+	afterDoing:  [:portfolio | 
+		portfolio addAccountSummary: portfolioToAdd .
+		portfolio addAccountSummary: anotherPortfolioToAdd .
+	].
 	
 	! !
 
-!PortfolioTest methodsFor: 'as yet unclassified' stamp: 'FG 5/16/2022 21:38:55'!
+!PortfolioTest methodsFor: 'testing' stamp: 'FG 5/22/2022 16:43:20'!
 test07PortfolioBalanceIsTheSumOfAllItsPortfoliosAndAccounts
 
-	|account anotherAccount portfolioAccount portfolio portfolioToAdd anotherPortfolioToAdd|
+	|account anotherAccount portfolioAccount portfolioToAdd anotherPortfolioToAdd|
 	
-	account := ReceptiveAccount new.
-	Deposit register: 100 on: account .
+	account := self createAccountWithDeposit: 100.
+	anotherAccount  := self createAccountWithWithdraw: 20.
+	portfolioAccount := self createAccountWithDeposit: 50.
 	
-	anotherAccount := ReceptiveAccount new.
-	Withdraw register: 20 on: anotherAccount .
-	
-	portfolioToAdd := Portfolio new.
-	portfolioToAdd addAccount: account.
-	
-	anotherPortfolioToAdd := Portfolio new.
-	anotherPortfolioToAdd addAccount: anotherAccount.
-	
-	portfolio := Portfolio new.
-	portfolio addPortfolio: portfolioToAdd .
-	portfolio addPortfolio: anotherPortfolioToAdd .
+	portfolioToAdd := self createPortfolioWithAccountSummary: account.
+	anotherPortfolioToAdd := self createPortfolioWithAccountSummary: anotherAccount.
 
-	portfolioAccount := ReceptiveAccount new.
-	Deposit register: 56 on: portfolioAccount .
-	portfolio addAccount: portfolioAccount .
-	
-	self assert: portfolio balance = 136.
+	self assertPortfolioBalanceEquals: (portfolioToAdd balance + anotherPortfolioToAdd balance + portfolioAccount balance)
+	afterDoing:  [:portfolio | 
+		portfolio addAccountSummary: portfolioToAdd .
+		portfolio addAccountSummary: anotherPortfolioToAdd .
+		portfolio addAccountSummary: portfolioAccount .
+	].
 	
 	! !
 
-!PortfolioTest methodsFor: 'as yet unclassified' stamp: 'FG 5/19/2022 20:19:40'!
+!PortfolioTest methodsFor: 'testing' stamp: 'FG 5/19/2022 20:19:40'!
 test08PortfolioHasRegisteredReturnFalseWhenCreated
 
 	|portfolio account transaction|
@@ -146,41 +136,36 @@ test08PortfolioHasRegisteredReturnFalseWhenCreated
 	
 	! !
 
-!PortfolioTest methodsFor: 'as yet unclassified' stamp: 'FG 5/19/2022 20:22:18'!
-test09PortfolioHasRegisteredReturnTrueWhenItsAccountHasTransactions
+!PortfolioTest methodsFor: 'testing' stamp: 'FG 5/22/2022 17:18:05'!
+test09PortfolioHasRegisteredReturnTrueWhenItsAccountIncludesTheTransaction
 
 	|portfolio account transaction|
-	
-	portfolio := Portfolio new.
 
 	account := ReceptiveAccount new.
 	transaction := Deposit register: 56 on: account .
 	
-	portfolio  addAccount: account.
+	portfolio := self createPortfolioWithAccountSummary: account.
 	
 	self assert: (portfolio hasRegistered: transaction).
 	
 	! !
 
-!PortfolioTest methodsFor: 'as yet unclassified' stamp: 'FG 5/19/2022 20:26:50'!
-test10PortfolioHasRegisteredReturnTrueWhenItsPortfolioHasTransactions
+!PortfolioTest methodsFor: 'testing' stamp: 'FG 5/22/2022 17:18:19'!
+test10PortfolioHasRegisteredReturnTrueWhenItsPortfolioIncludesTheTransaction
 
 	|portfolio anotherPortfolio account transaction|
 	
-	portfolio := Portfolio new.
-	
-	anotherPortfolio := Portfolio new.
 	account := ReceptiveAccount new.
 	transaction := Deposit register: 56 on: account .
-	anotherPortfolio  addAccount: account.
 	
-	portfolio addPortfolio: anotherPortfolio.
-	
+	anotherPortfolio  := self createPortfolioWithAccountSummary: account.
+	portfolio  := self createPortfolioWithAccountSummary: anotherPortfolio.
+
 	self assert: (portfolio hasRegistered: transaction).
 	
 	! !
 
-!PortfolioTest methodsFor: 'as yet unclassified' stamp: 'FG 5/19/2022 20:35:53'!
+!PortfolioTest methodsFor: 'testing' stamp: 'FG 5/19/2022 20:35:53'!
 test11PortfolioTransactionsDoesNotHaveElementsWhenCreated
 
 	|portfolio account transaction|
@@ -194,38 +179,156 @@ test11PortfolioTransactionsDoesNotHaveElementsWhenCreated
 	
 	! !
 
-!PortfolioTest methodsFor: 'as yet unclassified' stamp: 'FG 5/19/2022 21:32:13'!
+!PortfolioTest methodsFor: 'testing' stamp: 'FG 5/22/2022 17:11:24'!
 test12PortfolioTransactionsContainsItsAccountsTransactions
 
 	|portfolio account |
 	
-	portfolio := Portfolio new.
-
-	account := ReceptiveAccount new.
-	Deposit register: 56 on: account .
-	
-	portfolio addAccount: account.
+	account := self createAccountWithDeposit: 50.
+	portfolio := self createPortfolioWithAccountSummary: account.
 	
 	self assert: ((portfolio transactions) includesAllOf: (account transactions)).
 	
 	! !
 
-!PortfolioTest methodsFor: 'as yet unclassified' stamp: 'FG 5/19/2022 21:34:26'!
+!PortfolioTest methodsFor: 'testing' stamp: 'FG 5/22/2022 17:12:19'!
 test13PortfolioTransactionsContainsItsPortfolioTransactions
 
 	|portfolio anotherPortfolio account|
 	
-	portfolio := Portfolio new.
-	
-	anotherPortfolio := Portfolio new.
-	account := ReceptiveAccount new.
-	Deposit register: 56 on: account .
-	anotherPortfolio  addAccount: account.
-	
-	portfolio addPortfolio: anotherPortfolio.
+	account := self createAccountWithDeposit: 50.
+	anotherPortfolio := self createPortfolioWithAccountSummary: account.
+	portfolio := self createPortfolioWithAccountSummary: anotherPortfolio.
 	
 	self assert: ((portfolio transactions) includesAllOf: (anotherPortfolio transactions)).
 	
+	! !
+
+!PortfolioTest methodsFor: 'testing' stamp: 'FG 5/22/2022 16:56:36'!
+test14AddingAnAccountFailsIfTheAccountAlreadyExistsOnThePortfolio
+
+	|portfolio account|
+
+	self should: [portfolio addAccountSummary: account.] 
+		raiseCannotAddAccountSummaryAfter: [
+			account := self createAccountWithDeposit: 50.
+			portfolio := self createPortfolioWithAccountSummary: account.
+	]
+	
+		
+	! !
+
+!PortfolioTest methodsFor: 'testing' stamp: 'FG 5/22/2022 17:23:22'!
+test15AddingAnAccountFailsIfTheAccountAlreadyExistsOnAChildPortfolio
+
+	|portfolio account childPortfolio|
+
+	self should: [portfolio addAccountSummary: account.] 
+		raiseCannotAddAccountSummaryAfter: [
+			account := self createAccountWithDeposit: 50.
+			childPortfolio := self createPortfolioWithAccountSummary: account.
+			portfolio := self createPortfolioWithAccountSummary: childPortfolio.
+	]
+	
+		
+	! !
+
+!PortfolioTest methodsFor: 'testing' stamp: 'FG 5/22/2022 17:25:20'!
+test16AddingAnAccountFailsIfTheAccountAlreadyExistsOnAnySuccessorPortfolio
+
+	|portfolio account childPortfolio grandChildPortfolio|
+
+	self should: [portfolio addAccountSummary: account.] 
+		raiseCannotAddAccountSummaryAfter: [
+			account := self createAccountWithDeposit: 50.
+			grandChildPortfolio := self createPortfolioWithAccountSummary: account.
+			childPortfolio := self createPortfolioWithAccountSummary: grandChildPortfolio.
+			portfolio := self createPortfolioWithAccountSummary: childPortfolio.
+	]
+	
+		
+	! !
+
+!PortfolioTest methodsFor: 'testing' stamp: 'FG 5/22/2022 17:01:31'!
+test17AddingAnAccountFailsIfTheAccountAlreadyExistsOnTheParentPortfolio
+
+	|portfolio account childPortfolio|
+
+	self should: [childPortfolio addAccountSummary: account.] 
+		raiseCannotAddAccountSummaryAfter: [
+			account := self createAccountWithDeposit: 50.
+			childPortfolio := Portfolio new.
+			portfolio := self createPortfolioWithAccountSummary: childPortfolio.
+			portfolio addAccountSummary: account. 
+	]
+	
+		
+	! !
+
+!PortfolioTest methodsFor: 'testing' stamp: 'FG 5/22/2022 17:03:03'!
+test18AddingAnAccountFailsIfTheAccountAlreadyExistsOnAnyOfTheParentsPortfolio
+
+	|parentPortfolio account childPortfolio anotherParentPortfolio|
+
+	self should: [childPortfolio addAccountSummary: account.] 
+		raiseCannotAddAccountSummaryAfter: [
+			account := self createAccountWithDeposit: 50.
+			childPortfolio := Portfolio new.
+			parentPortfolio := self createPortfolioWithAccountSummary: childPortfolio.
+			parentPortfolio addAccountSummary: account. 
+			anotherParentPortfolio := self createPortfolioWithAccountSummary: childPortfolio.
+	]
+	
+		
+	! !
+
+!PortfolioTest methodsFor: 'testing' stamp: 'FG 5/22/2022 17:05:19'!
+test19AddingAnAccountFailsIfTheAccountAlreadyExistsOnTheTree
+	
+	|parentPortfolio account childPortfolio grandParentPortfolio|
+
+	self should: [childPortfolio addAccountSummary: account.] 
+		raiseCannotAddAccountSummaryAfter: [
+			account := self createAccountWithDeposit: 50.
+			childPortfolio := Portfolio new.
+			parentPortfolio := self createPortfolioWithAccountSummary: childPortfolio.
+			grandParentPortfolio := self createPortfolioWithAccountSummary: parentPortfolio.
+ 			grandParentPortfolio addAccountSummary: account. 
+	]
+	
+		
+	! !
+
+
+!PortfolioTest methodsFor: 'accountSummary' stamp: 'FG 5/22/2022 16:19:36'!
+createAccountWithDeposit: aValueToDeposit
+
+	|account|
+	
+	account := ReceptiveAccount  new.
+	Deposit register: aValueToDeposit on: account.
+	
+	^account! !
+
+!PortfolioTest methodsFor: 'accountSummary' stamp: 'FG 5/22/2022 16:39:09'!
+createAccountWithWithdraw: aValueToWithdraw
+
+	|account|
+	
+	account := ReceptiveAccount  new.
+	Withdraw register: aValueToWithdraw on: account.
+	
+	^account! !
+
+!PortfolioTest methodsFor: 'accountSummary' stamp: 'FG 5/22/2022 16:43:28'!
+createPortfolioWithAccountSummary: anAccountSummaryToBeAdded
+
+	| portfolio |
+	
+	portfolio := Portfolio new.
+	portfolio addAccountSummary: anAccountSummaryToBeAdded.
+	
+	^portfolio.
 	! !
 
 
@@ -236,88 +339,284 @@ TestCase subclass: #ReceptiveAccountTest
 	poolDictionaries: ''
 	category: 'Portfolio-Ejercicio'!
 
-!ReceptiveAccountTest methodsFor: 'tests' stamp: 'NR 11/2/2020 17:13:44'!
+!ReceptiveAccountTest methodsFor: 'tests' stamp: 'FG 5/22/2022 16:07:11'!
 test01ReceptiveAccountHaveZeroAsBalanceWhenCreated 
 
-	| account |
-	
-	account := ReceptiveAccount new.
-
-	self assert: 0 equals: account balance.
+	self assertAReceptiveAccount: [ :account | self assert: 0 equals: account balance.] afterDoing: [ :account | ^self ]
 ! !
 
-!ReceptiveAccountTest methodsFor: 'tests' stamp: 'NR 11/2/2020 17:13:48'!
+!ReceptiveAccountTest methodsFor: 'tests' stamp: 'FG 5/22/2022 16:07:11'!
 test02DepositIncreasesBalanceOnTransactionValue 
 
-	| account |
-	
-	account := ReceptiveAccount  new.
-	Deposit register: 100 on: account.
-		
-	self assert: 100 equals: account balance.
+	self assertAReceptiveAccount: [ :account | self assert: 100 equals: account balance.] afterDoing: [ :account | Deposit register: 100 on: account. ]
 ! !
 
-!ReceptiveAccountTest methodsFor: 'tests' stamp: 'NR 11/2/2020 17:13:52'!
+!ReceptiveAccountTest methodsFor: 'tests' stamp: 'FG 5/22/2022 16:07:11'!
 test03WithdrawDecreasesBalanceOnTransactionValue 
 
+	self assertAReceptiveAccount: 
+		[:account | self assert: 50 equals: account balance.] 
+	afterDoing: 
+		[:account | Deposit register: 100 on: account.
+		Withdraw register: 50 on: account.] 
+! !
+
+!ReceptiveAccountTest methodsFor: 'tests' stamp: 'FG 5/22/2022 16:07:11'!
+test04WithdrawValueMustBePositive 
+
+	| withdrawValue |
+	
+	withdrawValue := 50.
+
+	self assertAReceptiveAccount: [:account | self assert: withdrawValue equals: (Withdraw register: withdrawValue on: account) value] 
+	afterDoing: [:account | ^self].
+! !
+
+!ReceptiveAccountTest methodsFor: 'tests' stamp: 'FG 5/22/2022 16:07:11'!
+test05ReceptiveAccountKnowsRegisteredTransactions 
+
+	| deposit withdraw |
+	
+	self assertAReceptiveAccount: 
+		[:account | self assert: (account hasRegistered: deposit).
+			self assert: (account hasRegistered: withdraw).] 
+	afterDoing: 
+		[:account | deposit := Deposit register: 100 on: account.
+			withdraw := Withdraw register: 50 on: account.]
+! !
+
+!ReceptiveAccountTest methodsFor: 'tests' stamp: 'FG 5/22/2022 16:07:11'!
+test06ReceptiveAccountDoNotKnowNotRegisteredTransactions
+
+	| deposit withdraw |
+	
+	self assertAReceptiveAccount: 
+		[:account | self deny: (account hasRegistered: deposit).
+			self deny: (account hasRegistered: withdraw).] 
+	afterDoing: 
+		[:account |		deposit :=  Deposit for: 200.
+			withdraw := Withdraw for: 50.].
+! !
+
+!ReceptiveAccountTest methodsFor: 'tests' stamp: 'FG 5/22/2022 16:07:11'!
+test07AccountKnowsItsTransactions 
+
+	| deposit |
+	
+	self assertAReceptiveAccount: 
+		[:account | self assert: 1 equals: account transactions size.
+			self assert: (account transactions includes: deposit).] 
+	afterDoing: 
+		[:account |	 deposit := Deposit register: 50 on: account.].! !
+
+
+!ReceptiveAccountTest methodsFor: 'assertions' stamp: 'FG 5/22/2022 16:07:11'!
+assertAReceptiveAccount: anAssertClosure afterDoing: aClosureWithTransactionsToProcess
+
 	| account |
 	
 	account := ReceptiveAccount new.
-	Deposit register: 100 on: account.
-	Withdraw register: 50 on: account.
+	
+	aClosureWithTransactionsToProcess value: account.
+
+	anAssertClosure value: account.
+! !
+
+
+!classDefinition: #AccountSummary category: 'Portfolio-Ejercicio'!
+Object subclass: #AccountSummary
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'Portfolio-Ejercicio'!
+
+!AccountSummary methodsFor: 'balance' stamp: 'FG 5/21/2022 09:19:16'!
+balance
+
+	self subclassResponsibility.! !
+
+
+!AccountSummary methodsFor: 'testing' stamp: 'FG 5/21/2022 09:18:56'!
+hasRegistered: aTransaction
+	
+	self subclassResponsibility.! !
+
+!AccountSummary methodsFor: 'testing' stamp: 'FG 5/21/2022 10:38:35'!
+includesAccount: aReceptiveAccount 
+	
+	self subclassResponsibility.! !
+
+
+!AccountSummary methodsFor: 'initialization' stamp: 'FG 5/21/2022 09:17:46'!
+initialize
+
+	self subclassResponsibility.! !
+
+
+!AccountSummary methodsFor: 'transactions' stamp: 'FG 5/21/2022 09:19:48'!
+transactions
+
+	self subclassResponsibility.! !
+
+
+!AccountSummary methodsFor: 'adding - private' stamp: 'FG 5/22/2022 11:03:31'!
+addParent: aParentPortfolio 
+	
+	self subclassResponsibility.! !
+
+
+!classDefinition: #Portfolio category: 'Portfolio-Ejercicio'!
+AccountSummary subclass: #Portfolio
+	instanceVariableNames: 'accountSummaries parents'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'Portfolio-Ejercicio'!
+
+!Portfolio methodsFor: 'initialization' stamp: 'FG 5/22/2022 10:35:54'!
+initialize
+
+	accountSummaries := OrderedCollection new.
+	parents := OrderedCollection new.! !
+
+
+!Portfolio methodsFor: 'transactions' stamp: 'FG 5/22/2022 11:20:26'!
+transactions
+	
+	^ accountSummaries 
+		inject: OrderedCollection new
+		into: [ :transactions :anAccountSummary | transactions addAll: anAccountSummary transactions; yourself ].
+! !
+
+
+!Portfolio methodsFor: 'testing' stamp: 'FG 5/22/2022 10:59:09'!
+hasRegistered: aTransaction 
+	
+	 ^ accountSummaries anySatisfy: [:anAccountSummary | anAccountSummary hasRegistered: aTransaction ]! !
+
+!Portfolio methodsFor: 'testing' stamp: 'FG 5/21/2022 10:40:38'!
+includesAccount: aReceptiveAccount 
+	
+	^accountSummaries anySatisfy: [ :anAccountSummary | anAccountSummary includesAccount: aReceptiveAccount].! !
+
+!Portfolio methodsFor: 'testing' stamp: 'FG 5/21/2022 10:54:13'!
+includesPortfolio: aPortfolio 
+	
+	^accountSummaries anySatisfy: [ :anAccountSummary | anAccountSummary includesPortfolio: aPortfolio].! !
+
+
+!Portfolio methodsFor: 'adding' stamp: 'FG 5/22/2022 11:03:31'!
+addAccountSummary: anAccountSummaryToAdd
 		
-	self assert: 50 equals: account balance.
+	anAccountSummaryToAdd assertCanBeAddedTo: self.
+	
+	anAccountSummaryToAdd addParent: self.
+	
+	accountSummaries add: anAccountSummaryToAdd.! !
+
+
+!Portfolio methodsFor: 'balance' stamp: 'FG 5/21/2022 09:44:55'!
+balance
+	
+	^accountSummaries sum: [:anAccountSummary | anAccountSummary balance] ifEmpty: [0].! !
+
+
+!Portfolio methodsFor: 'add asserting - private' stamp: 'FG 5/22/2022 15:37:08'!
+assertAccountSummariesSatisfy: aClosureToBeSatified onRecursionDo: aRecursionStep
+
+	parents isEmpty ifTrue: [
+		(accountSummaries anySatisfy: aClosureToBeSatified) ifTrue: [^CannotAddAccountSummary signal].
+	] ifFalse: [
+		parents do: aRecursionStep.
+	]! !
+
+!Portfolio methodsFor: 'add asserting - private' stamp: 'FG 5/22/2022 15:38:02'!
+assertCanAddPortfolio: aPortfolioToBeAddedTo
+
+	self assertAccountSummariesSatisfy:  [ :anAccountSummary |				anAccountSummary includesPortfolio: aPortfolioToBeAddedTo] 
+		onRecursionDo: [:aParent | aParent assertCanAddPortfolio: aPortfolioToBeAddedTo. ].
 ! !
 
-!ReceptiveAccountTest methodsFor: 'tests' stamp: 'HAW 5/23/2019 15:20:32'!
-test04WithdrawValueMustBePositive 
+!Portfolio methodsFor: 'add asserting - private' stamp: 'FG 5/22/2022 15:38:45'!
+assertCanAddReceptiveAccount: aReceptiveAccountToBeAddedTo
 
-	| account withdrawValue |
+	self assertAccountSummariesSatisfy:  [ :anAccountSummary |				anAccountSummary includesAccount: aReceptiveAccountToBeAddedTo] 
+		onRecursionDo: [:aParent | aParent assertCanAddReceptiveAccount: aReceptiveAccountToBeAddedTo. ].! !
+
+!Portfolio methodsFor: 'add asserting - private' stamp: 'FG 5/21/2022 11:01:28'!
+assertCanBeAddedTo: aPortfolioToBeAddedTo
 	
-	account := ReceptiveAccount new.
-	withdrawValue := 50.
+	^aPortfolioToBeAddedTo assertCanAddPortfolio: self.! !
+
+
+!Portfolio methodsFor: 'adding - private' stamp: 'FG 5/22/2022 11:03:31'!
+addParent: aParentPortfolio 
 	
-	self assert: withdrawValue equals: (Withdraw register: withdrawValue on: account) value
+	parents add: aParentPortfolio.! !
+
+
+!classDefinition: #ReceptiveAccount category: 'Portfolio-Ejercicio'!
+AccountSummary subclass: #ReceptiveAccount
+	instanceVariableNames: 'transactions'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'Portfolio-Ejercicio'!
+
+!ReceptiveAccount methodsFor: 'initialization' stamp: 'NR 10/17/2019 15:06:56'!
+initialize
+
+	transactions := OrderedCollection new.! !
+
+
+!ReceptiveAccount methodsFor: 'transactions' stamp: 'HernanWilkinson 7/13/2011 18:37'!
+register: aTransaction
+
+	transactions add: aTransaction 
 ! !
 
-!ReceptiveAccountTest methodsFor: 'tests' stamp: 'NR 5/16/2022 16:18:39'!
-test05ReceptiveAccountKnowsRegisteredTransactions 
+!ReceptiveAccount methodsFor: 'transactions' stamp: 'HernanWilkinson 7/13/2011 18:37'!
+transactions 
 
-	| account deposit withdraw |
-	
-	account := ReceptiveAccount new.
-	deposit := Deposit register: 100 on: account.
-	withdraw := Withdraw register: 50 on: account.
-		
-	self assert: (account hasRegistered: deposit).
-	self assert: (account hasRegistered: withdraw).
+	^ transactions copy! !
+
+
+!ReceptiveAccount methodsFor: 'balance' stamp: 'FG 5/22/2022 11:40:33'!
+balance
+
+	|acc|
+	acc := 0.
+	transactions do: [:aTransaction | acc := aTransaction addToBalance: acc. ].
+	^acc.! !
+
+
+!ReceptiveAccount methodsFor: 'testing' stamp: 'NR 10/17/2019 03:28:43'!
+hasRegistered: aTransaction
+
+	^ transactions includes: aTransaction 
 ! !
 
-!ReceptiveAccountTest methodsFor: 'tests' stamp: 'NR 5/16/2022 16:19:11'!
-test06ReceptiveAccountDoNotKnowNotRegisteredTransactions
-
-	| deposit withdraw account |
+!ReceptiveAccount methodsFor: 'testing' stamp: 'FG 5/21/2022 10:38:20'!
+includesAccount: aReceptiveAccount 
 	
-	account := ReceptiveAccount new.
-	deposit :=  Deposit for: 200.
-	withdraw := Withdraw for: 50.
-	
-	self deny: (account hasRegistered: deposit).
-	self deny: (account hasRegistered:withdraw).
+	^self = aReceptiveAccount.
 ! !
 
-!ReceptiveAccountTest methodsFor: 'tests' stamp: 'NR 11/2/2020 17:14:01'!
-test07AccountKnowsItsTransactions 
-
-	| account1 deposit1 |
+!ReceptiveAccount methodsFor: 'testing' stamp: 'FG 5/21/2022 10:54:56'!
+includesPortfolio: aPortfolio
 	
-	account1 := ReceptiveAccount new.
-	
-	deposit1 := Deposit register: 50 on: account1.
-		
-	self assert: 1 equals: account1 transactions size.
-	self assert: (account1 transactions includes: deposit1).
+	^aPortfolio includesAccount: self.
 ! !
+
+
+!ReceptiveAccount methodsFor: 'add asserting - private' stamp: 'FG 5/21/2022 11:03:16'!
+assertCanBeAddedTo: aPortfolioToBeAddedTo
+	
+	^aPortfolioToBeAddedTo assertCanAddReceptiveAccount: self.! !
+
+
+!ReceptiveAccount methodsFor: 'adding - private' stamp: 'FG 5/22/2022 11:03:31'!
+addParent: aParentPortfolio 
+	
+	^self.! !
 
 
 !classDefinition: #AccountTransaction category: 'Portfolio-Ejercicio'!
@@ -374,7 +673,7 @@ value
 	^ value! !
 
 
-!Deposit methodsFor: 'balance' stamp: 'FG 5/16/2022 20:21:52'!
+!Deposit methodsFor: 'balance' stamp: 'FG 5/22/2022 11:37:17'!
 addToBalance: aBalanceToBeAddedTo
 
 	^aBalanceToBeAddedTo + value.! !
@@ -404,15 +703,16 @@ initializeFor: aValue
 	value := aValue ! !
 
 
-!Withdraw methodsFor: 'value' stamp: 'FG 5/16/2022 20:21:57'!
-addToBalance: aBalanceToBeAddedTo
-
-	^aBalanceToBeAddedTo - value.! !
-
 !Withdraw methodsFor: 'value' stamp: 'HernanWilkinson 7/13/2011 18:33'!
 value
 
 	^ value! !
+
+
+!Withdraw methodsFor: 'balance' stamp: 'FG 5/16/2022 20:21:57'!
+addToBalance: aBalanceToBeAddedTo
+
+	^aBalanceToBeAddedTo - value.! !
 
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
@@ -424,93 +724,3 @@ Withdraw class
 for: aValue
 
 	^ self new initializeFor: aValue ! !
-
-
-!classDefinition: #Portfolio category: 'Portfolio-Ejercicio'!
-Object subclass: #Portfolio
-	instanceVariableNames: 'accounts portfolios'
-	classVariableNames: ''
-	poolDictionaries: ''
-	category: 'Portfolio-Ejercicio'!
-
-!Portfolio methodsFor: 'accessing' stamp: 'FG 5/16/2022 21:20:32'!
-addAccount: aReceptiveAccount 
-	
-	accounts add: aReceptiveAccount.! !
-
-!Portfolio methodsFor: 'accessing' stamp: 'FG 5/16/2022 21:36:27'!
-addPortfolio: aPortfolioToBeAdded 
-	
-	portfolios add: aPortfolioToBeAdded.! !
-
-!Portfolio methodsFor: 'accessing' stamp: 'FG 5/16/2022 21:43:12'!
-balance
-	|partialBalance| 
-	
-	partialBalance := portfolios sum: [:aPortfolio | aPortfolio balance] ifEmpty: [0].
-	partialBalance		:= partialBalance + (accounts sum: [:anAccount | anAccount balance] ifEmpty: [0]).
-	^partialBalance! !
-
-!Portfolio methodsFor: 'accessing' stamp: 'FG 5/19/2022 20:26:32'!
-hasRegistered: aTransaction 
-	 ^ (accounts anySatisfy: [:anAccount | anAccount hasRegistered: aTransaction ]) or: [portfolios anySatisfy: [:aPortfolio | aPortfolio hasRegistered: aTransaction ]].! !
-
-!Portfolio methodsFor: 'accessing' stamp: 'FG 5/16/2022 21:36:14'!
-initialize
-
-	accounts := OrderedCollection new.
-	portfolios := OrderedCollection new.! !
-
-!Portfolio methodsFor: 'accessing' stamp: 'FG 5/19/2022 21:37:47'!
-transactions
-	|listOfTransactions|
-	
-	listOfTransactions := accounts collect: [:anAccount | anAccount transactions ] andFold: [:aCollection :anotherCollection | aCollection addAllLast: anotherCollection ] ifEmpty: [OrderedCollection new].
-	
-	listOfTransactions addAllLast: (portfolios collect: [:aPortfolio | aPortfolio transactions ] andFold: [:aCollection :anotherCollection | aCollection addAllLast: anotherCollection ] ifEmpty: [OrderedCollection new]).
-	
-	^listOfTransactions.
-! !
-
-
-!classDefinition: #ReceptiveAccount category: 'Portfolio-Ejercicio'!
-Object subclass: #ReceptiveAccount
-	instanceVariableNames: 'transactions'
-	classVariableNames: ''
-	poolDictionaries: ''
-	category: 'Portfolio-Ejercicio'!
-
-!ReceptiveAccount methodsFor: 'initialization' stamp: 'NR 10/17/2019 15:06:56'!
-initialize
-
-	transactions := OrderedCollection new.! !
-
-
-!ReceptiveAccount methodsFor: 'transactions' stamp: 'HernanWilkinson 7/13/2011 18:37'!
-register: aTransaction
-
-	transactions add: aTransaction 
-! !
-
-!ReceptiveAccount methodsFor: 'transactions' stamp: 'HernanWilkinson 7/13/2011 18:37'!
-transactions 
-
-	^ transactions copy! !
-
-
-!ReceptiveAccount methodsFor: 'balance' stamp: 'FG 5/16/2022 20:19:25'!
-balance
-
-	"^transactions sum: [ :aTransaction | (aTransaction isKindOf: Deposit) ifTrue: [aTransaction value] ifFalse: [-1 * aTransaction value] ] ifEmpty: [ 0 ]."
-	
-	|acc|
-	acc := 0.
-	transactions do: [:aTransaction | acc := aTransaction addToBalance: acc. ].
-	^acc.! !
-
-
-!ReceptiveAccount methodsFor: 'testing' stamp: 'NR 10/17/2019 03:28:43'!
-hasRegistered: aTransaction
-
-	^ transactions includes: aTransaction 
-! !
