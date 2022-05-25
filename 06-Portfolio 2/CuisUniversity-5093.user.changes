@@ -1,0 +1,2006 @@
+
+
+----STARTUP---- (25 May 2022 16:43:29) as C:\Users\Fabian\Desktop\Ing1\Ejercicio 6\windows64\CuisUniversity-5093.image!
+
+
+----End fileIn of C:\Users\Fabian\Desktop\Ing1\Ejercicio 6\windows64\Portfolio-Solucion.st----!
+
+TestCase subclass: #TransactionTest
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'Portfolio-Solucion'!
+
+!classDefinition: #TransactionTest category: 'Portfolio-Solucion' stamp: 'FG 5/25/2022 16:54:31'!
+TestCase subclass: #TransactionTest
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'Portfolio-Solucion'!
+!TransactionTest methodsFor: 'testing' stamp: 'FG 5/25/2022 17:07:16'!
+test01TransferFromOneAccountToAnotherChangesTheBalancesCorrectly
+
+	! !
+
+!classDefinition: #Transfer category: 'Portfolio-Solucion' stamp: 'FG 5/25/2022 17:11:36'!
+Object subclass: #Transfer
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'Portfolio-Solucion'!
+!TransactionTest methodsFor: 'testing' stamp: 'FG 5/25/2022 17:11:27' prior: 50474558!
+test01TransferFromOneAccountToAnotherChangesTheBalancesCorrectly
+
+	|depositAccount withdrawAccount transfer|
+	
+	depositAccount  := ReceptiveAccount new.
+	withdrawAccount := ReceptiveAccount  new.
+		
+	transfer := Transfer registerTransfer: 10 from: withdrawAccount to: depositAccount.
+	
+	self assert: depositAccount balance = 10.
+	self assert: withdrawAccount balance = -10.! !
+!TransactionTest methodsFor: 'testing' stamp: 'FG 5/25/2022 17:11:48' prior: 50474570!
+test01TransferFromOneAccountToAnotherChangesTheBalancesCorrectly
+
+	|depositAccount withdrawAccount|
+	
+	depositAccount  := ReceptiveAccount new.
+	withdrawAccount := ReceptiveAccount  new.
+		
+	Transfer registerTransfer: 10 from: withdrawAccount to: depositAccount.
+	
+	self assert: depositAccount balance = 10.
+	self assert: withdrawAccount balance = -10.! !
+
+!testRun: #TransactionTest #test01TransferFromOneAccountToAnotherChangesTheBalancesCorrectly stamp: 'FG 5/25/2022 17:11:52'!
+ERROR!
+!Transfer class methodsFor: 'instance creation' stamp: 'FG 5/25/2022 17:12:01'!
+registerTransfer: aSmallInteger from: aReceptiveAccount to: aReceptiveAccount3 
+	"DO NOT FORGET TO RENAME COLLABORATORS AND REMOVE THIS COMMENT!!!!"
+	self shouldBeImplemented.
+	^self new initializeRegisterTransfer: aSmallInteger from: aReceptiveAccount to: aReceptiveAccount3 ! !
+!Transfer class methodsFor: 'instance creation' stamp: 'FG 5/25/2022 17:13:17' prior: 50474603!
+registerTransfer: anAmountToTransfer from: aWithdrawAccount to: aDepositAccount 
+
+	^self new initializeTransferOf: anAmountToTransfer from: aWithdrawAccount to: aDepositAccount.! !
+
+!testRun: #TransactionTest #test01TransferFromOneAccountToAnotherChangesTheBalancesCorrectly stamp: 'FG 5/25/2022 17:13:20'!
+ERROR!
+
+!classDefinition: #Transfer category: 'Portfolio-Solucion' stamp: 'FG 5/25/2022 17:13:36'!
+Object subclass: #Transfer
+	instanceVariableNames: 'amountToTransfer'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'Portfolio-Solucion'!
+
+!classDefinition: #Transfer category: 'Portfolio-Solucion' stamp: 'FG 5/25/2022 17:13:36'!
+Object subclass: #Transfer
+	instanceVariableNames: 'amountToTransfer withdrawAccount'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'Portfolio-Solucion'!
+
+!classDefinition: #Transfer category: 'Portfolio-Solucion' stamp: 'FG 5/25/2022 17:13:36'!
+Object subclass: #Transfer
+	instanceVariableNames: 'amountToTransfer withdrawAccount depositAccount'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'Portfolio-Solucion'!
+!Transfer methodsFor: 'initialization' stamp: 'FG 5/25/2022 17:13:36'!
+initializeTransferOf: anAmountToTransfer from: aWithdrawAccount to: aDepositAccount 
+	self shouldBeImplemented.
+	amountToTransfer := anAmountToTransfer.
+	withdrawAccount := aWithdrawAccount.
+	depositAccount := aDepositAccount.! !
+!Transfer methodsFor: 'initialization' stamp: 'FG 5/25/2022 17:13:47' prior: 50474652!
+initializeTransferOf: anAmountToTransfer from: aWithdrawAccount to: aDepositAccount 
+
+	! !
+!Transfer methodsFor: 'initialization' stamp: 'FG 5/25/2022 17:13:54' prior: 50474662!
+initializeTransferOf: anAmountToTransfer from: aWithdrawAccount to: aDepositAccount 
+
+	"amountToTransfer := anAmountToTransfer.
+	withdrawAccount := aWithdrawAccount.
+	depositAccount := aDepositAccount."! !
+
+!testRun: #TransactionTest #test01TransferFromOneAccountToAnotherChangesTheBalancesCorrectly stamp: 'FG 5/25/2022 17:13:56'!
+FAILURE!
+!Transfer methodsFor: 'initialization' stamp: 'FG 5/25/2022 17:14:59' prior: 50474668!
+initializeTransferOf: anAmountToTransfer from: aWithdrawAccount to: aDepositAccount 
+
+	Deposit register: anAmountToTransfer on: aDepositAccount.
+	Withdraw register: anAmountToTransfer on: aWithdrawAccount.
+	"amountToTransfer := anAmountToTransfer.
+	withdrawAccount := aWithdrawAccount.
+	depositAccount := aDepositAccount."! !
+
+!testRun: #TransactionTest #test01TransferFromOneAccountToAnotherChangesTheBalancesCorrectly stamp: 'FG 5/25/2022 17:15:08'!
+PASSED!
+
+!testRun: #TransactionTest #test01TransferFromOneAccountToAnotherChangesTheBalancesCorrectly stamp: 'FG 5/25/2022 17:15:08'!
+PASSED!
+
+Object subclass: #Transfer
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'Portfolio-Solucion'!
+
+!classDefinition: #Transfer category: 'Portfolio-Solucion' stamp: 'FG 5/25/2022 17:15:17'!
+Object subclass: #Transfer
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'Portfolio-Solucion'!
+
+!classRenamed: #TransactionTest as: #TranferTest stamp: 'FG 5/25/2022 17:15:37'!
+Smalltalk renameClassNamed: #TransactionTest as: #TranferTest!
+
+!classRenamed: #TranferTest as: #TransferTest stamp: 'FG 5/25/2022 17:15:43'!
+Smalltalk renameClassNamed: #TranferTest as: #TransferTest!
+!TransferTest methodsFor: 'testing' stamp: 'FG 5/25/2022 17:28:51'!
+test02TransferIsRegisteredOnDepositAccount
+
+	|depositAccount withdrawAccount transfer|
+	
+	depositAccount  := ReceptiveAccount new.
+	withdrawAccount := ReceptiveAccount  new.
+		
+	transfer := Transfer registerTransfer: 10 from: withdrawAccount to: depositAccount.
+	
+	self assert: (depositAccount hasRegistered: transfer).! !
+
+!testRun: #TransferTest #test02TransferIsRegisteredOnDepositAccount stamp: 'FG 5/25/2022 17:28:56'!
+FAILURE!
+!ReceptiveAccount methodsFor: 'testing' stamp: 'FG 5/25/2022 17:30:02' prior: 50474415 overrides: 50474205!
+hasRegistered: aTransaction
+	(aTransaction isKindOf: Transfer) ifTrue: [^true].
+	^ transactions includes: aTransaction 
+! !
+
+!testRun: #TransferTest #test02TransferIsRegisteredOnDepositAccount stamp: 'FG 5/25/2022 17:30:21'!
+PASSED!
+
+!testRun: #TransferTest #test01TransferFromOneAccountToAnotherChangesTheBalancesCorrectly stamp: 'FG 5/25/2022 17:30:21'!
+PASSED!
+
+!testRun: #TransferTest #test02TransferIsRegisteredOnDepositAccount stamp: 'FG 5/25/2022 17:30:21'!
+PASSED!
+!TransferTest methodsFor: 'testing' stamp: 'FG 5/25/2022 17:32:11'!
+test03TransferIsNotRegisterOnAnotherAccount
+
+	|depositAccount withdrawAccount transfer anotherAccount|
+	
+	depositAccount  := ReceptiveAccount new.
+	withdrawAccount := ReceptiveAccount  new.
+	anotherAccount := ReceptiveAccount  new.
+
+	transfer := Transfer registerTransfer: 10 from: withdrawAccount to: depositAccount.
+	
+	self assert: (anotherAccount hasRegistered: transfer).! !
+
+!testRun: #TransferTest #test03TransferIsNotRegisterOnAnotherAccount stamp: 'FG 5/25/2022 17:32:13'!
+PASSED!
+
+!testRun: #TransferTest #test01TransferFromOneAccountToAnotherChangesTheBalancesCorrectly stamp: 'FG 5/25/2022 17:32:13'!
+PASSED!
+
+!testRun: #TransferTest #test02TransferIsRegisteredOnDepositAccount stamp: 'FG 5/25/2022 17:32:13'!
+PASSED!
+
+!testRun: #TransferTest #test03TransferIsNotRegisterOnAnotherAccount stamp: 'FG 5/25/2022 17:32:13'!
+PASSED!
+!TransferTest methodsFor: 'testing' stamp: 'FG 5/25/2022 17:32:22' prior: 50474757!
+test03TransferIsNotRegisterOnAnotherAccount
+
+	|depositAccount withdrawAccount transfer anotherAccount|
+	
+	depositAccount  := ReceptiveAccount new.
+	withdrawAccount := ReceptiveAccount  new.
+	anotherAccount := ReceptiveAccount  new.
+
+	transfer := Transfer registerTransfer: 10 from: withdrawAccount to: depositAccount.
+	
+	self deny: (anotherAccount hasRegistered: transfer).! !
+
+!testRun: #TransferTest #test03TransferIsNotRegisterOnAnotherAccount stamp: 'FG 5/25/2022 17:32:23'!
+FAILURE!
+!Transfer methodsFor: 'initialization' stamp: 'FG 5/25/2022 17:34:03' prior: 50474682!
+initializeTransferOf: anAmountToTransfer from: aWithdrawAccount to: aDepositAccount 
+
+	Deposit register: anAmountToTransfer on: aDepositAccount.
+	Withdraw register: anAmountToTransfer on: aWithdrawAccount.
+	
+	aDepositAccount register: self.! !
+
+!classDefinition: #ReceptiveAccount category: 'Portfolio-Solucion' stamp: 'FG 5/25/2022 17:35:06'!
+Account subclass: #ReceptiveAccount
+	instanceVariableNames: 'transactions transfer'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'Portfolio-Solucion'!
+!ReceptiveAccount methodsFor: 'transactions' stamp: 'FG 5/25/2022 17:34:53' prior: 50474397!
+register: aTransaction
+	(aTransaction isKindOf: Transfer) ifTrue: [transfer := aTransaction ].
+	transactions add: aTransaction 
+! !
+!ReceptiveAccount methodsFor: 'testing' stamp: 'FG 5/25/2022 17:35:59' prior: 50474740 overrides: 50474205!
+hasRegistered: aTransaction
+	(aTransaction isKindOf: Transfer) ifTrue: [ ^transfer = aTransaction ].
+	^ transactions includes: aTransaction 
+! !
+
+!testRun: #TransferTest #test03TransferIsNotRegisterOnAnotherAccount stamp: 'FG 5/25/2022 17:36:19'!
+PASSED!
+
+!testRun: #TransferTest #test01TransferFromOneAccountToAnotherChangesTheBalancesCorrectly stamp: 'FG 5/25/2022 17:36:19'!
+ERROR!
+
+!testRun: #TransferTest #test02TransferIsRegisteredOnDepositAccount stamp: 'FG 5/25/2022 17:36:19'!
+PASSED!
+
+!testRun: #TransferTest #test03TransferIsNotRegisterOnAnotherAccount stamp: 'FG 5/25/2022 17:36:19'!
+PASSED!
+
+!testRun: #TransferTest #test01TransferFromOneAccountToAnotherChangesTheBalancesCorrectly stamp: 'FG 5/25/2022 17:36:19'!
+ERROR!
+!ReceptiveAccount methodsFor: 'testing' stamp: 'FG 5/25/2022 17:38:24' prior: 50474831 overrides: 50474205!
+hasRegistered: aTransaction
+	((aTransaction isKindOf: Transfer) and: [ transfer isNotNil ]) ifTrue: [ ^transfer = aTransaction ].
+	^ transactions includes: aTransaction 
+! !
+
+!testRun: #TransferTest #test03TransferIsNotRegisterOnAnotherAccount stamp: 'FG 5/25/2022 17:38:30'!
+ERROR!
+!ReceptiveAccount methodsFor: 'testing' stamp: 'FG 5/25/2022 17:39:45' prior: 50474858 overrides: 50474205!
+hasRegistered: aTransaction
+	(aTransaction isKindOf: Transfer) ifTrue: [ 
+		transfer ifNil: [^false] ifNotNil: [		^transfer = aTransaction] .
+	].
+	^ transactions includes: aTransaction 
+! !
+
+!testRun: #TransferTest #test03TransferIsNotRegisterOnAnotherAccount stamp: 'FG 5/25/2022 17:39:51'!
+PASSED!
+
+!testRun: #TransferTest #test01TransferFromOneAccountToAnotherChangesTheBalancesCorrectly stamp: 'FG 5/25/2022 17:39:54'!
+ERROR!
+
+!testRun: #TransferTest #test02TransferIsRegisteredOnDepositAccount stamp: 'FG 5/25/2022 17:39:54'!
+PASSED!
+
+!testRun: #TransferTest #test03TransferIsNotRegisterOnAnotherAccount stamp: 'FG 5/25/2022 17:39:54'!
+PASSED!
+
+!testRun: #TransferTest #test01TransferFromOneAccountToAnotherChangesTheBalancesCorrectly stamp: 'FG 5/25/2022 17:39:54'!
+ERROR!
+
+!testRun: #TransferTest #test01TransferFromOneAccountToAnotherChangesTheBalancesCorrectly stamp: 'FG 5/25/2022 17:40:33'!
+ERROR!
+!ReceptiveAccount methodsFor: 'transactions' stamp: 'FG 5/25/2022 17:41:31' prior: 50474823!
+register: aTransaction
+	(aTransaction isKindOf: Transfer) ifTrue: [transfer := aTransaction ]
+	ifFalse: [ 	transactions add: aTransaction ]. 
+! !
+
+!testRun: #TransferTest #test01TransferFromOneAccountToAnotherChangesTheBalancesCorrectly stamp: 'FG 5/25/2022 17:41:34'!
+PASSED!
+
+!testRun: #TransferTest #test02TransferIsRegisteredOnDepositAccount stamp: 'FG 5/25/2022 17:41:34'!
+PASSED!
+
+!testRun: #TransferTest #test03TransferIsNotRegisterOnAnotherAccount stamp: 'FG 5/25/2022 17:41:34'!
+PASSED!
+!TransferTest methodsFor: 'testing' stamp: 'FG 5/25/2022 17:43:10'!
+test04AllTransfersAreRegisteredOnDepositAccount
+
+	|depositAccount withdrawAccount firstTransfer secondTransfer|
+	
+	depositAccount  := ReceptiveAccount new.
+	withdrawAccount := ReceptiveAccount  new.
+		
+	firstTransfer := Transfer registerTransfer: 10 from: withdrawAccount to: depositAccount.
+	secondTransfer := Transfer registerTransfer: 15 from: withdrawAccount to: depositAccount.
+
+	self assert: (depositAccount hasRegistered: firstTransfer).
+	self assert: (depositAccount hasRegistered: secondTransfer).! !
+
+!testRun: #TransferTest #test04AllTransfersAreRegisteredOnDepositAccount stamp: 'FG 5/25/2022 17:43:13'!
+FAILURE!
+
+!classDefinition: #ReceptiveAccount category: 'Portfolio-Solucion' stamp: 'FG 5/25/2022 17:43:47'!
+Account subclass: #ReceptiveAccount
+	instanceVariableNames: 'transactions transfer transfers'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'Portfolio-Solucion'!
+!ReceptiveAccount methodsFor: 'transactions' stamp: 'FG 5/25/2022 17:43:46' prior: 50474903!
+register: aTransaction
+	(aTransaction isKindOf: Transfer) ifTrue: [transfers add: aTransaction ]
+	ifFalse: [ 	transactions add: aTransaction ]. 
+! !
+!ReceptiveAccount methodsFor: 'testing' stamp: 'FG 5/25/2022 17:44:26' prior: 50474871 overrides: 50474205!
+hasRegistered: aTransaction
+	(aTransaction isKindOf: Transfer) ifTrue: [ 
+		^transfers includes: aTransaction.
+	].
+	^ transactions includes: aTransaction 
+! !
+!ReceptiveAccount methodsFor: 'initialization' stamp: 'FG 5/25/2022 17:44:42' prior: 50474385 overrides: 16920235!
+initialize
+
+	super initialize.
+	transactions := OrderedCollection new.
+	transfers := OrderedCollection new.! !
+
+!testRun: #TransferTest #test04AllTransfersAreRegisteredOnDepositAccount stamp: 'FG 5/25/2022 17:44:50'!
+PASSED!
+
+!testRun: #TransferTest #test01TransferFromOneAccountToAnotherChangesTheBalancesCorrectly stamp: 'FG 5/25/2022 17:44:50'!
+PASSED!
+
+!testRun: #TransferTest #test02TransferIsRegisteredOnDepositAccount stamp: 'FG 5/25/2022 17:44:50'!
+PASSED!
+
+!testRun: #TransferTest #test03TransferIsNotRegisterOnAnotherAccount stamp: 'FG 5/25/2022 17:44:50'!
+PASSED!
+
+!testRun: #TransferTest #test04AllTransfersAreRegisteredOnDepositAccount stamp: 'FG 5/25/2022 17:44:50'!
+PASSED!
+
+Account subclass: #ReceptiveAccount
+	instanceVariableNames: 'transactions transfers'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'Portfolio-Solucion'!
+
+!classDefinition: #ReceptiveAccount category: 'Portfolio-Solucion' stamp: 'FG 5/25/2022 17:45:04'!
+Account subclass: #ReceptiveAccount
+	instanceVariableNames: 'transactions transfers'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'Portfolio-Solucion'!
+!TransferTest methodsFor: 'testing' stamp: 'FG 5/25/2022 17:47:20'!
+test05TransferShouldFailWhenTransferingZeroAmount
+
+	! !
+!TransferTest methodsFor: 'testing' stamp: 'FG 5/25/2022 17:48:08' prior: 50475008!
+test05TransferShouldFailWhenTransferingZeroAmount
+
+	|depositAccount withdrawAccount|
+	
+	depositAccount  := ReceptiveAccount new.
+	withdrawAccount := ReceptiveAccount  new.
+		
+	! !
+!TransferTest methodsFor: 'testing' stamp: 'FG 5/25/2022 17:51:25' prior: 50475013!
+test05TransferShouldFailWhenTransferingZeroAmount
+
+	|depositAccount withdrawAccount|
+	
+	depositAccount  := ReceptiveAccount new.
+	withdrawAccount := ReceptiveAccount  new.
+		
+	self 
+		should: [ Transfer registerTransfer: 0 from: withdrawAccount to: depositAccount ]
+		raise: Error - MessageNotUnderstood 
+		withExceptionDo: [ :anError |
+			self assert: Transfer canNotRegisterTransferWithZeroAmountErrorMessage equals: anError messageText. ]! !
+!Transfer class methodsFor: 'error messages' stamp: 'FG 5/25/2022 17:52:19'!
+canNotRegisterTransferWithZeroAmountErrorMessage
+
+	^'The transfers should be for an amount bigger than zero'! !
+
+!testRun: #TransferTest #test05TransferShouldFailWhenTransferingZeroAmount stamp: 'FG 5/25/2022 17:53:40'!
+FAILURE!
+!Transfer class methodsFor: 'instance creation' stamp: 'FG 5/25/2022 17:55:09' prior: 50474615!
+registerTransfer: anAmountToTransfer from: aWithdrawAccount to: aDepositAccount 
+	
+	(anAmountToTransfer = 0) ifTrue: [self error: self canNotRegisterTransferWithZeroAmountErrorMessage ].
+	
+	^self new initializeTransferOf: anAmountToTransfer from: aWithdrawAccount to: aDepositAccount.! !
+
+!testRun: #TransferTest #test05TransferShouldFailWhenTransferingZeroAmount stamp: 'FG 5/25/2022 17:55:20'!
+PASSED!
+
+!testRun: #TransferTest #test01TransferFromOneAccountToAnotherChangesTheBalancesCorrectly stamp: 'FG 5/25/2022 17:55:20'!
+PASSED!
+
+!testRun: #TransferTest #test02TransferIsRegisteredOnDepositAccount stamp: 'FG 5/25/2022 17:55:20'!
+PASSED!
+
+!testRun: #TransferTest #test03TransferIsNotRegisterOnAnotherAccount stamp: 'FG 5/25/2022 17:55:20'!
+PASSED!
+
+!testRun: #TransferTest #test04AllTransfersAreRegisteredOnDepositAccount stamp: 'FG 5/25/2022 17:55:20'!
+PASSED!
+
+!testRun: #TransferTest #test05TransferShouldFailWhenTransferingZeroAmount stamp: 'FG 5/25/2022 17:55:20'!
+PASSED!
+!TransferTest methodsFor: 'testing' stamp: 'FG 5/25/2022 17:55:37'!
+test06TransferShouldFailWhenTransferingNegativeAmounts
+
+	|depositAccount withdrawAccount|
+	
+	depositAccount  := ReceptiveAccount new.
+	withdrawAccount := ReceptiveAccount  new.
+		
+	self 
+		should: [ Transfer registerTransfer: -10 from: withdrawAccount to: depositAccount ]
+		raise: Error - MessageNotUnderstood 
+		withExceptionDo: [ :anError |
+			self assert: Transfer canNotRegisterTransferWithZeroAmountErrorMessage equals: anError messageText. ]! !
+
+!testRun: #TransferTest #test06TransferShouldFailWhenTransferingNegativeAmounts stamp: 'FG 5/25/2022 17:55:41'!
+FAILURE!
+!TransferTest methodsFor: 'testing' stamp: 'FG 5/25/2022 17:56:27' prior: 50475083!
+test06TransferShouldFailWhenTransferingNegativeAmounts
+
+	|depositAccount withdrawAccount|
+	
+	depositAccount  := ReceptiveAccount new.
+	withdrawAccount := ReceptiveAccount  new.
+		
+	self 
+		should: [ Transfer registerTransfer: -10 from: withdrawAccount to: depositAccount ]
+		raise: Error - MessageNotUnderstood 
+		withExceptionDo: [ :anError |
+			self assert: Transfer canNotRegisterTransferWithZeroAmountErrorMessage equals: anError messageText. ]! !
+!Transfer class methodsFor: 'error messages' stamp: 'FG 5/25/2022 17:56:57'!
+canNotRegisterTransferWithNotPositiveAmountsErrorMessage
+
+	^'The transfers should be for an amount bigger than zero'! !
+!TransferTest methodsFor: 'as yet unclassified' stamp: 'FG 5/25/2022 17:56:57' prior: 50475104!
+test06TransferShouldFailWhenTransferingNegativeAmounts
+
+	|depositAccount withdrawAccount|
+	
+	depositAccount  := ReceptiveAccount new.
+	withdrawAccount := ReceptiveAccount  new.
+		
+	self 
+		should: [ Transfer registerTransfer: -10 from: withdrawAccount to: depositAccount ]
+		raise: Error - MessageNotUnderstood 
+		withExceptionDo: [ :anError |
+			self assert: Transfer canNotRegisterTransferWithNotPositiveAmountsErrorMessage equals: anError messageText. ]! !
+!Transfer class methodsFor: 'as yet unclassified' stamp: 'FG 5/25/2022 17:56:57' prior: 50475050!
+registerTransfer: anAmountToTransfer from: aWithdrawAccount to: aDepositAccount 
+	
+	(anAmountToTransfer = 0) ifTrue: [self error: self canNotRegisterTransferWithNotPositiveAmountsErrorMessage ].
+	
+	^self new initializeTransferOf: anAmountToTransfer from: aWithdrawAccount to: aDepositAccount.! !
+!TransferTest methodsFor: 'as yet unclassified' stamp: 'FG 5/25/2022 17:56:57' prior: 50475022!
+test05TransferShouldFailWhenTransferingZeroAmount
+
+	|depositAccount withdrawAccount|
+	
+	depositAccount  := ReceptiveAccount new.
+	withdrawAccount := ReceptiveAccount  new.
+		
+	self 
+		should: [ Transfer registerTransfer: 0 from: withdrawAccount to: depositAccount ]
+		raise: Error - MessageNotUnderstood 
+		withExceptionDo: [ :anError |
+			self assert: Transfer canNotRegisterTransferWithNotPositiveAmountsErrorMessage equals: anError messageText. ]! !
+
+!methodRemoval: Transfer class #canNotRegisterTransferWithZeroAmountErrorMessage stamp: 'FG 5/25/2022 17:56:57'!
+canNotRegisterTransferWithZeroAmountErrorMessage
+
+	^'The transfers should be for an amount bigger than zero'!
+
+!testRun: #TransferTest #test06TransferShouldFailWhenTransferingNegativeAmounts stamp: 'FG 5/25/2022 17:57:00'!
+FAILURE!
+
+!testRun: #TransferTest #test05TransferShouldFailWhenTransferingZeroAmount stamp: 'FG 5/25/2022 17:57:05'!
+PASSED!
+
+!testRun: #TransferTest #test01TransferFromOneAccountToAnotherChangesTheBalancesCorrectly stamp: 'FG 5/25/2022 17:57:05'!
+PASSED!
+
+!testRun: #TransferTest #test02TransferIsRegisteredOnDepositAccount stamp: 'FG 5/25/2022 17:57:05'!
+PASSED!
+
+!testRun: #TransferTest #test03TransferIsNotRegisterOnAnotherAccount stamp: 'FG 5/25/2022 17:57:05'!
+PASSED!
+
+!testRun: #TransferTest #test04AllTransfersAreRegisteredOnDepositAccount stamp: 'FG 5/25/2022 17:57:05'!
+PASSED!
+
+!testRun: #TransferTest #test05TransferShouldFailWhenTransferingZeroAmount stamp: 'FG 5/25/2022 17:57:05'!
+PASSED!
+
+!testRun: #TransferTest #test06TransferShouldFailWhenTransferingNegativeAmounts stamp: 'FG 5/25/2022 17:57:05'!
+FAILURE!
+
+!testRun: #TransferTest #test06TransferShouldFailWhenTransferingNegativeAmounts stamp: 'FG 5/25/2022 17:57:05'!
+FAILURE!
+!Transfer class methodsFor: 'instance creation' stamp: 'FG 5/25/2022 17:57:35' prior: 50475146!
+registerTransfer: anAmountToTransfer from: aWithdrawAccount to: aDepositAccount 
+	
+	(anAmountToTransfer <= 0) ifTrue: [self error: self canNotRegisterTransferWithNotPositiveAmountsErrorMessage ].
+	
+	^self new initializeTransferOf: anAmountToTransfer from: aWithdrawAccount to: aDepositAccount.! !
+
+!testRun: #TransferTest #test05TransferShouldFailWhenTransferingZeroAmount stamp: 'FG 5/25/2022 17:57:43'!
+PASSED!
+
+!testRun: #TransferTest #test01TransferFromOneAccountToAnotherChangesTheBalancesCorrectly stamp: 'FG 5/25/2022 17:57:43'!
+PASSED!
+
+!testRun: #TransferTest #test02TransferIsRegisteredOnDepositAccount stamp: 'FG 5/25/2022 17:57:43'!
+PASSED!
+
+!testRun: #TransferTest #test03TransferIsNotRegisterOnAnotherAccount stamp: 'FG 5/25/2022 17:57:43'!
+PASSED!
+
+!testRun: #TransferTest #test04AllTransfersAreRegisteredOnDepositAccount stamp: 'FG 5/25/2022 17:57:43'!
+PASSED!
+
+!testRun: #TransferTest #test05TransferShouldFailWhenTransferingZeroAmount stamp: 'FG 5/25/2022 17:57:43'!
+PASSED!
+
+!testRun: #TransferTest #test06TransferShouldFailWhenTransferingNegativeAmounts stamp: 'FG 5/25/2022 17:57:43'!
+PASSED!
+
+!testRun: #TransferTest #test06TransferShouldFailWhenTransferingNegativeAmounts stamp: 'FG 5/25/2022 17:57:49'!
+PASSED!
+
+!testRun: #TransferTest #test01TransferFromOneAccountToAnotherChangesTheBalancesCorrectly stamp: 'FG 5/25/2022 17:57:49'!
+PASSED!
+
+!testRun: #TransferTest #test02TransferIsRegisteredOnDepositAccount stamp: 'FG 5/25/2022 17:57:49'!
+PASSED!
+
+!testRun: #TransferTest #test03TransferIsNotRegisterOnAnotherAccount stamp: 'FG 5/25/2022 17:57:49'!
+PASSED!
+
+!testRun: #TransferTest #test04AllTransfersAreRegisteredOnDepositAccount stamp: 'FG 5/25/2022 17:57:49'!
+PASSED!
+
+!testRun: #TransferTest #test05TransferShouldFailWhenTransferingZeroAmount stamp: 'FG 5/25/2022 17:57:49'!
+PASSED!
+
+!testRun: #TransferTest #test06TransferShouldFailWhenTransferingNegativeAmounts stamp: 'FG 5/25/2022 17:57:49'!
+PASSED!
+!TransferTest methodsFor: 'testing' stamp: 'FG 5/25/2022 17:59:32'!
+test07TransferShouldBeRegisteredBetweenTwoDifferentAccounts
+
+	|account|
+	
+	account := ReceptiveAccount new.
+	
+	! !
+!TransferTest methodsFor: 'testing' stamp: 'FG 5/25/2022 18:01:08' prior: 50475280!
+test07TransferShouldBeRegisteredBetweenTwoDifferentAccounts
+
+	|account|
+	
+	account := ReceptiveAccount new.
+	
+	self 
+		should: [ Transfer registerTransfer: 10 from: account to: account ]
+		raise: Error - MessageNotUnderstood 
+		withExceptionDo: [ :anError |
+			self assert: Transfer shouldBeRegisteredBetweenTwoDifferentAccounts equals: anError messageText. ]! !
+
+!testRun: #TransferTest #test07TransferShouldBeRegisteredBetweenTwoDifferentAccounts stamp: 'FG 5/25/2022 18:01:16'!
+FAILURE!
+!Transfer class methodsFor: 'error messages' stamp: 'FG 5/25/2022 18:01:42'!
+shouldBeRegisteredBetweenTwoDifferentAccounts
+
+	^'The transfers should be between two different accounts'! !
+!Transfer class methodsFor: 'instance creation' stamp: 'FG 5/25/2022 18:02:11' prior: 50475217!
+registerTransfer: anAmountToTransfer from: aWithdrawAccount to: aDepositAccount 
+	
+	(anAmountToTransfer <= 0) ifTrue: [self error: self canNotRegisterTransferWithNotPositiveAmountsErrorMessage ].
+	(aWithdrawAccount = aDepositAccount ) ifTrue: [self error: self shouldBeRegisteredBetweenTwoDifferentAccounts ].
+	
+	^self new initializeTransferOf: anAmountToTransfer from: aWithdrawAccount to: aDepositAccount.! !
+
+!testRun: #TransferTest #test07TransferShouldBeRegisteredBetweenTwoDifferentAccounts stamp: 'FG 5/25/2022 18:02:17'!
+PASSED!
+
+!testRun: #TransferTest #test01TransferFromOneAccountToAnotherChangesTheBalancesCorrectly stamp: 'FG 5/25/2022 18:02:17'!
+PASSED!
+
+!testRun: #TransferTest #test02TransferIsRegisteredOnDepositAccount stamp: 'FG 5/25/2022 18:02:17'!
+PASSED!
+
+!testRun: #TransferTest #test03TransferIsNotRegisterOnAnotherAccount stamp: 'FG 5/25/2022 18:02:17'!
+PASSED!
+
+!testRun: #TransferTest #test04AllTransfersAreRegisteredOnDepositAccount stamp: 'FG 5/25/2022 18:02:17'!
+PASSED!
+
+!testRun: #TransferTest #test05TransferShouldFailWhenTransferingZeroAmount stamp: 'FG 5/25/2022 18:02:17'!
+PASSED!
+
+!testRun: #TransferTest #test06TransferShouldFailWhenTransferingNegativeAmounts stamp: 'FG 5/25/2022 18:02:17'!
+PASSED!
+
+!testRun: #TransferTest #test07TransferShouldBeRegisteredBetweenTwoDifferentAccounts stamp: 'FG 5/25/2022 18:02:17'!
+PASSED!
+!Transfer class methodsFor: 'instance creation' stamp: 'FG 5/25/2022 18:02:55'!
+assertAmountIsPossitive: anAmountToTransfer
+
+	^ (anAmountToTransfer <= 0) ifTrue: [self error: self canNotRegisterTransferWithNotPositiveAmountsErrorMessage ]! !
+!Transfer class methodsFor: 'instance creation' stamp: 'FG 5/25/2022 18:02:55' prior: 50475312!
+registerTransfer: anAmountToTransfer from: aWithdrawAccount to: aDepositAccount 
+	
+	self assertAmountIsPossitive: anAmountToTransfer.
+	(aWithdrawAccount = aDepositAccount ) ifTrue: [self error: self shouldBeRegisteredBetweenTwoDifferentAccounts ].
+	
+	^self new initializeTransferOf: anAmountToTransfer from: aWithdrawAccount to: aDepositAccount.! !
+!Transfer class methodsFor: 'instance creation' stamp: 'FG 5/25/2022 18:03:35'!
+assertAmountIsPositive: anAmountToTransfer
+
+	^ (anAmountToTransfer <= 0) ifTrue: [self error: self canNotRegisterTransferWithNotPositiveAmountsErrorMessage ]! !
+!Transfer class methodsFor: 'as yet unclassified' stamp: 'FG 5/25/2022 18:03:35' prior: 50475367!
+registerTransfer: anAmountToTransfer from: aWithdrawAccount to: aDepositAccount 
+	
+	self assertAmountIsPositive: anAmountToTransfer.
+	(aWithdrawAccount = aDepositAccount ) ifTrue: [self error: self shouldBeRegisteredBetweenTwoDifferentAccounts ].
+	
+	^self new initializeTransferOf: anAmountToTransfer from: aWithdrawAccount to: aDepositAccount.! !
+
+!methodRemoval: Transfer class #assertAmountIsPossitive: stamp: 'FG 5/25/2022 18:03:35'!
+assertAmountIsPossitive: anAmountToTransfer
+
+	^ (anAmountToTransfer <= 0) ifTrue: [self error: self canNotRegisterTransferWithNotPositiveAmountsErrorMessage ]!
+!Transfer class methodsFor: 'instance creation' stamp: 'FG 5/25/2022 18:05:06'!
+assertShouldBeDifferentWithdrawAccount: aWithdrawAccount andDepositAccount: aDepositAccount 
+	
+      (aWithdrawAccount = aDepositAccount ) ifTrue: [self error: self shouldBeRegisteredBetweenTwoDifferentAccounts ].! !
+!Transfer class methodsFor: 'instance creation' stamp: 'FG 5/25/2022 18:05:30' prior: 50475390!
+registerTransfer: anAmountToTransfer from: aWithdrawAccount to: aDepositAccount 
+	
+	self assertAmountIsPositive: anAmountToTransfer.
+	self assertShouldBeDifferentWithdrawAccount: aWithdrawAccount andDepositAccount: aDepositAccount.
+	
+	^self new initializeTransferOf: anAmountToTransfer from: aWithdrawAccount to: aDepositAccount.! !
+
+!testRun: #TransferTest #test07TransferShouldBeRegisteredBetweenTwoDifferentAccounts stamp: 'FG 5/25/2022 18:06:17'!
+PASSED!
+
+!testRun: #TransferTest #test07TransferShouldBeRegisteredBetweenTwoDifferentAccounts stamp: 'FG 5/25/2022 18:06:20'!
+PASSED!
+
+!testRun: #TransferTest #test01TransferFromOneAccountToAnotherChangesTheBalancesCorrectly stamp: 'FG 5/25/2022 18:06:21'!
+PASSED!
+
+!testRun: #TransferTest #test02TransferIsRegisteredOnDepositAccount stamp: 'FG 5/25/2022 18:06:21'!
+PASSED!
+
+!testRun: #TransferTest #test03TransferIsNotRegisterOnAnotherAccount stamp: 'FG 5/25/2022 18:06:21'!
+PASSED!
+
+!testRun: #TransferTest #test04AllTransfersAreRegisteredOnDepositAccount stamp: 'FG 5/25/2022 18:06:21'!
+PASSED!
+
+!testRun: #TransferTest #test05TransferShouldFailWhenTransferingZeroAmount stamp: 'FG 5/25/2022 18:06:21'!
+PASSED!
+
+!testRun: #TransferTest #test06TransferShouldFailWhenTransferingNegativeAmounts stamp: 'FG 5/25/2022 18:06:21'!
+PASSED!
+
+!testRun: #TransferTest #test07TransferShouldBeRegisteredBetweenTwoDifferentAccounts stamp: 'FG 5/25/2022 18:06:21'!
+PASSED!
+!TransferTest methodsFor: 'testing' stamp: 'FG 5/25/2022 18:11:48'!
+test08AllTransfersAreRegisteredOnWithdrawAccount
+
+	|depositAccount withdrawAccount firstTransfer secondTransfer|
+	
+	depositAccount  := ReceptiveAccount new.
+	withdrawAccount := ReceptiveAccount  new.
+		
+	firstTransfer := Transfer registerTransfer: 10 from: withdrawAccount to: depositAccount.
+	secondTransfer := Transfer registerTransfer: 15 from: withdrawAccount to: depositAccount.
+
+	self assert: (withdrawAccount hasRegistered: firstTransfer).
+	self assert: (withdrawAccount hasRegistered: secondTransfer).! !
+
+!testRun: #TransferTest #test08AllTransfersAreRegisteredOnWithdrawAccount stamp: 'FG 5/25/2022 18:11:51'!
+FAILURE!
+!Transfer methodsFor: 'initialization' stamp: 'FG 5/25/2022 18:12:08' prior: 50474804!
+initializeTransferOf: anAmountToTransfer from: aWithdrawAccount to: aDepositAccount 
+
+	Deposit register: anAmountToTransfer on: aDepositAccount.
+	Withdraw register: anAmountToTransfer on: aWithdrawAccount.
+	
+	aDepositAccount register: self.
+	aWithdrawAccount register: self.! !
+
+!testRun: #TransferTest #test08AllTransfersAreRegisteredOnWithdrawAccount stamp: 'FG 5/25/2022 18:12:13'!
+PASSED!
+
+!testRun: #TransferTest #test01TransferFromOneAccountToAnotherChangesTheBalancesCorrectly stamp: 'FG 5/25/2022 18:12:13'!
+PASSED!
+
+!testRun: #TransferTest #test02TransferIsRegisteredOnDepositAccount stamp: 'FG 5/25/2022 18:12:13'!
+PASSED!
+
+!testRun: #TransferTest #test03TransferIsNotRegisterOnAnotherAccount stamp: 'FG 5/25/2022 18:12:13'!
+PASSED!
+
+!testRun: #TransferTest #test04AllTransfersAreRegisteredOnDepositAccount stamp: 'FG 5/25/2022 18:12:13'!
+PASSED!
+
+!testRun: #TransferTest #test05TransferShouldFailWhenTransferingZeroAmount stamp: 'FG 5/25/2022 18:12:13'!
+PASSED!
+
+!testRun: #TransferTest #test06TransferShouldFailWhenTransferingNegativeAmounts stamp: 'FG 5/25/2022 18:12:13'!
+PASSED!
+
+!testRun: #TransferTest #test07TransferShouldBeRegisteredBetweenTwoDifferentAccounts stamp: 'FG 5/25/2022 18:12:13'!
+PASSED!
+
+!testRun: #TransferTest #test08AllTransfersAreRegisteredOnWithdrawAccount stamp: 'FG 5/25/2022 18:12:13'!
+PASSED!
+!TransferTest methodsFor: 'testing' stamp: 'FG 5/25/2022 18:15:00'!
+test09TransferValueIsEqualToTheAmountTransfered
+
+	|depositAccount withdrawAccount transfer|
+	
+	depositAccount  := ReceptiveAccount new.
+	withdrawAccount := ReceptiveAccount  new.
+		
+	transfer := Transfer registerTransfer: 10 from: withdrawAccount to: depositAccount.
+
+	self assert: (transfer value: 10).! !
+
+!testRun: #TransferTest #test09TransferValueIsEqualToTheAmountTransfered stamp: 'FG 5/25/2022 18:15:02'!
+ERROR!
+!TransferTest methodsFor: 'testing' stamp: 'FG 5/25/2022 18:15:19' prior: 50475536!
+test09TransferValueIsEqualToTheAmountTransfered
+
+	|depositAccount withdrawAccount transfer|
+	
+	depositAccount  := ReceptiveAccount new.
+	withdrawAccount := ReceptiveAccount  new.
+		
+	transfer := Transfer registerTransfer: 10 from: withdrawAccount to: depositAccount.
+
+	self assert: (transfer value = 10).! !
+
+!testRun: #TransferTest #test09TransferValueIsEqualToTheAmountTransfered stamp: 'FG 5/25/2022 18:15:21'!
+FAILURE!
+
+!testRun: #TransferTest #test09TransferValueIsEqualToTheAmountTransfered stamp: 'FG 5/25/2022 18:16:08'!
+FAILURE!
+
+!classDefinition: #Transfer category: 'Portfolio-Solucion' stamp: 'FG 5/25/2022 18:16:40'!
+Object subclass: #Transfer
+	instanceVariableNames: 'value'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'Portfolio-Solucion'!
+!Transfer methodsFor: 'initialization' stamp: 'FG 5/25/2022 18:16:37' overrides: 16902254!
+value
+	
+	^value! !
+!Transfer methodsFor: 'initialization' stamp: 'FG 5/25/2022 18:17:06' prior: 50475492!
+initializeTransferOf: anAmountToTransfer from: aWithdrawAccount to: aDepositAccount 
+
+	Deposit register: anAmountToTransfer on: aDepositAccount.
+	Withdraw register: anAmountToTransfer on: aWithdrawAccount.
+	value := anAmountToTransfer.
+	aDepositAccount register: self.
+	aWithdrawAccount register: self.! !
+
+!testRun: #TransferTest #test09TransferValueIsEqualToTheAmountTransfered stamp: 'FG 5/25/2022 18:17:57'!
+PASSED!
+
+!testRun: #TransferTest #test01TransferFromOneAccountToAnotherChangesTheBalancesCorrectly stamp: 'FG 5/25/2022 18:17:57'!
+PASSED!
+
+!testRun: #TransferTest #test02TransferIsRegisteredOnDepositAccount stamp: 'FG 5/25/2022 18:17:57'!
+PASSED!
+
+!testRun: #TransferTest #test03TransferIsNotRegisterOnAnotherAccount stamp: 'FG 5/25/2022 18:17:57'!
+PASSED!
+
+!testRun: #TransferTest #test04AllTransfersAreRegisteredOnDepositAccount stamp: 'FG 5/25/2022 18:17:57'!
+PASSED!
+
+!testRun: #TransferTest #test05TransferShouldFailWhenTransferingZeroAmount stamp: 'FG 5/25/2022 18:17:57'!
+PASSED!
+
+!testRun: #TransferTest #test06TransferShouldFailWhenTransferingNegativeAmounts stamp: 'FG 5/25/2022 18:17:57'!
+PASSED!
+
+!testRun: #TransferTest #test07TransferShouldBeRegisteredBetweenTwoDifferentAccounts stamp: 'FG 5/25/2022 18:17:57'!
+PASSED!
+
+!testRun: #TransferTest #test08AllTransfersAreRegisteredOnWithdrawAccount stamp: 'FG 5/25/2022 18:17:57'!
+PASSED!
+
+!testRun: #TransferTest #test09TransferValueIsEqualToTheAmountTransfered stamp: 'FG 5/25/2022 18:17:57'!
+PASSED!
+!TransferTest methodsFor: 'testing' stamp: 'FG 5/25/2022 18:18:25' prior: 50475552!
+test09TransferValueIsEqualToTheAmountTransfered
+
+	|depositAccount withdrawAccount transfer|
+	
+	depositAccount  := ReceptiveAccount new.
+	withdrawAccount := ReceptiveAccount  new.
+		
+	transfer := Transfer registerTransfer: 10 from: withdrawAccount to: depositAccount.
+
+	self assert: transfer value equals: 10.! !
+
+!testRun: #TransferTest #test09TransferValueIsEqualToTheAmountTransfered stamp: 'FG 5/25/2022 18:18:27'!
+PASSED!
+
+!testRun: #TransferTest #test01TransferFromOneAccountToAnotherChangesTheBalancesCorrectly stamp: 'FG 5/25/2022 18:18:27'!
+PASSED!
+
+!testRun: #TransferTest #test02TransferIsRegisteredOnDepositAccount stamp: 'FG 5/25/2022 18:18:27'!
+PASSED!
+
+!testRun: #TransferTest #test03TransferIsNotRegisterOnAnotherAccount stamp: 'FG 5/25/2022 18:18:27'!
+PASSED!
+
+!testRun: #TransferTest #test04AllTransfersAreRegisteredOnDepositAccount stamp: 'FG 5/25/2022 18:18:27'!
+PASSED!
+
+!testRun: #TransferTest #test05TransferShouldFailWhenTransferingZeroAmount stamp: 'FG 5/25/2022 18:18:27'!
+PASSED!
+
+!testRun: #TransferTest #test06TransferShouldFailWhenTransferingNegativeAmounts stamp: 'FG 5/25/2022 18:18:27'!
+PASSED!
+
+!testRun: #TransferTest #test07TransferShouldBeRegisteredBetweenTwoDifferentAccounts stamp: 'FG 5/25/2022 18:18:27'!
+PASSED!
+
+!testRun: #TransferTest #test08AllTransfersAreRegisteredOnWithdrawAccount stamp: 'FG 5/25/2022 18:18:27'!
+PASSED!
+
+!testRun: #TransferTest #test09TransferValueIsEqualToTheAmountTransfered stamp: 'FG 5/25/2022 18:18:27'!
+PASSED!
+!TransferTest methodsFor: 'testing' stamp: 'FG 5/25/2022 18:18:56' prior: 50474585!
+test01TransferFromOneAccountToAnotherChangesTheBalancesCorrectly
+
+	|depositAccount withdrawAccount|
+	
+	depositAccount  := ReceptiveAccount new.
+	withdrawAccount := ReceptiveAccount  new.
+		
+	Transfer registerTransfer: 10 from: withdrawAccount to: depositAccount.
+	
+	self assert: depositAccount balance equals: 10.
+	self assert: withdrawAccount balance equals: -10.! !
+
+!testRun: #TransferTest #test01TransferFromOneAccountToAnotherChangesTheBalancesCorrectly stamp: 'FG 5/25/2022 18:18:58'!
+PASSED!
+
+!testRun: #TransferTest #test01TransferFromOneAccountToAnotherChangesTheBalancesCorrectly stamp: 'FG 5/25/2022 18:18:58'!
+PASSED!
+
+!testRun: #TransferTest #test02TransferIsRegisteredOnDepositAccount stamp: 'FG 5/25/2022 18:18:58'!
+PASSED!
+
+!testRun: #TransferTest #test03TransferIsNotRegisterOnAnotherAccount stamp: 'FG 5/25/2022 18:18:58'!
+PASSED!
+
+!testRun: #TransferTest #test04AllTransfersAreRegisteredOnDepositAccount stamp: 'FG 5/25/2022 18:18:58'!
+PASSED!
+
+!testRun: #TransferTest #test05TransferShouldFailWhenTransferingZeroAmount stamp: 'FG 5/25/2022 18:18:58'!
+PASSED!
+
+!testRun: #TransferTest #test06TransferShouldFailWhenTransferingNegativeAmounts stamp: 'FG 5/25/2022 18:18:58'!
+PASSED!
+
+!testRun: #TransferTest #test07TransferShouldBeRegisteredBetweenTwoDifferentAccounts stamp: 'FG 5/25/2022 18:18:58'!
+PASSED!
+
+!testRun: #TransferTest #test08AllTransfersAreRegisteredOnWithdrawAccount stamp: 'FG 5/25/2022 18:18:58'!
+PASSED!
+
+!testRun: #TransferTest #test09TransferValueIsEqualToTheAmountTransfered stamp: 'FG 5/25/2022 18:18:58'!
+PASSED!
+
+AccountTransaction subclass: #Transfer
+	instanceVariableNames: 'value'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'Portfolio-Solucion'!
+
+!classDefinition: #Transfer category: 'Portfolio-Solucion' stamp: 'FG 5/25/2022 18:19:56'!
+AccountTransaction subclass: #Transfer
+	instanceVariableNames: 'value'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'Portfolio-Solucion'!
+!ReceptiveAccount methodsFor: 'testing' stamp: 'FG 5/25/2022 18:20:29' prior: 50474961 overrides: 50474205!
+hasRegistered: aTransaction
+	^ transactions includes: aTransaction 
+! !
+!ReceptiveAccount methodsFor: 'testing' stamp: 'FG 5/25/2022 18:20:31' prior: 50475746 overrides: 50474205!
+hasRegistered: aTransaction
+
+	^ transactions includes: aTransaction 
+! !
+!ReceptiveAccount methodsFor: 'transactions' stamp: 'FG 5/25/2022 18:20:53' prior: 50474952!
+register: aTransaction
+
+	transactions add: aTransaction. 
+! !
+
+!testRun: #ReceptiveAccountTest #test01ReceptiveAccountHaveZeroAsBalanceWhenCreated stamp: 'FG 5/25/2022 18:21:08'!
+PASSED!
+
+!testRun: #ReceptiveAccountTest #test02DepositIncreasesBalanceOnTransactionValue stamp: 'FG 5/25/2022 18:21:08'!
+PASSED!
+
+!testRun: #ReceptiveAccountTest #test03WithdrawDecreasesBalanceOnTransactionValue stamp: 'FG 5/25/2022 18:21:08'!
+PASSED!
+
+!testRun: #ReceptiveAccountTest #test04WithdrawValueMustBePositive stamp: 'FG 5/25/2022 18:21:08'!
+PASSED!
+
+!testRun: #ReceptiveAccountTest #test05ReceptiveAccountKnowsRegisteredTransactions stamp: 'FG 5/25/2022 18:21:08'!
+PASSED!
+
+!testRun: #ReceptiveAccountTest #test06ReceptiveAccountDoNotKnowNotRegisteredTransactions stamp: 'FG 5/25/2022 18:21:08'!
+PASSED!
+
+!testRun: #ReceptiveAccountTest #test07AccountKnowsItsTransactions stamp: 'FG 5/25/2022 18:21:08'!
+PASSED!
+
+!testRun: #PortfolioTest #test01BalanceOfPortfolioWithoutAccountsIsZero stamp: 'FG 5/25/2022 18:21:11'!
+PASSED!
+
+!testRun: #PortfolioTest #test02BalanceOfPortfolioWithAccountsIsSumOfAccountsBalance stamp: 'FG 5/25/2022 18:21:11'!
+PASSED!
+
+!testRun: #PortfolioTest #test03BalanceOfPortfolioIsCalculatedRecursivelyOnPortfolios stamp: 'FG 5/25/2022 18:21:11'!
+PASSED!
+
+!testRun: #PortfolioTest #test04PortfolioWithoutAccountsHasNoRegisteredTransaction stamp: 'FG 5/25/2022 18:21:11'!
+PASSED!
+
+!testRun: #PortfolioTest #test05PortfolioHasRegisteredItsAccountsTransactions stamp: 'FG 5/25/2022 18:21:11'!
+PASSED!
+
+!testRun: #PortfolioTest #test06PortfolioLooksForRegisteredTransactionsRecursively stamp: 'FG 5/25/2022 18:21:11'!
+PASSED!
+
+!testRun: #PortfolioTest #test07PortfolioHasNoTransactionWhenHasNoAccounts stamp: 'FG 5/25/2022 18:21:11'!
+PASSED!
+
+!testRun: #PortfolioTest #test08PortfolioTransactionsIncludesAllItsAccountsTransactions stamp: 'FG 5/25/2022 18:21:11'!
+PASSED!
+
+!testRun: #PortfolioTest #test09PortfolioTransactionsAreCalculatedRecursively stamp: 'FG 5/25/2022 18:21:11'!
+PASSED!
+
+!testRun: #PortfolioTest #test10PortfolioCanNotIncludeTheSameAccountMoreThanOnce stamp: 'FG 5/25/2022 18:21:12'!
+PASSED!
+
+!testRun: #PortfolioTest #test11PortfolioCanNotIncludeAccountOfItsPortfolios stamp: 'FG 5/25/2022 18:21:12'!
+PASSED!
+
+!testRun: #PortfolioTest #test12PortfolioCanNotIncludeItself stamp: 'FG 5/25/2022 18:21:12'!
+PASSED!
+
+!testRun: #PortfolioTest #test13ComposedPortfolioCanNotHaveParentPortfolioAccount stamp: 'FG 5/25/2022 18:21:12'!
+PASSED!
+
+!testRun: #PortfolioTest #test14ComposedPortfolioCanNotHaveAccountOfAnyRootParentRecursively stamp: 'FG 5/25/2022 18:21:12'!
+PASSED!
+
+!testRun: #PortfolioTest #test15PortfolioCanNotIncludeAnyOfTheComposedAccountOfPortfolioToAdd stamp: 'FG 5/25/2022 18:21:12'!
+PASSED!
+
+!testRun: #TransferTest #test01TransferFromOneAccountToAnotherChangesTheBalancesCorrectly stamp: 'FG 5/25/2022 18:21:14'!
+ERROR!
+
+!testRun: #TransferTest #test02TransferIsRegisteredOnDepositAccount stamp: 'FG 5/25/2022 18:21:14'!
+PASSED!
+
+!testRun: #TransferTest #test03TransferIsNotRegisterOnAnotherAccount stamp: 'FG 5/25/2022 18:21:14'!
+PASSED!
+
+!testRun: #TransferTest #test04AllTransfersAreRegisteredOnDepositAccount stamp: 'FG 5/25/2022 18:21:14'!
+PASSED!
+
+!testRun: #TransferTest #test05TransferShouldFailWhenTransferingZeroAmount stamp: 'FG 5/25/2022 18:21:14'!
+PASSED!
+
+!testRun: #TransferTest #test06TransferShouldFailWhenTransferingNegativeAmounts stamp: 'FG 5/25/2022 18:21:14'!
+PASSED!
+
+!testRun: #TransferTest #test07TransferShouldBeRegisteredBetweenTwoDifferentAccounts stamp: 'FG 5/25/2022 18:21:14'!
+PASSED!
+
+!testRun: #TransferTest #test08AllTransfersAreRegisteredOnWithdrawAccount stamp: 'FG 5/25/2022 18:21:14'!
+PASSED!
+
+!testRun: #TransferTest #test09TransferValueIsEqualToTheAmountTransfered stamp: 'FG 5/25/2022 18:21:14'!
+PASSED!
+
+!testRun: #TransferTest #test01TransferFromOneAccountToAnotherChangesTheBalancesCorrectly stamp: 'FG 5/25/2022 18:21:14'!
+ERROR!
+!Transfer methodsFor: 'balance' stamp: 'FG 5/25/2022 18:22:11' overrides: 50474447!
+affectBalance: aBalance
+
+	self subclassResponsibility ! !
+!Transfer methodsFor: 'balance' stamp: 'FG 5/25/2022 18:23:46' prior: 50475884 overrides: 50474447!
+affectBalance: aBalance
+
+	^ aBalance! !
+
+!testRun: #TransferTest #test01TransferFromOneAccountToAnotherChangesTheBalancesCorrectly stamp: 'FG 5/25/2022 18:23:49'!
+PASSED!
+
+!testRun: #TransferTest #test02TransferIsRegisteredOnDepositAccount stamp: 'FG 5/25/2022 18:23:49'!
+PASSED!
+
+!testRun: #TransferTest #test03TransferIsNotRegisterOnAnotherAccount stamp: 'FG 5/25/2022 18:23:49'!
+PASSED!
+
+!testRun: #TransferTest #test04AllTransfersAreRegisteredOnDepositAccount stamp: 'FG 5/25/2022 18:23:49'!
+PASSED!
+
+!testRun: #TransferTest #test05TransferShouldFailWhenTransferingZeroAmount stamp: 'FG 5/25/2022 18:23:49'!
+PASSED!
+
+!testRun: #TransferTest #test06TransferShouldFailWhenTransferingNegativeAmounts stamp: 'FG 5/25/2022 18:23:49'!
+PASSED!
+
+!testRun: #TransferTest #test07TransferShouldBeRegisteredBetweenTwoDifferentAccounts stamp: 'FG 5/25/2022 18:23:49'!
+PASSED!
+
+!testRun: #TransferTest #test08AllTransfersAreRegisteredOnWithdrawAccount stamp: 'FG 5/25/2022 18:23:49'!
+PASSED!
+
+!testRun: #TransferTest #test09TransferValueIsEqualToTheAmountTransfered stamp: 'FG 5/25/2022 18:23:49'!
+PASSED!
+!TransferTest methodsFor: 'testing' stamp: 'FG 5/25/2022 18:25:52'!
+test09TransferKnowsDepositAccount
+
+	|depositAccount withdrawAccount transfer|
+	
+	depositAccount  := ReceptiveAccount new.
+	withdrawAccount := ReceptiveAccount  new.
+		
+	transfer := Transfer registerTransfer: 10 from: withdrawAccount to: depositAccount.
+
+	self assert: transfer depositAccount equals: depositAccount.! !
+!TransferTest methodsFor: 'testing' stamp: 'FG 5/25/2022 18:26:01'!
+test10TransferKnowsDepositAccount
+
+	|depositAccount withdrawAccount transfer|
+	
+	depositAccount  := ReceptiveAccount new.
+	withdrawAccount := ReceptiveAccount  new.
+		
+	transfer := Transfer registerTransfer: 10 from: withdrawAccount to: depositAccount.
+
+	self assert: transfer depositAccount equals: depositAccount.! !
+
+!methodRemoval: TransferTest #test09TransferKnowsDepositAccount stamp: 'FG 5/25/2022 18:26:01'!
+test09TransferKnowsDepositAccount
+
+	|depositAccount withdrawAccount transfer|
+	
+	depositAccount  := ReceptiveAccount new.
+	withdrawAccount := ReceptiveAccount  new.
+		
+	transfer := Transfer registerTransfer: 10 from: withdrawAccount to: depositAccount.
+
+	self assert: transfer depositAccount equals: depositAccount.!
+
+!testRun: #TransferTest #test10TransferKnowsDepositAccount stamp: 'FG 5/25/2022 18:26:05'!
+ERROR!
+!Transfer methodsFor: 'accounts' stamp: 'FG 5/25/2022 18:26:20'!
+depositAccount
+	self shouldBeImplemented.! !
+
+!classDefinition: #Transfer category: 'Portfolio-Solucion' stamp: 'FG 5/25/2022 18:26:39'!
+AccountTransaction subclass: #Transfer
+	instanceVariableNames: 'value depositAccount'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'Portfolio-Solucion'!
+!Transfer methodsFor: 'accounts' stamp: 'FG 5/25/2022 18:26:35' prior: 50475968!
+depositAccount
+	
+	^ depositAccount! !
+
+!testRun: #TransferTest #test10TransferKnowsDepositAccount stamp: 'FG 5/25/2022 18:26:41'!
+FAILURE!
+!Transfer methodsFor: 'initialization' stamp: 'FG 5/25/2022 18:27:05' prior: 50475583!
+initializeTransferOf: anAmountToTransfer from: aWithdrawAccount to: aDepositAccount 
+
+	Deposit register: anAmountToTransfer on: aDepositAccount.
+	Withdraw register: anAmountToTransfer on: aWithdrawAccount.
+	value := anAmountToTransfer.
+	depositAccount := aDepositAccount.
+	aDepositAccount register: self.
+	aWithdrawAccount register: self.! !
+
+!testRun: #TransferTest #test10TransferKnowsDepositAccount stamp: 'FG 5/25/2022 18:27:15'!
+PASSED!
+
+!testRun: #TransferTest #test01TransferFromOneAccountToAnotherChangesTheBalancesCorrectly stamp: 'FG 5/25/2022 18:27:15'!
+PASSED!
+
+!testRun: #TransferTest #test02TransferIsRegisteredOnDepositAccount stamp: 'FG 5/25/2022 18:27:15'!
+PASSED!
+
+!testRun: #TransferTest #test03TransferIsNotRegisterOnAnotherAccount stamp: 'FG 5/25/2022 18:27:15'!
+PASSED!
+
+!testRun: #TransferTest #test04AllTransfersAreRegisteredOnDepositAccount stamp: 'FG 5/25/2022 18:27:15'!
+PASSED!
+
+!testRun: #TransferTest #test05TransferShouldFailWhenTransferingZeroAmount stamp: 'FG 5/25/2022 18:27:15'!
+PASSED!
+
+!testRun: #TransferTest #test06TransferShouldFailWhenTransferingNegativeAmounts stamp: 'FG 5/25/2022 18:27:15'!
+PASSED!
+
+!testRun: #TransferTest #test07TransferShouldBeRegisteredBetweenTwoDifferentAccounts stamp: 'FG 5/25/2022 18:27:15'!
+PASSED!
+
+!testRun: #TransferTest #test08AllTransfersAreRegisteredOnWithdrawAccount stamp: 'FG 5/25/2022 18:27:15'!
+PASSED!
+
+!testRun: #TransferTest #test09TransferValueIsEqualToTheAmountTransfered stamp: 'FG 5/25/2022 18:27:15'!
+PASSED!
+
+!testRun: #TransferTest #test10TransferKnowsDepositAccount stamp: 'FG 5/25/2022 18:27:15'!
+PASSED!
+!TransferTest methodsFor: 'testing' stamp: 'FG 5/25/2022 18:27:38'!
+test10TransferKnowsWithdrawAccount
+
+	|depositAccount withdrawAccount transfer|
+	
+	depositAccount  := ReceptiveAccount new.
+	withdrawAccount := ReceptiveAccount  new.
+		
+	transfer := Transfer registerTransfer: 10 from: withdrawAccount to: depositAccount.
+
+	self assert: transfer withdrawAccount equals: withdrawAccount.! !
+!TransferTest methodsFor: 'testing' stamp: 'FG 5/25/2022 18:27:47'!
+test11TransferKnowsWithdrawAccount
+
+	|depositAccount withdrawAccount transfer|
+	
+	depositAccount  := ReceptiveAccount new.
+	withdrawAccount := ReceptiveAccount  new.
+		
+	transfer := Transfer registerTransfer: 10 from: withdrawAccount to: depositAccount.
+
+	self assert: transfer withdrawAccount equals: withdrawAccount.! !
+
+!methodRemoval: TransferTest #test10TransferKnowsWithdrawAccount stamp: 'FG 5/25/2022 18:27:47'!
+test10TransferKnowsWithdrawAccount
+
+	|depositAccount withdrawAccount transfer|
+	
+	depositAccount  := ReceptiveAccount new.
+	withdrawAccount := ReceptiveAccount  new.
+		
+	transfer := Transfer registerTransfer: 10 from: withdrawAccount to: depositAccount.
+
+	self assert: transfer withdrawAccount equals: withdrawAccount.!
+
+!testRun: #TransferTest #test11TransferKnowsWithdrawAccount stamp: 'FG 5/25/2022 18:27:50'!
+ERROR!
+!Transfer methodsFor: 'accounts' stamp: 'FG 5/25/2022 18:27:55'!
+withdrawAccount
+	self shouldBeImplemented.! !
+
+!classDefinition: #Transfer category: 'Portfolio-Solucion' stamp: 'FG 5/25/2022 18:28:10'!
+AccountTransaction subclass: #Transfer
+	instanceVariableNames: 'value depositAccount withdrawAccount'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'Portfolio-Solucion'!
+!Transfer methodsFor: 'accounts' stamp: 'FG 5/25/2022 18:28:08' prior: 50476083!
+withdrawAccount
+
+	^ withdrawAccount! !
+
+!testRun: #TransferTest #test11TransferKnowsWithdrawAccount stamp: 'FG 5/25/2022 18:28:11'!
+FAILURE!
+!Transfer methodsFor: 'initialization' stamp: 'FG 5/25/2022 18:28:27' prior: 50475988!
+initializeTransferOf: anAmountToTransfer from: aWithdrawAccount to: aDepositAccount 
+
+	Deposit register: anAmountToTransfer on: aDepositAccount.
+	Withdraw register: anAmountToTransfer on: aWithdrawAccount.
+	value := anAmountToTransfer.
+	depositAccount := aDepositAccount.
+	withdrawAccount := aWithdrawAccount.
+	aDepositAccount register: self.
+	aWithdrawAccount register: self.! !
+
+!testRun: #TransferTest #test10TransferKnowsDepositAccount stamp: 'FG 5/25/2022 18:28:32'!
+PASSED!
+
+!testRun: #TransferTest #test01TransferFromOneAccountToAnotherChangesTheBalancesCorrectly stamp: 'FG 5/25/2022 18:28:32'!
+PASSED!
+
+!testRun: #TransferTest #test02TransferIsRegisteredOnDepositAccount stamp: 'FG 5/25/2022 18:28:32'!
+PASSED!
+
+!testRun: #TransferTest #test03TransferIsNotRegisterOnAnotherAccount stamp: 'FG 5/25/2022 18:28:32'!
+PASSED!
+
+!testRun: #TransferTest #test04AllTransfersAreRegisteredOnDepositAccount stamp: 'FG 5/25/2022 18:28:32'!
+PASSED!
+
+!testRun: #TransferTest #test05TransferShouldFailWhenTransferingZeroAmount stamp: 'FG 5/25/2022 18:28:32'!
+PASSED!
+
+!testRun: #TransferTest #test06TransferShouldFailWhenTransferingNegativeAmounts stamp: 'FG 5/25/2022 18:28:32'!
+PASSED!
+
+!testRun: #TransferTest #test07TransferShouldBeRegisteredBetweenTwoDifferentAccounts stamp: 'FG 5/25/2022 18:28:32'!
+PASSED!
+
+!testRun: #TransferTest #test08AllTransfersAreRegisteredOnWithdrawAccount stamp: 'FG 5/25/2022 18:28:32'!
+PASSED!
+
+!testRun: #TransferTest #test09TransferValueIsEqualToTheAmountTransfered stamp: 'FG 5/25/2022 18:28:32'!
+PASSED!
+
+!testRun: #TransferTest #test10TransferKnowsDepositAccount stamp: 'FG 5/25/2022 18:28:32'!
+PASSED!
+
+!testRun: #TransferTest #test11TransferKnowsWithdrawAccount stamp: 'FG 5/25/2022 18:28:32'!
+PASSED!
+
+!testRun: #TransferTest #test11TransferKnowsWithdrawAccount stamp: 'FG 5/25/2022 18:28:36'!
+PASSED!
+
+!testRun: #TransferTest #test01TransferFromOneAccountToAnotherChangesTheBalancesCorrectly stamp: 'FG 5/25/2022 18:28:36'!
+PASSED!
+
+!testRun: #TransferTest #test02TransferIsRegisteredOnDepositAccount stamp: 'FG 5/25/2022 18:28:36'!
+PASSED!
+
+!testRun: #TransferTest #test03TransferIsNotRegisterOnAnotherAccount stamp: 'FG 5/25/2022 18:28:36'!
+PASSED!
+
+!testRun: #TransferTest #test04AllTransfersAreRegisteredOnDepositAccount stamp: 'FG 5/25/2022 18:28:36'!
+PASSED!
+
+!testRun: #TransferTest #test05TransferShouldFailWhenTransferingZeroAmount stamp: 'FG 5/25/2022 18:28:36'!
+PASSED!
+
+!testRun: #TransferTest #test06TransferShouldFailWhenTransferingNegativeAmounts stamp: 'FG 5/25/2022 18:28:36'!
+PASSED!
+
+!testRun: #TransferTest #test07TransferShouldBeRegisteredBetweenTwoDifferentAccounts stamp: 'FG 5/25/2022 18:28:36'!
+PASSED!
+
+!testRun: #TransferTest #test08AllTransfersAreRegisteredOnWithdrawAccount stamp: 'FG 5/25/2022 18:28:36'!
+PASSED!
+
+!testRun: #TransferTest #test09TransferValueIsEqualToTheAmountTransfered stamp: 'FG 5/25/2022 18:28:36'!
+PASSED!
+
+!testRun: #TransferTest #test10TransferKnowsDepositAccount stamp: 'FG 5/25/2022 18:28:36'!
+PASSED!
+
+!testRun: #TransferTest #test11TransferKnowsWithdrawAccount stamp: 'FG 5/25/2022 18:28:36'!
+PASSED!
+!Transfer methodsFor: 'initialization' stamp: 'FG 5/25/2022 18:41:43' prior: 50476104!
+initializeTransferOf: anAmountToTransfer from: aWithdrawAccount to: aDepositAccount 
+
+	Deposit register: anAmountToTransfer on: aDepositAccount.
+	Withdraw register: anAmountToTransfer on: aWithdrawAccount.
+	value := anAmountToTransfer.
+	depositAccount := aDepositAccount.
+	withdrawAccount := aWithdrawAccount.
+	depositAccount register: self.
+	withdrawAccount register: self.! !
+
+!testRun: #TransferTest #test01TransferFromOneAccountToAnotherChangesTheBalancesCorrectly stamp: 'FG 5/25/2022 18:41:46'!
+PASSED!
+
+!testRun: #TransferTest #test02TransferIsRegisteredOnDepositAccount stamp: 'FG 5/25/2022 18:41:46'!
+PASSED!
+
+!testRun: #TransferTest #test03TransferIsNotRegisterOnAnotherAccount stamp: 'FG 5/25/2022 18:41:46'!
+PASSED!
+
+!testRun: #TransferTest #test04AllTransfersAreRegisteredOnDepositAccount stamp: 'FG 5/25/2022 18:41:46'!
+PASSED!
+
+!testRun: #TransferTest #test05TransferShouldFailWhenTransferingZeroAmount stamp: 'FG 5/25/2022 18:41:46'!
+PASSED!
+
+!testRun: #TransferTest #test06TransferShouldFailWhenTransferingNegativeAmounts stamp: 'FG 5/25/2022 18:41:46'!
+PASSED!
+
+!testRun: #TransferTest #test07TransferShouldBeRegisteredBetweenTwoDifferentAccounts stamp: 'FG 5/25/2022 18:41:46'!
+PASSED!
+
+!testRun: #TransferTest #test08AllTransfersAreRegisteredOnWithdrawAccount stamp: 'FG 5/25/2022 18:41:46'!
+PASSED!
+
+!testRun: #TransferTest #test09TransferValueIsEqualToTheAmountTransfered stamp: 'FG 5/25/2022 18:41:46'!
+PASSED!
+
+!testRun: #TransferTest #test10TransferKnowsDepositAccount stamp: 'FG 5/25/2022 18:41:46'!
+PASSED!
+
+!testRun: #TransferTest #test11TransferKnowsWithdrawAccount stamp: 'FG 5/25/2022 18:41:46'!
+PASSED!
+
+Transfer subclass: #DepositTransfer
+	instanceVariableNames: 'value depositAccount withdrawAccount'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'Portfolio-Solucion'!
+
+Transfer subclass: #DepositTransfer
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'Portfolio-Solucion'!
+
+!classDefinition: #DepositTransfer category: 'Portfolio-Solucion' stamp: 'FG 5/25/2022 18:45:57'!
+Transfer subclass: #DepositTransfer
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'Portfolio-Solucion'!
+
+Transfer subclass: #WithdrawTransfer
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'Portfolio-Solucion'!
+
+!classDefinition: #WithdrawTransfer category: 'Portfolio-Solucion' stamp: 'FG 5/25/2022 18:46:08'!
+Transfer subclass: #WithdrawTransfer
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'Portfolio-Solucion'!
+!Transfer methodsFor: 'balance' stamp: 'FG 5/25/2022 18:46:34' prior: 50475889 overrides: 50474447!
+affectBalance: aBalance
+
+	self subclassResponsibility.! !
+
+!classRemoval: #DepositTransfer stamp: 'FG 5/25/2022 18:50:40'!
+Transfer subclass: #DepositTransfer
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'Portfolio-Solucion'!
+
+!classRemoval: #WithdrawTransfer stamp: 'FG 5/25/2022 18:50:45'!
+Transfer subclass: #WithdrawTransfer
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'Portfolio-Solucion'!
+!Transfer methodsFor: 'balance' stamp: 'FG 5/25/2022 18:50:58' prior: 50476288 overrides: 50474447!
+affectBalance: aBalance
+
+	^aBalance.! !
+!TransferTest methodsFor: 'testing' stamp: 'FG 5/25/2022 18:56:18' prior: 50476054!
+test11TransferKnowsWithdrawAccount
+
+	|depositAccount withdrawAccount transfer|
+	
+	depositAccount  := ReceptiveAccount new.
+	withdrawAccount := ReceptiveAccount  new.
+		
+	transfer := Transfer registerTransfer: 10 from: withdrawAccount to: depositAccount.
+
+	self assert: transfer withdrawAccount equals: withdrawAccount.! !
+
+Transfer subclass: #DepositTransfer
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'Portfolio-Solucion'!
+
+!classDefinition: #DepositTransfer category: 'Portfolio-Solucion' stamp: 'FG 5/25/2022 19:15:18'!
+Transfer subclass: #DepositTransfer
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'Portfolio-Solucion'!
+
+Transfer subclass: #WithdrawTransfer
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'Portfolio-Solucion'!
+
+!classDefinition: #WithdrawTransfer category: 'Portfolio-Solucion' stamp: 'FG 5/25/2022 19:15:24'!
+Transfer subclass: #WithdrawTransfer
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'Portfolio-Solucion'!
+
+AccountTransaction subclass: #Transfer
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'Portfolio-Solucion'!
+
+AccountTransaction subclass: #Transfer
+	instanceVariableNames: 'value depositAccount withdrawAccount'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'Portfolio-Solucion'!
+
+!classDefinition: #Transfer category: 'Portfolio-Solucion' stamp: 'FG 5/25/2022 19:15:40'!
+AccountTransaction subclass: #Transfer
+	instanceVariableNames: 'value depositAccount withdrawAccount'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'Portfolio-Solucion'!
+
+!classRemoval: #DepositTransfer stamp: 'FG 5/25/2022 19:17:06'!
+Transfer subclass: #DepositTransfer
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'Portfolio-Solucion'!
+
+!classRemoval: #WithdrawTransfer stamp: 'FG 5/25/2022 19:17:11'!
+Transfer subclass: #WithdrawTransfer
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'Portfolio-Solucion'!
+
+Transfer subclass: #WithdrawTransfer
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'Portfolio-Solucion'!
+
+!classDefinition: #WithdrawTransfer category: 'Portfolio-Solucion' stamp: 'FG 5/25/2022 19:17:31'!
+Transfer subclass: #WithdrawTransfer
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'Portfolio-Solucion'!
+
+Transfer subclass: #DepositTransfer
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'Portfolio-Solucion'!
+
+!classDefinition: #DepositTransfer category: 'Portfolio-Solucion' stamp: 'FG 5/25/2022 19:17:38'!
+Transfer subclass: #DepositTransfer
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'Portfolio-Solucion'!
+!Transfer methodsFor: 'balance' stamp: 'FG 5/25/2022 19:18:12' prior: 50476306 overrides: 50474447!
+affectBalance: aBalance
+
+	self subclassResponsibility.! !
+!Transfer methodsFor: 'accounts' stamp: 'FG 5/25/2022 19:18:33' prior: 50475980!
+depositAccount
+	
+	self subclassResponsibility.! !
+!Transfer methodsFor: 'accounts' stamp: 'FG 5/25/2022 19:18:40' prior: 50476096!
+withdrawAccount
+
+	self subclassResponsibility.! !
+!Transfer methodsFor: 'value' stamp: 'FG 5/25/2022 19:19:00' prior: 50475579 overrides: 50474443!
+value
+	
+	self subclassResponsibility.! !
+!Transfer methodsFor: 'initialization' stamp: 'FG 5/25/2022 19:19:22' prior: 50476204!
+initializeTransferOf: anAmountToTransfer from: aWithdrawAccount to: aDepositAccount 
+
+	"Deposit register: anAmountToTransfer on: aDepositAccount.
+	Withdraw register: anAmountToTransfer on: aWithdrawAccount.
+	value := anAmountToTransfer.
+	depositAccount := aDepositAccount.
+	withdrawAccount := aWithdrawAccount."
+	depositAccount register: self.
+	withdrawAccount register: self.! !
+
+AccountTransaction subclass: #Transfer
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'Portfolio-Solucion'!
+
+!testRun: #TransferTest #test01TransferFromOneAccountToAnotherChangesTheBalancesCorrectly stamp: 'FG 5/25/2022 19:20:35'!
+ERROR!
+
+!testRun: #TransferTest #test02TransferIsRegisteredOnDepositAccount stamp: 'FG 5/25/2022 19:20:35'!
+ERROR!
+
+!testRun: #TransferTest #test03TransferIsNotRegisterOnAnotherAccount stamp: 'FG 5/25/2022 19:20:35'!
+ERROR!
+
+!testRun: #TransferTest #test04AllTransfersAreRegisteredOnDepositAccount stamp: 'FG 5/25/2022 19:20:35'!
+ERROR!
+
+!testRun: #TransferTest #test05TransferShouldFailWhenTransferingZeroAmount stamp: 'FG 5/25/2022 19:20:35'!
+PASSED!
+
+!testRun: #TransferTest #test06TransferShouldFailWhenTransferingNegativeAmounts stamp: 'FG 5/25/2022 19:20:35'!
+PASSED!
+
+!testRun: #TransferTest #test07TransferShouldBeRegisteredBetweenTwoDifferentAccounts stamp: 'FG 5/25/2022 19:20:35'!
+PASSED!
+
+!testRun: #TransferTest #test08AllTransfersAreRegisteredOnWithdrawAccount stamp: 'FG 5/25/2022 19:20:36'!
+ERROR!
+
+!testRun: #TransferTest #test09TransferValueIsEqualToTheAmountTransfered stamp: 'FG 5/25/2022 19:20:36'!
+ERROR!
+
+!testRun: #TransferTest #test10TransferKnowsDepositAccount stamp: 'FG 5/25/2022 19:20:36'!
+ERROR!
+
+!testRun: #TransferTest #test11TransferKnowsWithdrawAccount stamp: 'FG 5/25/2022 19:20:36'!
+ERROR!
+
+AccountTransaction subclass: #Transfer
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'Portfolio-Solucion'!
+
+!classRemoval: #Withdraw stamp: 'FG 5/25/2022 19:21:47'!
+AccountTransaction subclass: #Withdraw
+	instanceVariableNames: 'value'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'Portfolio-Solucion'!
+
+!classRemoval: #WithdrawTransfer stamp: 'FG 5/25/2022 19:21:47'!
+Transfer subclass: #WithdrawTransfer
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'Portfolio-Solucion'!
+
+!classRemoval: #DepositTransfer stamp: 'FG 5/25/2022 19:21:47'!
+Transfer subclass: #DepositTransfer
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'Portfolio-Solucion'!
+
+!classRemoval: #Transfer stamp: 'FG 5/25/2022 19:21:48'!
+AccountTransaction subclass: #Transfer
+	instanceVariableNames: 'value depositAccount withdrawAccount'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'Portfolio-Solucion'!
+
+!classRemoval: #Deposit stamp: 'FG 5/25/2022 19:21:48'!
+AccountTransaction subclass: #Deposit
+	instanceVariableNames: 'value'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'Portfolio-Solucion'!
+
+!classRemoval: #AccountTransaction stamp: 'FG 5/25/2022 19:21:48'!
+Object subclass: #AccountTransaction
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'Portfolio-Solucion'!
+
+!classRemoval: #ReceptiveAccount stamp: 'FG 5/25/2022 19:21:48'!
+Account subclass: #ReceptiveAccount
+	instanceVariableNames: 'transactions transfers'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'Portfolio-Solucion'!
+
+!classRemoval: #Portfolio stamp: 'FG 5/25/2022 19:21:49'!
+Account subclass: #Portfolio
+	instanceVariableNames: 'accounts parents'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'Portfolio-Solucion'!
+
+!classRemoval: #Account stamp: 'FG 5/25/2022 19:21:49'!
+Object subclass: #Account
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'Portfolio-Solucion'!
+
+!classRemoval: #TransferTest stamp: 'FG 5/25/2022 19:21:49'!
+TestCase subclass: #TransferTest
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'Portfolio-Solucion'!
+
+!classRemoval: #ReceptiveAccountTest stamp: 'FG 5/25/2022 19:21:50'!
+TestCase subclass: #ReceptiveAccountTest
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'Portfolio-Solucion'!
+
+!classRemoval: #PortfolioTest stamp: 'FG 5/25/2022 19:21:50'!
+TestCase subclass: #PortfolioTest
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'Portfolio-Solucion'!
+
+----End fileIn of C:\Users\Fabian\Desktop\Ing1\Ejercicio 6\windows64\Portfolio-Solucion.st----!
+
+Transfer subclass: #DepositTransfer
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'Portfolio-Solucion'!
+
+!classDefinition: #DepositTransfer category: 'Portfolio-Solucion' stamp: 'FG 5/25/2022 19:22:28'!
+Transfer subclass: #DepositTransfer
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'Portfolio-Solucion'!
+
+Transfer subclass: #WithDrawTransfer
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'Portfolio-Solucion'!
+
+!classDefinition: #WithDrawTransfer category: 'Portfolio-Solucion' stamp: 'FG 5/25/2022 19:22:35'!
+Transfer subclass: #WithDrawTransfer
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'Portfolio-Solucion'!
+
+!classRenamed: #WithDrawTransfer as: #WithdrawTransfer stamp: 'FG 5/25/2022 19:22:42'!
+Smalltalk renameClassNamed: #WithDrawTransfer as: #WithdrawTransfer!
+!DepositTransfer methodsFor: 'balance' stamp: 'FG 5/25/2022 19:24:42' overrides: 50477455!
+affectBalance: aBalance
+
+	^aBalance.! !
+!WithdrawTransfer methodsFor: 'balance' stamp: 'FG 5/25/2022 19:24:42' overrides: 50477455!
+affectBalance: aBalance
+
+	^aBalance.! !
+
+!methodRemoval: Transfer #affectBalance: stamp: 'FG 5/25/2022 19:24:42'!
+affectBalance: aBalance
+
+	^aBalance.!
+!Transfer methodsFor: 'balance' stamp: 'FG 5/25/2022 19:25:07'!
+balance
+
+	self subclassResponsibility.! !
+!Transfer methodsFor: 'value' stamp: 'FG 5/25/2022 19:25:58' prior: 50477451 overrides: 50477359!
+value
+	
+	self subclassResponsibility.! !
+!Transfer methodsFor: 'initialization' stamp: 'FG 5/25/2022 19:26:25' prior: 50477436!
+initializeTransferOf: anAmountToTransfer from: aWithdrawAccount to: aDepositAccount 
+
+	Deposit register: anAmountToTransfer on: aDepositAccount.
+	Withdraw register: anAmountToTransfer on: aWithdrawAccount.
+	"value := anAmountToTransfer."
+	depositAccount := aDepositAccount.
+	withdrawAccount := aWithdrawAccount.
+	depositAccount register: self.
+	withdrawAccount register: self.! !
+
+!classDefinition: #Transfer category: 'Portfolio-Solucion' stamp: 'FG 5/25/2022 19:26:37'!
+AccountTransaction subclass: #Transfer
+	instanceVariableNames: 'depositAccount withdrawAccount'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'Portfolio-Solucion'!
+
+!classDefinition: #DepositTransfer category: 'Portfolio-Solucion' stamp: 'FG 5/25/2022 19:26:37'!
+Transfer subclass: #DepositTransfer
+	instanceVariableNames: 'value'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'Portfolio-Solucion'!
+
+!classDefinition: #WithdrawTransfer category: 'Portfolio-Solucion' stamp: 'FG 5/25/2022 19:26:37'!
+Transfer subclass: #WithdrawTransfer
+	instanceVariableNames: 'value'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'Portfolio-Solucion'!
+!Transfer methodsFor: 'accounts' stamp: 'FG 5/25/2022 19:27:06' prior: 50477459!
+depositAccount
+	
+	self subclassResponsibility.! !
+!Transfer methodsFor: 'accounts' stamp: 'FG 5/25/2022 19:27:14' prior: 50477463!
+withdrawAccount
+
+	self subclassResponsibility.! !
+!Transfer methodsFor: 'initialization' stamp: 'FG 5/25/2022 19:27:25' prior: 50477611!
+initializeTransferOf: anAmountToTransfer from: aWithdrawAccount to: aDepositAccount 
+
+	Deposit register: anAmountToTransfer on: aDepositAccount.
+	Withdraw register: anAmountToTransfer on: aWithdrawAccount.
+	"value := anAmountToTransfer."
+	"depositAccount := aDepositAccount.
+	withdrawAccount := aWithdrawAccount."
+	depositAccount register: self.
+	withdrawAccount register: self.! !
+!Transfer methodsFor: 'initialization' stamp: 'FG 5/25/2022 19:28:14' prior: 50477660!
+initializeTransferOf: anAmountToTransfer from: aWithdrawAccount to: aDepositAccount 
+
+	Deposit register: anAmountToTransfer on: aDepositAccount.
+	Withdraw register: anAmountToTransfer on: aWithdrawAccount.
+	"value := anAmountToTransfer."
+	"depositAccount := aDepositAccount.
+	withdrawAccount := aWithdrawAccount."
+	aDepositAccount register: self.
+	aWithdrawAccount register: self.! !
+
+!classDefinition: #Transfer category: 'Portfolio-Solucion' stamp: 'FG 5/25/2022 19:28:20'!
+AccountTransaction subclass: #Transfer
+	instanceVariableNames: 'withdrawAccount'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'Portfolio-Solucion'!
+
+!classDefinition: #DepositTransfer category: 'Portfolio-Solucion' stamp: 'FG 5/25/2022 19:28:20'!
+Transfer subclass: #DepositTransfer
+	instanceVariableNames: 'value depositAccount'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'Portfolio-Solucion'!
+
+!classDefinition: #WithdrawTransfer category: 'Portfolio-Solucion' stamp: 'FG 5/25/2022 19:28:20'!
+Transfer subclass: #WithdrawTransfer
+	instanceVariableNames: 'value depositAccount'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'Portfolio-Solucion'!
+
+!classDefinition: #Transfer category: 'Portfolio-Solucion' stamp: 'FG 5/25/2022 19:28:25'!
+AccountTransaction subclass: #Transfer
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'Portfolio-Solucion'!
+
+!classDefinition: #DepositTransfer category: 'Portfolio-Solucion' stamp: 'FG 5/25/2022 19:28:25'!
+Transfer subclass: #DepositTransfer
+	instanceVariableNames: 'value depositAccount withdrawAccount'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'Portfolio-Solucion'!
+
+!classDefinition: #WithdrawTransfer category: 'Portfolio-Solucion' stamp: 'FG 5/25/2022 19:28:25'!
+Transfer subclass: #WithdrawTransfer
+	instanceVariableNames: 'value depositAccount withdrawAccount'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'Portfolio-Solucion'!
+!Transfer methodsFor: 'initialization' stamp: 'FG 5/25/2022 19:29:09' prior: 50477675!
+initializeTransferOf: anAmountToTransfer from: aWithdrawAccount to: aDepositAccount 
+
+	Deposit register: anAmountToTransfer on: aDepositAccount.
+	Withdraw register: anAmountToTransfer on: aWithdrawAccount.
+	"value := anAmountToTransfer."
+	"depositAccount := aDepositAccount.
+	withdrawAccount := aWithdrawAccount."
+	aDepositAccount register: self.
+	aWithdrawAccount register: self.! !
+!Transfer class methodsFor: 'instance creation' stamp: 'FG 5/25/2022 19:31:00' prior: 50477493!
+registerTransfer: anAmountToTransfer from: aWithdrawAccount to: aDepositAccount 
+	
+	|depositTransfer|
+	self assertAmountIsPositive: anAmountToTransfer.
+	self assertShouldBeDifferentWithdrawAccount: aWithdrawAccount andDepositAccount: aDepositAccount.
+	
+	depositTransfer := DepositTransfer new initializeTransferOf: anAmountToTransfer from: aWithdrawAccount to: aDepositAccount.
+	WithdrawTransfer new initializeTransfer: depositTransfer.
+	
+	^depositTransfer.! !
+!DepositTransfer methodsFor: 'initialization' stamp: 'FG 5/25/2022 19:31:21' overrides: 50477739!
+initializeTransferOf: anAmountToTransfer from: aWithdrawAccount to: aDepositAccount 
+
+	Deposit register: anAmountToTransfer on: aDepositAccount.
+	Withdraw register: anAmountToTransfer on: aWithdrawAccount.
+	"value := anAmountToTransfer."
+	"depositAccount := aDepositAccount.
+	withdrawAccount := aWithdrawAccount."
+	aDepositAccount register: self.
+	aWithdrawAccount register: self.! !
+!WithdrawTransfer methodsFor: 'initialization' stamp: 'FG 5/25/2022 19:31:21' overrides: 50477739!
+initializeTransferOf: anAmountToTransfer from: aWithdrawAccount to: aDepositAccount 
+
+	Deposit register: anAmountToTransfer on: aDepositAccount.
+	Withdraw register: anAmountToTransfer on: aWithdrawAccount.
+	"value := anAmountToTransfer."
+	"depositAccount := aDepositAccount.
+	withdrawAccount := aWithdrawAccount."
+	aDepositAccount register: self.
+	aWithdrawAccount register: self.! !
+
+!methodRemoval: Transfer #initializeTransferOf:from:to: stamp: 'FG 5/25/2022 19:31:21'!
+initializeTransferOf: anAmountToTransfer from: aWithdrawAccount to: aDepositAccount 
+
+	Deposit register: anAmountToTransfer on: aDepositAccount.
+	Withdraw register: anAmountToTransfer on: aWithdrawAccount.
+	"value := anAmountToTransfer."
+	"depositAccount := aDepositAccount.
+	withdrawAccount := aWithdrawAccount."
+	aDepositAccount register: self.
+	aWithdrawAccount register: self.!
+!DepositTransfer methodsFor: 'initialization' stamp: 'FG 5/25/2022 19:31:44' prior: 50477772!
+initializeTransferOf: anAmountToTransfer from: aWithdrawAccount to: aDepositAccount 
+
+	value := anAmountToTransfer.
+	depositAccount := aDepositAccount.
+	withdrawAccount := aWithdrawAccount.
+	aDepositAccount register: self.! !
+
+!classDefinition: #WithdrawTransfer category: 'Portfolio-Solucion' stamp: 'FG 5/25/2022 19:33:00'!
+Transfer subclass: #WithdrawTransfer
+	instanceVariableNames: 'value depositAccount withdrawAccount depositTransfer'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'Portfolio-Solucion'!
+!WithdrawTransfer methodsFor: 'initialization' stamp: 'FG 5/25/2022 19:32:59'!
+initializeTransfer: aDepositTransfer
+
+	depositTransfer := aDepositTransfer.
+	aDepositTransfer withdrawAccount register: self.! !
+
+!methodRemoval: WithdrawTransfer #initializeTransferOf:from:to: stamp: 'FG 5/25/2022 19:33:09'!
+initializeTransferOf: anAmountToTransfer from: aWithdrawAccount to: aDepositAccount 
+
+	Deposit register: anAmountToTransfer on: aDepositAccount.
+	Withdraw register: anAmountToTransfer on: aWithdrawAccount.
+	"value := anAmountToTransfer."
+	"depositAccount := aDepositAccount.
+	withdrawAccount := aWithdrawAccount."
+	aDepositAccount register: self.
+	aWithdrawAccount register: self.!
+!WithdrawTransfer methodsFor: 'balance' stamp: 'FG 5/25/2022 19:34:17' prior: 50477595 overrides: 50477363!
+affectBalance: aBalance
+
+	^aBalance - depositTransfer value.! !
+!DepositTransfer methodsFor: 'balance' stamp: 'FG 5/25/2022 19:34:23' prior: 50477590 overrides: 50477363!
+affectBalance: aBalance
+
+	^aBalance + value.! !
+!DepositTransfer methodsFor: 'value' stamp: 'FG 5/25/2022 19:34:53' overrides: 50477607!
+value 
+
+	^value.! !
+!WithdrawTransfer methodsFor: 'value' stamp: 'FG 5/25/2022 19:35:09' overrides: 50477607!
+value
+
+	^ depositTransfer value.! !
+!WithdrawTransfer methodsFor: 'accounts' stamp: 'FG 5/25/2022 19:35:32' overrides: 50477655!
+withdrawAccount
+
+	^depositTransfer withdrawAccount.! !
+!WithdrawTransfer methodsFor: 'accounts' stamp: 'FG 5/25/2022 19:35:47' overrides: 50477650!
+depositAccount
+
+	^depositTransfer depositAccount.! !
+!DepositTransfer methodsFor: 'accounts' stamp: 'FG 5/25/2022 19:36:37' overrides: 50477650!
+depositAccount
+
+	^depositAccount.! !
+!DepositTransfer methodsFor: 'accounts' stamp: 'FG 5/25/2022 19:36:46' overrides: 50477655!
+withdrawAccount
+
+	^withdrawAccount .! !
+!Transfer methodsFor: 'balance' stamp: 'FG 5/25/2022 19:37:57' overrides: 50477363!
+affectBalance: aBalance
+
+	self subclassResponsibility.! !
+
+!methodRemoval: Transfer #balance stamp: 'FG 5/25/2022 19:38:04'!
+balance
+
+	self subclassResponsibility.!
+
+!testRun: #TransferTest #test01TransferFromOneAccountToAnotherChangesTheBalancesCorrectly stamp: 'FG 5/25/2022 19:38:52'!
+PASSED!
+
+!testRun: #TransferTest #test02TransferIsRegisteredOnDepositAccount stamp: 'FG 5/25/2022 19:38:52'!
+PASSED!
+
+!testRun: #TransferTest #test03TransferIsNotRegisterOnAnotherAccount stamp: 'FG 5/25/2022 19:38:53'!
+PASSED!
+
+!testRun: #TransferTest #test04AllTransfersAreRegisteredOnDepositAccount stamp: 'FG 5/25/2022 19:38:53'!
+PASSED!
+
+!testRun: #TransferTest #test05TransferShouldFailWhenTransferingZeroAmount stamp: 'FG 5/25/2022 19:38:53'!
+PASSED!
+
+!testRun: #TransferTest #test06TransferShouldFailWhenTransferingNegativeAmounts stamp: 'FG 5/25/2022 19:38:53'!
+PASSED!
+
+!testRun: #TransferTest #test07TransferShouldBeRegisteredBetweenTwoDifferentAccounts stamp: 'FG 5/25/2022 19:38:53'!
+PASSED!
+
+!testRun: #TransferTest #test08AllTransfersAreRegisteredOnWithdrawAccount stamp: 'FG 5/25/2022 19:38:53'!
+FAILURE!
+
+!testRun: #TransferTest #test09TransferValueIsEqualToTheAmountTransfered stamp: 'FG 5/25/2022 19:38:53'!
+PASSED!
+
+!testRun: #TransferTest #test10TransferKnowsDepositAccount stamp: 'FG 5/25/2022 19:38:53'!
+PASSED!
+
+!testRun: #TransferTest #test11TransferKnowsWithdrawAccount stamp: 'FG 5/25/2022 19:38:53'!
+PASSED!
+
+!testRun: #TransferTest #test08AllTransfersAreRegisteredOnWithdrawAccount stamp: 'FG 5/25/2022 19:38:53'!
+FAILURE!
+
+Transfer subclass: #WithdrawTransfer
+	instanceVariableNames: 'depositTransfer'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'Portfolio-Solucion'!
+
+!classDefinition: #WithdrawTransfer category: 'Portfolio-Solucion' stamp: 'FG 5/25/2022 19:40:29'!
+Transfer subclass: #WithdrawTransfer
+	instanceVariableNames: 'depositTransfer'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'Portfolio-Solucion'!
+!WithdrawTransfer methodsFor: 'comparing' stamp: 'FG 5/25/2022 19:43:54' overrides: 16901772!
+= anObject 
+
+	^depositTransfer == anObject! !
+!WithdrawTransfer methodsFor: 'comparing' stamp: 'FG 5/25/2022 19:44:24' overrides: 16901788!
+hash
+	^ depositTransfer hash! !
+
+!testRun: #TransferTest #test01TransferFromOneAccountToAnotherChangesTheBalancesCorrectly stamp: 'FG 5/25/2022 19:44:30'!
+PASSED!
+
+!testRun: #TransferTest #test02TransferIsRegisteredOnDepositAccount stamp: 'FG 5/25/2022 19:44:30'!
+PASSED!
+
+!testRun: #TransferTest #test03TransferIsNotRegisterOnAnotherAccount stamp: 'FG 5/25/2022 19:44:30'!
+PASSED!
+
+!testRun: #TransferTest #test04AllTransfersAreRegisteredOnDepositAccount stamp: 'FG 5/25/2022 19:44:30'!
+PASSED!
+
+!testRun: #TransferTest #test05TransferShouldFailWhenTransferingZeroAmount stamp: 'FG 5/25/2022 19:44:30'!
+PASSED!
+
+!testRun: #TransferTest #test06TransferShouldFailWhenTransferingNegativeAmounts stamp: 'FG 5/25/2022 19:44:30'!
+PASSED!
+
+!testRun: #TransferTest #test07TransferShouldBeRegisteredBetweenTwoDifferentAccounts stamp: 'FG 5/25/2022 19:44:30'!
+PASSED!
+
+!testRun: #TransferTest #test08AllTransfersAreRegisteredOnWithdrawAccount stamp: 'FG 5/25/2022 19:44:30'!
+PASSED!
+
+!testRun: #TransferTest #test09TransferValueIsEqualToTheAmountTransfered stamp: 'FG 5/25/2022 19:44:30'!
+PASSED!
+
+!testRun: #TransferTest #test10TransferKnowsDepositAccount stamp: 'FG 5/25/2022 19:44:30'!
+PASSED!
+
+!testRun: #TransferTest #test11TransferKnowsWithdrawAccount stamp: 'FG 5/25/2022 19:44:30'!
+PASSED!
