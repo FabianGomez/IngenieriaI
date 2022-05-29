@@ -632,13 +632,6 @@ TestCase subclass: #TransferTest
 	category: 'Portfolio-Solucion'!
 
 !TransferTest methodsFor: 'testing' stamp: 'FG 5/29/2022 10:30:55'!
-setUp
-
-	amountToTransfer := 10.
-	accountToDeposit := ReceptiveAccount new.
-	accountToWithdraw := ReceptiveAccount new. ! !
-
-!TransferTest methodsFor: 'testing' stamp: 'FG 5/29/2022 10:30:55'!
 test01TransferAffectsBalanceCorrectly
 
 	Transfer register: amountToTransfer from: accountToWithdraw to: accountToDeposit .
@@ -704,6 +697,14 @@ test07TransferAccountsShouldBeDifferent
   	self should: [ Transfer register: amountToTransfer from: accountToDeposit to: accountToDeposit . ]
 		raise: Error - MessageNotUnderstood 
 		withExceptionDo: [ :anError | self assert: Transfer transferAccountsShouldBeDifferentErrorMessage equals: anError messageText. ]! !
+
+
+!TransferTest methodsFor: 'setUp' stamp: 'FG 5/29/2022 10:30:55'!
+setUp
+
+	amountToTransfer := 10.
+	accountToDeposit := ReceptiveAccount new.
+	accountToWithdraw := ReceptiveAccount new. ! !
 
 
 !classDefinition: #Account category: 'Portfolio-Solucion'!

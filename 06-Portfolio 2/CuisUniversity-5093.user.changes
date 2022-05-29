@@ -10960,3 +10960,5 @@ makeReport
 makeReport: aReport
 	
 	accounts do: [ :anAccount |		anAccount makeReport: aReport.	].! !
+
+----SNAPSHOT----(29 May 2022 10:43:00) CuisUniversity-5093.image priorSource: 5040594!
