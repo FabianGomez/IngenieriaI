@@ -5060,3 +5060,3329 @@ PASSED!
 PASSED!
 
 ----SNAPSHOT----(1 June 2022 19:11:54) CuisUniversity-5093.image priorSource: 4764647!
+
+----STARTUP---- (1 June 2022 19:25:16) as C:\Users\Fabian\Desktop\Ing1\Ejercicio 7\windows64\CuisUniversity-5093.image!
+
+!MarsRoverLoggerTest methodsFor: 'test' stamp: 'FG 6/1/2022 18:47:58' prior: 50480858!
+test02LoggerOverPositionChangesShouldLogNewPositionAfterMovingToTheNorth
+
+	| marsRover logger logStream marsRoverProxy |
+	
+	marsRover := MarsRover at: 1@1 heading: MarsRoverHeadingNorth.
+	marsRoverProxy := MarsRoverProxy of: marsRover.
+	logger := MarsRoverLogger followPositionChangesOn: marsRoverProxy.
+	
+	marsRover process: 'f'.
+	
+	logStream := logger readStream.
+	self assert: '1@2' equals: logStream nextLine.
+	self assert: logStream atEnd.
+! !
+!MarsRoverProxy methodsFor: 'delegate' stamp: 'FG 6/1/2022 19:26:45'!
+moveForward
+	
+	proxee moveForward.
+	self notifyPositionTracker.! !
+!MarsRoverProxy methodsFor: 'delegate' stamp: 'FG 6/1/2022 19:27:05'!
+moveBackward
+	
+	proxee moveBackward.
+	self notifyPositionTracker.! !
+
+!testRun: #MarsRoverLoggerTest #test02LoggerOverPositionChangesShouldLogNewPositionAfterMovingToTheNorth stamp: 'FG 6/1/2022 19:27:15'!
+FAILURE!
+!MarsRoverLoggerTest methodsFor: 'test' stamp: 'FG 6/1/2022 19:27:22' prior: 50480972!
+test02LoggerOverPositionChangesShouldLogNewPositionAfterMovingToTheNorth
+
+	| marsRover logger logStream marsRoverProxy |
+	
+	marsRover := MarsRover at: 1@1 heading: MarsRoverHeadingNorth.
+	marsRoverProxy := MarsRoverProxy of: marsRover.
+	logger := MarsRoverLogger followPositionChangesOn: marsRoverProxy.
+	
+	marsRoverProxy process: 'f'.
+	
+	logStream := logger readStream.
+	self assert: '1@2' equals: logStream nextLine.
+	self assert: logStream atEnd.
+! !
+
+!testRun: #MarsRoverLoggerTest #test02LoggerOverPositionChangesShouldLogNewPositionAfterMovingToTheNorth stamp: 'FG 6/1/2022 19:27:23'!
+FAILURE!
+
+!methodRemoval: MarsRoverProxy #changePosition: stamp: 'FG 6/1/2022 19:28:22'!
+changePosition: aPositionToBeAdded
+
+	proxee changePosition: aPositionToBeAdded.
+	self notifyPositionTracker.!
+!MarsRoverProxy methodsFor: 'delegate' stamp: 'FG 6/1/2022 19:30:01' prior: 50480989!
+moveForward
+
+	proxee moveForward.
+	self notifyPositionTracker.! !
+!MarsRover methodsFor: 'tracking' stamp: 'FG 6/1/2022 19:40:21' prior: 50478164!
+followHeadingChangesWith: aMarsRoverTracker
+
+	headingProxy := aMarsRoverTracker! !
+!MarsRover methodsFor: 'tracking' stamp: 'FG 6/1/2022 19:40:30' prior: 50478185!
+followPositionChangesWith: aMarsRoverTracker
+	
+	positionProxy := aMarsRoverTracker.! !
+!MarsRoverWindow methodsFor: 'events listener' stamp: 'FG 6/1/2022 19:43:31' prior: 50476727 overrides: 50478120!
+headingChangedTo: aMarsRoverHeading
+	
+	aMarsRoverHeading accept: self.! !
+
+!testRun: #MarsRoverLoggerTest #test01LoggerOverPositionChangesShouldBeEmptyAfterProcesingEmptyCommand stamp: 'FG 6/1/2022 19:43:33'!
+PASSED!
+
+!testRun: #MarsRoverLoggerTest #test02LoggerOverPositionChangesShouldLogNewPositionAfterMovingToTheNorth stamp: 'FG 6/1/2022 19:43:33'!
+FAILURE!
+
+!testRun: #MarsRoverLoggerTest #test03LoggerOverPositionChangesShouldLogNewPositionAfterMovingToTheShouth stamp: 'FG 6/1/2022 19:43:33'!
+PASSED!
+
+!testRun: #MarsRoverLoggerTest #test04LoggerOverPositionChangesShouldLogNewPositionAfterMovingToTheEastAndWest stamp: 'FG 6/1/2022 19:43:33'!
+PASSED!
+
+!testRun: #MarsRoverLoggerTest #test05LoggerOverHeadingChangesShouldLogNewHeadingAfterRotateToTheEast stamp: 'FG 6/1/2022 19:43:33'!
+PASSED!
+
+!testRun: #MarsRoverLoggerTest #test06LoggerOverHeadingChangesShouldLogNewHeadingAfterRotateToTheSouth stamp: 'FG 6/1/2022 19:43:33'!
+PASSED!
+
+!testRun: #MarsRoverLoggerTest #test07LoggerOverHeadingChangesShouldLogNewHeadingAfterFullRotation stamp: 'FG 6/1/2022 19:43:33'!
+PASSED!
+
+!testRun: #MarsRoverLoggerTest #test08LoggerOverHeadingAndPositionChangesShouldLogAllChanges stamp: 'FG 6/1/2022 19:43:33'!
+PASSED!
+
+!testRun: #MarsRoverTest #test01DoesNotMoveWhenNoCommand stamp: 'FG 6/1/2022 19:43:33'!
+PASSED!
+
+!testRun: #MarsRoverTest #test02IsAtFailsForDifferentPosition stamp: 'FG 6/1/2022 19:43:33'!
+PASSED!
+
+!testRun: #MarsRoverTest #test03IsAtFailsForDifferentHeading stamp: 'FG 6/1/2022 19:43:33'!
+PASSED!
+
+!testRun: #MarsRoverTest #test04IncrementsYAfterMovingForwardWhenHeadingNorth stamp: 'FG 6/1/2022 19:43:33'!
+PASSED!
+
+!testRun: #MarsRoverTest #test06DecrementsYAfterMovingBackwardsWhenHeadingNorth stamp: 'FG 6/1/2022 19:43:33'!
+PASSED!
+
+!testRun: #MarsRoverTest #test07PointToEashAfterRotatingRightWhenHeadingNorth stamp: 'FG 6/1/2022 19:43:33'!
+PASSED!
+
+!testRun: #MarsRoverTest #test08PointsToWestAfterRotatingLeftWhenPointingNorth stamp: 'FG 6/1/2022 19:43:33'!
+PASSED!
+
+!testRun: #MarsRoverTest #test09DoesNotProcessInvalidCommand stamp: 'FG 6/1/2022 19:43:33'!
+PASSED!
+
+!testRun: #MarsRoverTest #test10CanProcessMoreThanOneCommand stamp: 'FG 6/1/2022 19:43:33'!
+PASSED!
+
+!testRun: #MarsRoverTest #test11IncrementsXAfterMovingForwareWhenHeadingEast stamp: 'FG 6/1/2022 19:43:33'!
+PASSED!
+
+!testRun: #MarsRoverTest #test12DecrementsXAfterMovingBackwardWhenHeadingEast stamp: 'FG 6/1/2022 19:43:33'!
+PASSED!
+
+!testRun: #MarsRoverTest #test13PointsToSouthAfterRotatingRightWhenHeadingEast stamp: 'FG 6/1/2022 19:43:33'!
+PASSED!
+
+!testRun: #MarsRoverTest #test14PointsToNorthAfterRotatingLeftWhenPointingEast stamp: 'FG 6/1/2022 19:43:33'!
+PASSED!
+
+!testRun: #MarsRoverTest #test15ForwardBackwardsAndRotateRightWorkAsExpectedWhenPointingSouth stamp: 'FG 6/1/2022 19:43:33'!
+PASSED!
+
+!testRun: #MarsRoverTest #test16ForwardBackwardsAndRotateRightWorkAsExpectedWhenPointingWest stamp: 'FG 6/1/2022 19:43:33'!
+PASSED!
+
+!testRun: #MarsRoverWindowTest #test01WindowOverPositionChangesReturnsEmptyPositionAfterProcesingEmptyCommand stamp: 'FG 6/1/2022 19:43:33'!
+PASSED!
+
+!testRun: #MarsRoverWindowTest #test02WindowOverPositionChangesReturnsNewPositionAfterMovingToTheNorth stamp: 'FG 6/1/2022 19:43:34'!
+PASSED!
+
+!testRun: #MarsRoverWindowTest #test03WindowOverPositionChangesReturnsNewPositionAfterMovingToTheSouth stamp: 'FG 6/1/2022 19:43:34'!
+PASSED!
+
+!testRun: #MarsRoverWindowTest #test04WindowOverPositionChangesReturnsNewPositionAfterMovingToTheEastAndWest stamp: 'FG 6/1/2022 19:43:34'!
+PASSED!
+
+!testRun: #MarsRoverWindowTest #test05WindowOverHeadingChangesReturnsEmptyHeadingAfterProcesingEmptyCommand stamp: 'FG 6/1/2022 19:43:34'!
+PASSED!
+
+!testRun: #MarsRoverWindowTest #test06WindowOverHeadingChangesReturnsNewHeadingAfterRotateToTheEast stamp: 'FG 6/1/2022 19:43:34'!
+PASSED!
+
+!testRun: #MarsRoverWindowTest #test07WindowOverHeadingChangesReturnsNewHeadingAfterRotateToTheSouth stamp: 'FG 6/1/2022 19:43:34'!
+PASSED!
+
+!testRun: #MarsRoverWindowTest #test08WindowOverHeadingChangesReturnsNewHeadingAfterRotateToTheNorthAndWest stamp: 'FG 6/1/2022 19:43:34'!
+PASSED!
+
+!testRun: #MarsRoverWindowTest #test09WindowOverHeadingAndPositionChangesShouldChangeBothVariables stamp: 'FG 6/1/2022 19:43:34'!
+PASSED!
+
+!testRun: #MarsRoverLoggerTest #test02LoggerOverPositionChangesShouldLogNewPositionAfterMovingToTheNorth stamp: 'FG 6/1/2022 19:43:34'!
+FAILURE!
+
+!methodRemoval: MarsRoverHeadingEast #acceptWindow: stamp: 'FG 6/1/2022 19:43:47'!
+acceptWindow: aWindowVisitor 
+	
+	^aWindowVisitor visitMarsRoverHeadingEast: self.!
+
+!methodRemoval: MarsRoverHeadingNorth #acceptWindow: stamp: 'FG 6/1/2022 19:43:56'!
+acceptWindow: aWindowVisitor 
+	
+	^aWindowVisitor visitMarsRoverHeadingNorth: self.!
+
+!methodRemoval: MarsRoverHeadingSouth #acceptWindow: stamp: 'FG 6/1/2022 19:44:00'!
+acceptWindow: aWindowVisitor 
+	
+	^aWindowVisitor visitMarsRoverHeadingSouth: self!
+
+!methodRemoval: MarsRoverHeadingWest #acceptWindow: stamp: 'FG 6/1/2022 19:44:04'!
+acceptWindow: aWindowVisitor 
+	
+	^aWindowVisitor visitMarsRoverHeadingWest: self.!
+
+!classDefinition: #MarsRover category: 'MarsRover-WithHeading' stamp: 'FG 6/1/2022 19:46:30'!
+Object subclass: #MarsRover
+	instanceVariableNames: 'position head positionLogger headingLogger positionWindow headingWindow headingTracker positionProxy'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'MarsRover-WithHeading'!
+!MarsRover methodsFor: 'as yet unclassified' stamp: 'FG 6/1/2022 19:46:30' prior: 50478204!
+changeHeadingAndNotifyChanges: AMarsRoverHeadingClassToUpdate
+
+	head := AMarsRoverHeadingClassToUpdate for: self.
+	headingTracker ifNotNil: [headingTracker headingChangedTo: head].! !
+!MarsRover methodsFor: 'as yet unclassified' stamp: 'FG 6/1/2022 19:46:30' prior: 50481037!
+followHeadingChangesWith: aMarsRoverTracker
+
+	headingTracker := aMarsRoverTracker! !
+
+!classDefinition: #MarsRover category: 'MarsRover-WithHeading' stamp: 'FG 6/1/2022 19:46:42'!
+Object subclass: #MarsRover
+	instanceVariableNames: 'position head positionLogger headingLogger positionWindow headingWindow headingTracker positionTracker'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'MarsRover-WithHeading'!
+!MarsRover methodsFor: 'as yet unclassified' stamp: 'FG 6/1/2022 19:46:42' prior: 50480710!
+changePositionAndNotifyChanges: aPositionToBeAdded
+
+	position := position + aPositionToBeAdded.
+	positionTracker ifNotNil: [ positionTracker positionChangedTo: position ].! !
+!MarsRover methodsFor: 'as yet unclassified' stamp: 'FG 6/1/2022 19:46:42' prior: 50481043!
+followPositionChangesWith: aMarsRoverTracker
+	
+	positionTracker := aMarsRoverTracker.! !
+
+Object subclass: #MarsRover
+	instanceVariableNames: 'position head headingTracker positionTracker'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'MarsRover-WithHeading'!
+
+!classDefinition: #MarsRover category: 'MarsRover-WithHeading' stamp: 'FG 6/1/2022 19:48:11'!
+Object subclass: #MarsRover
+	instanceVariableNames: 'position head headingTracker positionTracker'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'MarsRover-WithHeading'!
+!MarsRoverWindow methodsFor: 'initialization' stamp: 'FG 6/1/2022 19:51:17' prior: 50478214 overrides: 50478125!
+followHeadingAndPositionChangesOn: aMarsRoverToFollow 
+	
+	aMarsRoverToFollow followHeadingChangesWith: self.
+	aMarsRoverToFollow followPositionChangesWith: self.! !
+!MarsRoverWindow methodsFor: 'initialization' stamp: 'FG 6/1/2022 19:51:27' prior: 50481277 overrides: 50478125!
+followHeadingAndPositionChangesOn: aMarsRoverToFollowPositionAndHeading 
+	
+	aMarsRoverToFollowPositionAndHeading followHeadingChangesWith: self.
+	aMarsRoverToFollowPositionAndHeading followPositionChangesWith: self.! !
+!MarsRoverWindow methodsFor: 'initialization' stamp: 'FG 6/1/2022 19:51:45' prior: 50478222 overrides: 50478137!
+followHeadingChangesOn: aMarsRoverToFollowHeading
+	
+	aMarsRoverToFollowHeading followHeadingChangesWith: self. ! !
+
+!testRun: #MarsRoverWindowTest #test03WindowOverPositionChangesReturnsNewPositionAfterMovingToTheSouth stamp: 'FG 6/1/2022 19:52:31'!
+PASSED!
+
+!testRun: #MarsRoverLoggerTest #test01LoggerOverPositionChangesShouldBeEmptyAfterProcesingEmptyCommand stamp: 'FG 6/1/2022 19:52:31'!
+PASSED!
+
+!testRun: #MarsRoverLoggerTest #test02LoggerOverPositionChangesShouldLogNewPositionAfterMovingToTheNorth stamp: 'FG 6/1/2022 19:52:31'!
+FAILURE!
+
+!testRun: #MarsRoverLoggerTest #test03LoggerOverPositionChangesShouldLogNewPositionAfterMovingToTheShouth stamp: 'FG 6/1/2022 19:52:31'!
+PASSED!
+
+!testRun: #MarsRoverLoggerTest #test04LoggerOverPositionChangesShouldLogNewPositionAfterMovingToTheEastAndWest stamp: 'FG 6/1/2022 19:52:31'!
+PASSED!
+
+!testRun: #MarsRoverLoggerTest #test05LoggerOverHeadingChangesShouldLogNewHeadingAfterRotateToTheEast stamp: 'FG 6/1/2022 19:52:31'!
+PASSED!
+
+!testRun: #MarsRoverLoggerTest #test06LoggerOverHeadingChangesShouldLogNewHeadingAfterRotateToTheSouth stamp: 'FG 6/1/2022 19:52:31'!
+PASSED!
+
+!testRun: #MarsRoverLoggerTest #test07LoggerOverHeadingChangesShouldLogNewHeadingAfterFullRotation stamp: 'FG 6/1/2022 19:52:31'!
+PASSED!
+
+!testRun: #MarsRoverLoggerTest #test08LoggerOverHeadingAndPositionChangesShouldLogAllChanges stamp: 'FG 6/1/2022 19:52:31'!
+PASSED!
+
+!testRun: #MarsRoverTest #test01DoesNotMoveWhenNoCommand stamp: 'FG 6/1/2022 19:52:31'!
+PASSED!
+
+!testRun: #MarsRoverTest #test02IsAtFailsForDifferentPosition stamp: 'FG 6/1/2022 19:52:31'!
+PASSED!
+
+!testRun: #MarsRoverTest #test03IsAtFailsForDifferentHeading stamp: 'FG 6/1/2022 19:52:31'!
+PASSED!
+
+!testRun: #MarsRoverTest #test04IncrementsYAfterMovingForwardWhenHeadingNorth stamp: 'FG 6/1/2022 19:52:31'!
+PASSED!
+
+!testRun: #MarsRoverTest #test06DecrementsYAfterMovingBackwardsWhenHeadingNorth stamp: 'FG 6/1/2022 19:52:31'!
+PASSED!
+
+!testRun: #MarsRoverTest #test07PointToEashAfterRotatingRightWhenHeadingNorth stamp: 'FG 6/1/2022 19:52:31'!
+PASSED!
+
+!testRun: #MarsRoverTest #test08PointsToWestAfterRotatingLeftWhenPointingNorth stamp: 'FG 6/1/2022 19:52:31'!
+PASSED!
+
+!testRun: #MarsRoverTest #test09DoesNotProcessInvalidCommand stamp: 'FG 6/1/2022 19:52:31'!
+PASSED!
+
+!testRun: #MarsRoverTest #test10CanProcessMoreThanOneCommand stamp: 'FG 6/1/2022 19:52:31'!
+PASSED!
+
+!testRun: #MarsRoverTest #test11IncrementsXAfterMovingForwareWhenHeadingEast stamp: 'FG 6/1/2022 19:52:31'!
+PASSED!
+
+!testRun: #MarsRoverTest #test12DecrementsXAfterMovingBackwardWhenHeadingEast stamp: 'FG 6/1/2022 19:52:31'!
+PASSED!
+
+!testRun: #MarsRoverTest #test13PointsToSouthAfterRotatingRightWhenHeadingEast stamp: 'FG 6/1/2022 19:52:31'!
+PASSED!
+
+!testRun: #MarsRoverTest #test14PointsToNorthAfterRotatingLeftWhenPointingEast stamp: 'FG 6/1/2022 19:52:31'!
+PASSED!
+
+!testRun: #MarsRoverTest #test15ForwardBackwardsAndRotateRightWorkAsExpectedWhenPointingSouth stamp: 'FG 6/1/2022 19:52:31'!
+PASSED!
+
+!testRun: #MarsRoverTest #test16ForwardBackwardsAndRotateRightWorkAsExpectedWhenPointingWest stamp: 'FG 6/1/2022 19:52:31'!
+PASSED!
+
+!testRun: #MarsRoverWindowTest #test01WindowOverPositionChangesReturnsEmptyPositionAfterProcesingEmptyCommand stamp: 'FG 6/1/2022 19:52:31'!
+PASSED!
+
+!testRun: #MarsRoverWindowTest #test02WindowOverPositionChangesReturnsNewPositionAfterMovingToTheNorth stamp: 'FG 6/1/2022 19:52:31'!
+PASSED!
+
+!testRun: #MarsRoverWindowTest #test03WindowOverPositionChangesReturnsNewPositionAfterMovingToTheSouth stamp: 'FG 6/1/2022 19:52:31'!
+PASSED!
+
+!testRun: #MarsRoverWindowTest #test04WindowOverPositionChangesReturnsNewPositionAfterMovingToTheEastAndWest stamp: 'FG 6/1/2022 19:52:31'!
+PASSED!
+
+!testRun: #MarsRoverWindowTest #test05WindowOverHeadingChangesReturnsEmptyHeadingAfterProcesingEmptyCommand stamp: 'FG 6/1/2022 19:52:31'!
+PASSED!
+
+!testRun: #MarsRoverWindowTest #test06WindowOverHeadingChangesReturnsNewHeadingAfterRotateToTheEast stamp: 'FG 6/1/2022 19:52:31'!
+PASSED!
+
+!testRun: #MarsRoverWindowTest #test07WindowOverHeadingChangesReturnsNewHeadingAfterRotateToTheSouth stamp: 'FG 6/1/2022 19:52:31'!
+PASSED!
+
+!testRun: #MarsRoverWindowTest #test08WindowOverHeadingChangesReturnsNewHeadingAfterRotateToTheNorthAndWest stamp: 'FG 6/1/2022 19:52:31'!
+PASSED!
+
+!testRun: #MarsRoverWindowTest #test09WindowOverHeadingAndPositionChangesShouldChangeBothVariables stamp: 'FG 6/1/2022 19:52:31'!
+PASSED!
+
+!testRun: #MarsRoverLoggerTest #test02LoggerOverPositionChangesShouldLogNewPositionAfterMovingToTheNorth stamp: 'FG 6/1/2022 19:52:31'!
+FAILURE!
+
+!methodRemoval: MarsRoverProxy #initializeAt:heading: stamp: 'FG 6/1/2022 19:54:29'!
+initializeAt: aPosition heading: aHeadingType
+
+	proxee initializeAt: aPosition heading: aHeadingType!
+
+!methodRemoval: MarsRoverProxy #moveBackward stamp: 'FG 6/1/2022 19:54:33'!
+moveBackward
+	
+	proxee moveBackward.
+	self notifyPositionTracker.!
+
+!methodRemoval: MarsRoverProxy #moveForward stamp: 'FG 6/1/2022 19:54:52'!
+moveForward
+
+	proxee moveForward.
+	self notifyPositionTracker.!
+!MarsRoverProxy methodsFor: 'delegate' stamp: 'FG 6/1/2022 19:56:44' prior: 50480161 overrides: 50337881!
+doesNotUnderstand: aMessage
+    
+	| positionBeforeAction res|
+	
+	positionBeforeAction := proxee position copy.
+	
+	res := proxee perform: aMessage selector withArguments: aMessage arguments.
+	
+	positionBeforeAction = proxee position ifFalse: [self notifyPositionTracker].
+	
+	^res! !
+
+!testRun: #MarsRoverLoggerTest #test02LoggerOverPositionChangesShouldLogNewPositionAfterMovingToTheNorth stamp: 'FG 6/1/2022 19:56:51'!
+ERROR!
+!MarsRover methodsFor: 'command processing' stamp: 'FG 6/1/2022 19:57:26'!
+position 
+
+	^position.
+! !
+
+!testRun: #MarsRoverLoggerTest #test02LoggerOverPositionChangesShouldLogNewPositionAfterMovingToTheNorth stamp: 'FG 6/1/2022 19:57:34'!
+PASSED!
+
+!testRun: #MarsRoverLoggerTest #test01LoggerOverPositionChangesShouldBeEmptyAfterProcesingEmptyCommand stamp: 'FG 6/1/2022 19:57:34'!
+PASSED!
+
+!testRun: #MarsRoverLoggerTest #test02LoggerOverPositionChangesShouldLogNewPositionAfterMovingToTheNorth stamp: 'FG 6/1/2022 19:57:34'!
+PASSED!
+
+!testRun: #MarsRoverLoggerTest #test03LoggerOverPositionChangesShouldLogNewPositionAfterMovingToTheShouth stamp: 'FG 6/1/2022 19:57:34'!
+PASSED!
+
+!testRun: #MarsRoverLoggerTest #test04LoggerOverPositionChangesShouldLogNewPositionAfterMovingToTheEastAndWest stamp: 'FG 6/1/2022 19:57:34'!
+PASSED!
+
+!testRun: #MarsRoverLoggerTest #test05LoggerOverHeadingChangesShouldLogNewHeadingAfterRotateToTheEast stamp: 'FG 6/1/2022 19:57:34'!
+PASSED!
+
+!testRun: #MarsRoverLoggerTest #test06LoggerOverHeadingChangesShouldLogNewHeadingAfterRotateToTheSouth stamp: 'FG 6/1/2022 19:57:34'!
+PASSED!
+
+!testRun: #MarsRoverLoggerTest #test07LoggerOverHeadingChangesShouldLogNewHeadingAfterFullRotation stamp: 'FG 6/1/2022 19:57:34'!
+PASSED!
+
+!testRun: #MarsRoverLoggerTest #test08LoggerOverHeadingAndPositionChangesShouldLogAllChanges stamp: 'FG 6/1/2022 19:57:34'!
+PASSED!
+
+----STARTUP---- (2 June 2022 10:55:34) as C:\Users\Fabian\Desktop\Ing1\Ejercicio 7\windows64\CuisUniversity-5093.image!
+
+!MarsRoverLoggerTest methodsFor: 'test' stamp: 'FG 6/1/2022 18:47:58' prior: 50480858!
+test02LoggerOverPositionChangesShouldLogNewPositionAfterMovingToTheNorth
+
+	| marsRover logger logStream marsRoverProxy |
+	
+	marsRover := MarsRover at: 1@1 heading: MarsRoverHeadingNorth.
+	marsRoverProxy := MarsRoverProxy of: marsRover.
+	logger := MarsRoverLogger followPositionChangesOn: marsRoverProxy.
+	
+	marsRover process: 'f'.
+	
+	logStream := logger readStream.
+	self assert: '1@2' equals: logStream nextLine.
+	self assert: logStream atEnd.
+! !
+!MarsRoverProxy methodsFor: 'delegate' stamp: 'FG 6/1/2022 19:26:45'!
+moveForward
+	
+	proxee moveForward.
+	self notifyPositionTracker.! !
+!MarsRoverProxy methodsFor: 'delegate' stamp: 'FG 6/1/2022 19:27:05'!
+moveBackward
+	
+	proxee moveBackward.
+	self notifyPositionTracker.! !
+!MarsRoverLoggerTest methodsFor: 'test' stamp: 'FG 6/1/2022 19:27:22' prior: 50481522!
+test02LoggerOverPositionChangesShouldLogNewPositionAfterMovingToTheNorth
+
+	| marsRover logger logStream marsRoverProxy |
+	
+	marsRover := MarsRover at: 1@1 heading: MarsRoverHeadingNorth.
+	marsRoverProxy := MarsRoverProxy of: marsRover.
+	logger := MarsRoverLogger followPositionChangesOn: marsRoverProxy.
+	
+	marsRoverProxy process: 'f'.
+	
+	logStream := logger readStream.
+	self assert: '1@2' equals: logStream nextLine.
+	self assert: logStream atEnd.
+! !
+
+!methodRemoval: MarsRoverProxy #changePosition: stamp: 'FG 6/2/2022 10:55:36'!
+changePosition: aPositionToBeAdded
+
+	proxee changePosition: aPositionToBeAdded.
+	self notifyPositionTracker.!
+!MarsRoverProxy methodsFor: 'delegate' stamp: 'FG 6/1/2022 19:30:01' prior: 50481539!
+moveForward
+
+	proxee moveForward.
+	self notifyPositionTracker.! !
+!MarsRover methodsFor: 'tracking' stamp: 'FG 6/1/2022 19:40:21' prior: 50478164!
+followHeadingChangesWith: aMarsRoverTracker
+
+	headingProxy := aMarsRoverTracker! !
+!MarsRover methodsFor: 'tracking' stamp: 'FG 6/1/2022 19:40:30' prior: 50478185!
+followPositionChangesWith: aMarsRoverTracker
+	
+	positionProxy := aMarsRoverTracker.! !
+!MarsRoverWindow methodsFor: 'events listener' stamp: 'FG 6/1/2022 19:43:31' prior: 50476727 overrides: 50478120!
+headingChangedTo: aMarsRoverHeading
+	
+	aMarsRoverHeading accept: self.! !
+
+!methodRemoval: MarsRoverHeadingEast #acceptWindow: stamp: 'FG 6/2/2022 10:55:36'!
+acceptWindow: aWindowVisitor 
+	
+	^aWindowVisitor visitMarsRoverHeadingEast: self.!
+
+!methodRemoval: MarsRoverHeadingNorth #acceptWindow: stamp: 'FG 6/2/2022 10:55:36'!
+acceptWindow: aWindowVisitor 
+	
+	^aWindowVisitor visitMarsRoverHeadingNorth: self.!
+
+!methodRemoval: MarsRoverHeadingSouth #acceptWindow: stamp: 'FG 6/2/2022 10:55:36'!
+acceptWindow: aWindowVisitor 
+	
+	^aWindowVisitor visitMarsRoverHeadingSouth: self!
+
+!methodRemoval: MarsRoverHeadingWest #acceptWindow: stamp: 'FG 6/2/2022 10:55:36'!
+acceptWindow: aWindowVisitor 
+	
+	^aWindowVisitor visitMarsRoverHeadingWest: self.!
+
+!classDefinition: #MarsRover category: 'MarsRover-WithHeading' stamp: 'FG 6/2/2022 10:55:36'!
+Object subclass: #MarsRover
+	instanceVariableNames: 'position head positionLogger headingLogger positionWindow headingWindow headingTracker positionProxy'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'MarsRover-WithHeading'!
+!MarsRover methodsFor: 'as yet unclassified' stamp: 'FG 6/1/2022 19:46:30' prior: 50478204!
+changeHeadingAndNotifyChanges: AMarsRoverHeadingClassToUpdate
+
+	head := AMarsRoverHeadingClassToUpdate for: self.
+	headingTracker ifNotNil: [headingTracker headingChangedTo: head].! !
+!MarsRover methodsFor: 'as yet unclassified' stamp: 'FG 6/1/2022 19:46:30' prior: 50481577!
+followHeadingChangesWith: aMarsRoverTracker
+
+	headingTracker := aMarsRoverTracker! !
+
+!classDefinition: #MarsRover category: 'MarsRover-WithHeading' stamp: 'FG 6/2/2022 10:55:37'!
+Object subclass: #MarsRover
+	instanceVariableNames: 'position head positionLogger headingLogger positionWindow headingWindow headingTracker positionTracker'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'MarsRover-WithHeading'!
+!MarsRover methodsFor: 'as yet unclassified' stamp: 'FG 6/1/2022 19:46:42' prior: 50480710!
+changePositionAndNotifyChanges: aPositionToBeAdded
+
+	position := position + aPositionToBeAdded.
+	positionTracker ifNotNil: [ positionTracker positionChangedTo: position ].! !
+!MarsRover methodsFor: 'as yet unclassified' stamp: 'FG 6/1/2022 19:46:42' prior: 50481583!
+followPositionChangesWith: aMarsRoverTracker
+	
+	positionTracker := aMarsRoverTracker.! !
+
+!classDefinition: #MarsRover category: 'MarsRover-WithHeading' stamp: 'FG 6/2/2022 10:55:37'!
+Object subclass: #MarsRover
+	instanceVariableNames: 'position head headingTracker positionTracker'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'MarsRover-WithHeading'!
+
+!classDefinition: #MarsRover category: 'MarsRover-WithHeading' stamp: 'FG 6/2/2022 10:55:37'!
+Object subclass: #MarsRover
+	instanceVariableNames: 'position head headingTracker positionTracker'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'MarsRover-WithHeading'!
+!MarsRoverWindow methodsFor: 'initialization' stamp: 'FG 6/1/2022 19:51:17' prior: 50478214 overrides: 50478125!
+followHeadingAndPositionChangesOn: aMarsRoverToFollow 
+	
+	aMarsRoverToFollow followHeadingChangesWith: self.
+	aMarsRoverToFollow followPositionChangesWith: self.! !
+!MarsRoverWindow methodsFor: 'initialization' stamp: 'FG 6/1/2022 19:51:27' prior: 50481685 overrides: 50478125!
+followHeadingAndPositionChangesOn: aMarsRoverToFollowPositionAndHeading 
+	
+	aMarsRoverToFollowPositionAndHeading followHeadingChangesWith: self.
+	aMarsRoverToFollowPositionAndHeading followPositionChangesWith: self.! !
+!MarsRoverWindow methodsFor: 'initialization' stamp: 'FG 6/1/2022 19:51:45' prior: 50478222 overrides: 50478137!
+followHeadingChangesOn: aMarsRoverToFollowHeading
+	
+	aMarsRoverToFollowHeading followHeadingChangesWith: self. ! !
+
+!methodRemoval: MarsRoverProxy #initializeAt:heading: stamp: 'FG 6/2/2022 10:55:37'!
+initializeAt: aPosition heading: aHeadingType
+
+	proxee initializeAt: aPosition heading: aHeadingType!
+
+!methodRemoval: MarsRoverProxy #moveBackward stamp: 'FG 6/2/2022 10:55:37'!
+moveBackward
+	
+	proxee moveBackward.
+	self notifyPositionTracker.!
+
+!methodRemoval: MarsRoverProxy #moveForward stamp: 'FG 6/2/2022 10:55:37'!
+moveForward
+
+	proxee moveForward.
+	self notifyPositionTracker.!
+!MarsRoverProxy methodsFor: 'delegate' stamp: 'FG 6/1/2022 19:56:44' prior: 50480161 overrides: 50337881!
+doesNotUnderstand: aMessage
+    
+	| positionBeforeAction res|
+	
+	positionBeforeAction := proxee position copy.
+	
+	res := proxee perform: aMessage selector withArguments: aMessage arguments.
+	
+	positionBeforeAction = proxee position ifFalse: [self notifyPositionTracker].
+	
+	^res! !
+!MarsRover methodsFor: 'command processing' stamp: 'FG 6/1/2022 19:57:26'!
+position 
+
+	^position.
+! !
+!MarsRover methodsFor: 'moving' stamp: 'FG 6/2/2022 10:56:06' prior: 50481652!
+changePositionAndNotifyChanges: aPositionToBeAdded
+
+	position := position + aPositionToBeAdded.
+	"positionTracker ifNotNil: [ positionTracker positionChangedTo: position ]."! !
+
+!testRun: #MarsRoverLoggerTest #test02LoggerOverPositionChangesShouldLogNewPositionAfterMovingToTheNorth stamp: 'FG 6/2/2022 10:56:10'!
+PASSED!
+
+!testRun: #MarsRoverLoggerTest #test01LoggerOverPositionChangesShouldBeEmptyAfterProcesingEmptyCommand stamp: 'FG 6/2/2022 10:56:10'!
+PASSED!
+
+!testRun: #MarsRoverLoggerTest #test02LoggerOverPositionChangesShouldLogNewPositionAfterMovingToTheNorth stamp: 'FG 6/2/2022 10:56:10'!
+PASSED!
+
+!testRun: #MarsRoverLoggerTest #test03LoggerOverPositionChangesShouldLogNewPositionAfterMovingToTheShouth stamp: 'FG 6/2/2022 10:56:10'!
+FAILURE!
+
+!testRun: #MarsRoverLoggerTest #test04LoggerOverPositionChangesShouldLogNewPositionAfterMovingToTheEastAndWest stamp: 'FG 6/2/2022 10:56:10'!
+FAILURE!
+
+!testRun: #MarsRoverLoggerTest #test05LoggerOverHeadingChangesShouldLogNewHeadingAfterRotateToTheEast stamp: 'FG 6/2/2022 10:56:10'!
+PASSED!
+
+!testRun: #MarsRoverLoggerTest #test06LoggerOverHeadingChangesShouldLogNewHeadingAfterRotateToTheSouth stamp: 'FG 6/2/2022 10:56:10'!
+PASSED!
+
+!testRun: #MarsRoverLoggerTest #test07LoggerOverHeadingChangesShouldLogNewHeadingAfterFullRotation stamp: 'FG 6/2/2022 10:56:10'!
+PASSED!
+
+!testRun: #MarsRoverLoggerTest #test08LoggerOverHeadingAndPositionChangesShouldLogAllChanges stamp: 'FG 6/2/2022 10:56:10'!
+FAILURE!
+!MarsRover methodsFor: 'moving' stamp: 'FG 6/2/2022 10:56:26' prior: 50481743!
+changePositionAndNotifyChanges: aPositionToBeAdded
+
+	position := position + aPositionToBeAdded.
+	positionTracker ifNotNil: [ positionTracker positionChangedTo: position ].! !
+
+!testRun: #MarsRoverLoggerTest #test02LoggerOverPositionChangesShouldLogNewPositionAfterMovingToTheNorth stamp: 'FG 6/2/2022 10:56:35'!
+PASSED!
+
+!testRun: #MarsRoverLoggerTest #test01LoggerOverPositionChangesShouldBeEmptyAfterProcesingEmptyCommand stamp: 'FG 6/2/2022 10:56:35'!
+PASSED!
+
+!testRun: #MarsRoverLoggerTest #test02LoggerOverPositionChangesShouldLogNewPositionAfterMovingToTheNorth stamp: 'FG 6/2/2022 10:56:35'!
+PASSED!
+
+!testRun: #MarsRoverLoggerTest #test03LoggerOverPositionChangesShouldLogNewPositionAfterMovingToTheShouth stamp: 'FG 6/2/2022 10:56:35'!
+PASSED!
+
+!testRun: #MarsRoverLoggerTest #test04LoggerOverPositionChangesShouldLogNewPositionAfterMovingToTheEastAndWest stamp: 'FG 6/2/2022 10:56:35'!
+PASSED!
+
+!testRun: #MarsRoverLoggerTest #test05LoggerOverHeadingChangesShouldLogNewHeadingAfterRotateToTheEast stamp: 'FG 6/2/2022 10:56:35'!
+PASSED!
+
+!testRun: #MarsRoverLoggerTest #test06LoggerOverHeadingChangesShouldLogNewHeadingAfterRotateToTheSouth stamp: 'FG 6/2/2022 10:56:35'!
+PASSED!
+
+!testRun: #MarsRoverLoggerTest #test07LoggerOverHeadingChangesShouldLogNewHeadingAfterFullRotation stamp: 'FG 6/2/2022 10:56:35'!
+PASSED!
+
+!testRun: #MarsRoverLoggerTest #test08LoggerOverHeadingAndPositionChangesShouldLogAllChanges stamp: 'FG 6/2/2022 10:56:35'!
+PASSED!
+!MarsRoverLoggerTest methodsFor: 'test' stamp: 'FG 6/2/2022 10:58:00'!
+test02LoggerOverPositionChangesShouldLogNewPositionAfterMovingToTheNorthWithProxy
+
+	| marsRover logger logStream marsRoverProxy |
+	
+	marsRover := MarsRover at: 1@1 heading: MarsRoverHeadingNorth.
+	marsRoverProxy := MarsRoverProxy of: marsRover.
+	logger := MarsRoverLogger followPositionChangesOn: marsRoverProxy.
+	
+	marsRoverProxy process: 'f'.
+	
+	logStream := logger readStream.
+	self assert: '1@2' equals: logStream nextLine.
+	self assert: logStream atEnd.
+! !
+!MarsRoverLoggerTest methodsFor: 'test' stamp: 'FG 6/2/2022 10:58:11'!
+testPROXY02LoggerOverPositionChangesShouldLogNewPositionAfterMovingToTheNorth
+
+	| marsRover logger logStream marsRoverProxy |
+	
+	marsRover := MarsRover at: 1@1 heading: MarsRoverHeadingNorth.
+	marsRoverProxy := MarsRoverProxy of: marsRover.
+	logger := MarsRoverLogger followPositionChangesOn: marsRoverProxy.
+	
+	marsRoverProxy process: 'f'.
+	
+	logStream := logger readStream.
+	self assert: '1@2' equals: logStream nextLine.
+	self assert: logStream atEnd.
+! !
+
+!methodRemoval: MarsRoverLoggerTest #test02LoggerOverPositionChangesShouldLogNewPositionAfterMovingToTheNorthWithProxy stamp: 'FG 6/2/2022 10:58:19'!
+test02LoggerOverPositionChangesShouldLogNewPositionAfterMovingToTheNorthWithProxy
+
+	| marsRover logger logStream marsRoverProxy |
+	
+	marsRover := MarsRover at: 1@1 heading: MarsRoverHeadingNorth.
+	marsRoverProxy := MarsRoverProxy of: marsRover.
+	logger := MarsRoverLogger followPositionChangesOn: marsRoverProxy.
+	
+	marsRoverProxy process: 'f'.
+	
+	logStream := logger readStream.
+	self assert: '1@2' equals: logStream nextLine.
+	self assert: logStream atEnd.
+!
+!MarsRoverLoggerTest methodsFor: 'test' stamp: 'FG 5/31/2022 07:34:01' prior: 50481549!
+test02LoggerOverPositionChangesShouldLogNewPositionAfterMovingToTheNorth
+
+	| marsRover logger logStream |
+	
+	marsRover := MarsRover at: 1@1 heading: MarsRoverHeadingNorth.
+	logger := MarsRoverLogger followPositionChangesOn: marsRover.
+	
+	marsRover process: 'f'.
+	
+	logStream := logger readStream.
+	self assert: '1@2' equals: logStream nextLine.
+	self assert: logStream atEnd.
+! !
+
+!testRun: #MarsRoverLoggerTest #test02LoggerOverPositionChangesShouldLogNewPositionAfterMovingToTheNorth stamp: 'FG 6/2/2022 10:58:40'!
+PASSED!
+
+!testRun: #MarsRoverLoggerTest #test01LoggerOverPositionChangesShouldBeEmptyAfterProcesingEmptyCommand stamp: 'FG 6/2/2022 10:58:40'!
+PASSED!
+
+!testRun: #MarsRoverLoggerTest #test02LoggerOverPositionChangesShouldLogNewPositionAfterMovingToTheNorth stamp: 'FG 6/2/2022 10:58:40'!
+PASSED!
+
+!testRun: #MarsRoverLoggerTest #test03LoggerOverPositionChangesShouldLogNewPositionAfterMovingToTheShouth stamp: 'FG 6/2/2022 10:58:40'!
+PASSED!
+
+!testRun: #MarsRoverLoggerTest #test04LoggerOverPositionChangesShouldLogNewPositionAfterMovingToTheEastAndWest stamp: 'FG 6/2/2022 10:58:40'!
+PASSED!
+
+!testRun: #MarsRoverLoggerTest #test05LoggerOverHeadingChangesShouldLogNewHeadingAfterRotateToTheEast stamp: 'FG 6/2/2022 10:58:40'!
+PASSED!
+
+!testRun: #MarsRoverLoggerTest #test06LoggerOverHeadingChangesShouldLogNewHeadingAfterRotateToTheSouth stamp: 'FG 6/2/2022 10:58:40'!
+PASSED!
+
+!testRun: #MarsRoverLoggerTest #test07LoggerOverHeadingChangesShouldLogNewHeadingAfterFullRotation stamp: 'FG 6/2/2022 10:58:40'!
+PASSED!
+
+!testRun: #MarsRoverLoggerTest #test08LoggerOverHeadingAndPositionChangesShouldLogAllChanges stamp: 'FG 6/2/2022 10:58:40'!
+PASSED!
+
+!testRun: #MarsRoverLoggerTest #testPROXY02LoggerOverPositionChangesShouldLogNewPositionAfterMovingToTheNorth stamp: 'FG 6/2/2022 10:58:40'!
+PASSED!
+
+!testRun: #MarsRoverTest #test01DoesNotMoveWhenNoCommand stamp: 'FG 6/2/2022 10:58:40'!
+PASSED!
+
+!testRun: #MarsRoverTest #test02IsAtFailsForDifferentPosition stamp: 'FG 6/2/2022 10:58:40'!
+PASSED!
+
+!testRun: #MarsRoverTest #test03IsAtFailsForDifferentHeading stamp: 'FG 6/2/2022 10:58:40'!
+PASSED!
+
+!testRun: #MarsRoverTest #test04IncrementsYAfterMovingForwardWhenHeadingNorth stamp: 'FG 6/2/2022 10:58:40'!
+PASSED!
+
+!testRun: #MarsRoverTest #test06DecrementsYAfterMovingBackwardsWhenHeadingNorth stamp: 'FG 6/2/2022 10:58:40'!
+PASSED!
+
+!testRun: #MarsRoverTest #test07PointToEashAfterRotatingRightWhenHeadingNorth stamp: 'FG 6/2/2022 10:58:40'!
+PASSED!
+
+!testRun: #MarsRoverTest #test08PointsToWestAfterRotatingLeftWhenPointingNorth stamp: 'FG 6/2/2022 10:58:40'!
+PASSED!
+
+!testRun: #MarsRoverTest #test09DoesNotProcessInvalidCommand stamp: 'FG 6/2/2022 10:58:40'!
+PASSED!
+
+!testRun: #MarsRoverTest #test10CanProcessMoreThanOneCommand stamp: 'FG 6/2/2022 10:58:40'!
+PASSED!
+
+!testRun: #MarsRoverTest #test11IncrementsXAfterMovingForwareWhenHeadingEast stamp: 'FG 6/2/2022 10:58:40'!
+PASSED!
+
+!testRun: #MarsRoverTest #test12DecrementsXAfterMovingBackwardWhenHeadingEast stamp: 'FG 6/2/2022 10:58:40'!
+PASSED!
+
+!testRun: #MarsRoverTest #test13PointsToSouthAfterRotatingRightWhenHeadingEast stamp: 'FG 6/2/2022 10:58:40'!
+PASSED!
+
+!testRun: #MarsRoverTest #test14PointsToNorthAfterRotatingLeftWhenPointingEast stamp: 'FG 6/2/2022 10:58:40'!
+PASSED!
+
+!testRun: #MarsRoverTest #test15ForwardBackwardsAndRotateRightWorkAsExpectedWhenPointingSouth stamp: 'FG 6/2/2022 10:58:40'!
+PASSED!
+
+!testRun: #MarsRoverTest #test16ForwardBackwardsAndRotateRightWorkAsExpectedWhenPointingWest stamp: 'FG 6/2/2022 10:58:40'!
+PASSED!
+
+!testRun: #MarsRoverWindowTest #test01WindowOverPositionChangesReturnsEmptyPositionAfterProcesingEmptyCommand stamp: 'FG 6/2/2022 10:58:40'!
+PASSED!
+
+!testRun: #MarsRoverWindowTest #test02WindowOverPositionChangesReturnsNewPositionAfterMovingToTheNorth stamp: 'FG 6/2/2022 10:58:40'!
+PASSED!
+
+!testRun: #MarsRoverWindowTest #test03WindowOverPositionChangesReturnsNewPositionAfterMovingToTheSouth stamp: 'FG 6/2/2022 10:58:40'!
+PASSED!
+
+!testRun: #MarsRoverWindowTest #test04WindowOverPositionChangesReturnsNewPositionAfterMovingToTheEastAndWest stamp: 'FG 6/2/2022 10:58:40'!
+PASSED!
+
+!testRun: #MarsRoverWindowTest #test05WindowOverHeadingChangesReturnsEmptyHeadingAfterProcesingEmptyCommand stamp: 'FG 6/2/2022 10:58:40'!
+PASSED!
+
+!testRun: #MarsRoverWindowTest #test06WindowOverHeadingChangesReturnsNewHeadingAfterRotateToTheEast stamp: 'FG 6/2/2022 10:58:40'!
+PASSED!
+
+!testRun: #MarsRoverWindowTest #test07WindowOverHeadingChangesReturnsNewHeadingAfterRotateToTheSouth stamp: 'FG 6/2/2022 10:58:40'!
+PASSED!
+
+!testRun: #MarsRoverWindowTest #test08WindowOverHeadingChangesReturnsNewHeadingAfterRotateToTheNorthAndWest stamp: 'FG 6/2/2022 10:58:40'!
+PASSED!
+
+!testRun: #MarsRoverWindowTest #test09WindowOverHeadingAndPositionChangesShouldChangeBothVariables stamp: 'FG 6/2/2022 10:58:40'!
+PASSED!
+
+TestCase subclass: #MarsRoverTrackerTest
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'MarsRover-WithHeading'!
+
+!classDefinition: #MarsRoverTrackerTest category: 'MarsRover-WithHeading' stamp: 'FG 6/2/2022 11:02:39'!
+TestCase subclass: #MarsRoverTrackerTest
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'MarsRover-WithHeading'!
+!MarsRoverTrackerTest methodsFor: 'test' stamp: 'FG 6/2/2022 11:04:21'!
+test01SeveralTrackersOverPositionChangesShouldLogAllChanges
+
+	| marsRover logger window logStream |
+	
+	marsRover := MarsRover at: 1@1 heading: MarsRoverHeadingNorth .
+	logger := MarsRoverLogger followPositionChangesOn: marsRover.
+	window := MarsRoverWindow followPositionChangesOn: marsRover.
+
+	marsRover process: 'frfr'.
+	
+	logStream := logger readStream.
+	self assert: '1@2' equals: logStream nextLine.
+	self assert: 'East' equals: logStream nextLine.
+	self assert: '2@2' equals: logStream nextLine.
+	self assert: 'South' equals: logStream nextLine.
+	self assert: logStream atEnd.! !
+!MarsRoverTrackerTest methodsFor: 'test' stamp: 'FG 6/2/2022 11:05:14' prior: 50482061!
+test01SeveralTrackersOverPositionChangesShouldLogAllChanges
+
+	| marsRover logger window logStream |
+	
+	marsRover := MarsRover at: 1@1 heading: MarsRoverHeadingNorth .
+	logger := MarsRoverLogger followPositionChangesOn: marsRover.
+	window := MarsRoverWindow followPositionChangesOn: marsRover.
+
+	marsRover process: 'ff'.
+	
+	logStream := logger readStream.
+	self assert: '1@2' equals: logStream nextLine.
+	self assert: '1@3' equals: logStream nextLine.
+	self assert: logStream atEnd.
+	
+	self assert: '1@3' equals: window position.! !
+
+!testRun: #MarsRoverTrackerTest #test01SeveralTrackersOverPositionChangesShouldLogAllChanges stamp: 'FG 6/2/2022 11:05:17'!
+FAILURE!
+
+!classDefinition: #MarsRover category: 'MarsRover-WithHeading' stamp: 'FG 6/2/2022 11:05:50'!
+Object subclass: #MarsRover
+	instanceVariableNames: 'position head headingTracker positionTracker positionTrackers'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'MarsRover-WithHeading'!
+!MarsRover methodsFor: 'tracking' stamp: 'FG 6/2/2022 11:05:48' prior: 50481661!
+followPositionChangesWith: aMarsRoverTracker
+	
+	positionTrackers add: aMarsRoverTracker.! !
+!MarsRover methodsFor: 'initialization' stamp: 'FG 6/2/2022 11:06:08' prior: 50474526!
+initializeAt: aPosition heading: aHeadingType
+
+	position := aPosition.
+	head := aHeadingType for: self.
+	positionTrackers := OrderedCollection new.! !
+!MarsRover methodsFor: 'moving' stamp: 'FG 6/2/2022 11:06:50' prior: 50481792!
+changePositionAndNotifyChanges: aPositionToBeAdded
+
+	position := position + aPositionToBeAdded.
+	positionTracker do: [ :aPositionTracker | aPositionTracker positionChangedTo: position ].! !
+!MarsRover methodsFor: 'moving' stamp: 'FG 6/2/2022 11:06:55' prior: 50482130!
+changePositionAndNotifyChanges: aPositionToBeAdded
+
+	position := position + aPositionToBeAdded.
+	positionTrackers do: [ :aPositionTracker | aPositionTracker positionChangedTo: position ].! !
+
+!testRun: #MarsRoverTrackerTest #test01SeveralTrackersOverPositionChangesShouldLogAllChanges stamp: 'FG 6/2/2022 11:07:02'!
+PASSED!
+
+!testRun: #MarsRoverTrackerTest #test01SeveralTrackersOverPositionChangesShouldLogAllChanges stamp: 'FG 6/2/2022 11:07:02'!
+PASSED!
+
+!testRun: #MarsRoverTrackerTest #test01SeveralTrackersOverPositionChangesShouldLogAllChanges stamp: 'FG 6/2/2022 11:07:04'!
+PASSED!
+
+!testRun: #MarsRoverLoggerTest #test01LoggerOverPositionChangesShouldBeEmptyAfterProcesingEmptyCommand stamp: 'FG 6/2/2022 11:07:04'!
+PASSED!
+
+!testRun: #MarsRoverLoggerTest #test02LoggerOverPositionChangesShouldLogNewPositionAfterMovingToTheNorth stamp: 'FG 6/2/2022 11:07:04'!
+PASSED!
+
+!testRun: #MarsRoverLoggerTest #test03LoggerOverPositionChangesShouldLogNewPositionAfterMovingToTheShouth stamp: 'FG 6/2/2022 11:07:04'!
+PASSED!
+
+!testRun: #MarsRoverLoggerTest #test04LoggerOverPositionChangesShouldLogNewPositionAfterMovingToTheEastAndWest stamp: 'FG 6/2/2022 11:07:04'!
+PASSED!
+
+!testRun: #MarsRoverLoggerTest #test05LoggerOverHeadingChangesShouldLogNewHeadingAfterRotateToTheEast stamp: 'FG 6/2/2022 11:07:04'!
+PASSED!
+
+!testRun: #MarsRoverLoggerTest #test06LoggerOverHeadingChangesShouldLogNewHeadingAfterRotateToTheSouth stamp: 'FG 6/2/2022 11:07:04'!
+PASSED!
+
+!testRun: #MarsRoverLoggerTest #test07LoggerOverHeadingChangesShouldLogNewHeadingAfterFullRotation stamp: 'FG 6/2/2022 11:07:04'!
+PASSED!
+
+!testRun: #MarsRoverLoggerTest #test08LoggerOverHeadingAndPositionChangesShouldLogAllChanges stamp: 'FG 6/2/2022 11:07:04'!
+PASSED!
+
+!testRun: #MarsRoverLoggerTest #testPROXY02LoggerOverPositionChangesShouldLogNewPositionAfterMovingToTheNorth stamp: 'FG 6/2/2022 11:07:04'!
+PASSED!
+
+!testRun: #MarsRoverTest #test01DoesNotMoveWhenNoCommand stamp: 'FG 6/2/2022 11:07:04'!
+PASSED!
+
+!testRun: #MarsRoverTest #test02IsAtFailsForDifferentPosition stamp: 'FG 6/2/2022 11:07:04'!
+PASSED!
+
+!testRun: #MarsRoverTest #test03IsAtFailsForDifferentHeading stamp: 'FG 6/2/2022 11:07:04'!
+PASSED!
+
+!testRun: #MarsRoverTest #test04IncrementsYAfterMovingForwardWhenHeadingNorth stamp: 'FG 6/2/2022 11:07:04'!
+PASSED!
+
+!testRun: #MarsRoverTest #test06DecrementsYAfterMovingBackwardsWhenHeadingNorth stamp: 'FG 6/2/2022 11:07:04'!
+PASSED!
+
+!testRun: #MarsRoverTest #test07PointToEashAfterRotatingRightWhenHeadingNorth stamp: 'FG 6/2/2022 11:07:04'!
+PASSED!
+
+!testRun: #MarsRoverTest #test08PointsToWestAfterRotatingLeftWhenPointingNorth stamp: 'FG 6/2/2022 11:07:04'!
+PASSED!
+
+!testRun: #MarsRoverTest #test09DoesNotProcessInvalidCommand stamp: 'FG 6/2/2022 11:07:04'!
+PASSED!
+
+!testRun: #MarsRoverTest #test10CanProcessMoreThanOneCommand stamp: 'FG 6/2/2022 11:07:04'!
+PASSED!
+
+!testRun: #MarsRoverTest #test11IncrementsXAfterMovingForwareWhenHeadingEast stamp: 'FG 6/2/2022 11:07:04'!
+PASSED!
+
+!testRun: #MarsRoverTest #test12DecrementsXAfterMovingBackwardWhenHeadingEast stamp: 'FG 6/2/2022 11:07:04'!
+PASSED!
+
+!testRun: #MarsRoverTest #test13PointsToSouthAfterRotatingRightWhenHeadingEast stamp: 'FG 6/2/2022 11:07:04'!
+PASSED!
+
+!testRun: #MarsRoverTest #test14PointsToNorthAfterRotatingLeftWhenPointingEast stamp: 'FG 6/2/2022 11:07:04'!
+PASSED!
+
+!testRun: #MarsRoverTest #test15ForwardBackwardsAndRotateRightWorkAsExpectedWhenPointingSouth stamp: 'FG 6/2/2022 11:07:04'!
+PASSED!
+
+!testRun: #MarsRoverTest #test16ForwardBackwardsAndRotateRightWorkAsExpectedWhenPointingWest stamp: 'FG 6/2/2022 11:07:04'!
+PASSED!
+
+!testRun: #MarsRoverTrackerTest #test01SeveralTrackersOverPositionChangesShouldLogAllChanges stamp: 'FG 6/2/2022 11:07:04'!
+PASSED!
+
+!testRun: #MarsRoverWindowTest #test01WindowOverPositionChangesReturnsEmptyPositionAfterProcesingEmptyCommand stamp: 'FG 6/2/2022 11:07:04'!
+PASSED!
+
+!testRun: #MarsRoverWindowTest #test02WindowOverPositionChangesReturnsNewPositionAfterMovingToTheNorth stamp: 'FG 6/2/2022 11:07:04'!
+PASSED!
+
+!testRun: #MarsRoverWindowTest #test03WindowOverPositionChangesReturnsNewPositionAfterMovingToTheSouth stamp: 'FG 6/2/2022 11:07:04'!
+PASSED!
+
+!testRun: #MarsRoverWindowTest #test04WindowOverPositionChangesReturnsNewPositionAfterMovingToTheEastAndWest stamp: 'FG 6/2/2022 11:07:04'!
+PASSED!
+
+!testRun: #MarsRoverWindowTest #test05WindowOverHeadingChangesReturnsEmptyHeadingAfterProcesingEmptyCommand stamp: 'FG 6/2/2022 11:07:04'!
+PASSED!
+
+!testRun: #MarsRoverWindowTest #test06WindowOverHeadingChangesReturnsNewHeadingAfterRotateToTheEast stamp: 'FG 6/2/2022 11:07:04'!
+PASSED!
+
+!testRun: #MarsRoverWindowTest #test07WindowOverHeadingChangesReturnsNewHeadingAfterRotateToTheSouth stamp: 'FG 6/2/2022 11:07:04'!
+PASSED!
+
+!testRun: #MarsRoverWindowTest #test08WindowOverHeadingChangesReturnsNewHeadingAfterRotateToTheNorthAndWest stamp: 'FG 6/2/2022 11:07:04'!
+PASSED!
+
+!testRun: #MarsRoverWindowTest #test09WindowOverHeadingAndPositionChangesShouldChangeBothVariables stamp: 'FG 6/2/2022 11:07:04'!
+PASSED!
+
+Object subclass: #MarsRover
+	instanceVariableNames: 'position head headingTracker positionTrackers'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'MarsRover-WithHeading'!
+
+!classDefinition: #MarsRover category: 'MarsRover-WithHeading' stamp: 'FG 6/2/2022 11:07:25'!
+Object subclass: #MarsRover
+	instanceVariableNames: 'position head headingTracker positionTrackers'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'MarsRover-WithHeading'!
+!MarsRoverTrackerTest methodsFor: 'test' stamp: 'FG 6/2/2022 11:07:55'!
+test01SeveralTrackersOverHeadingChangesShouldNotifyAllChanges
+
+	| marsRover logger window logStream |
+	
+	marsRover := MarsRover at: 1@1 heading: MarsRoverHeadingNorth .
+	logger := MarsRoverLogger followPositionChangesOn: marsRover.
+	window := MarsRoverWindow followPositionChangesOn: marsRover.
+
+	marsRover process: 'ff'.
+	
+	logStream := logger readStream.
+	self assert: '1@2' equals: logStream nextLine.
+	self assert: '1@3' equals: logStream nextLine.
+	self assert: logStream atEnd.
+	
+	self assert: '1@3' equals: window position.! !
+!MarsRoverTrackerTest methodsFor: 'test' stamp: 'FG 6/2/2022 11:08:06'!
+test02SeveralTrackersOverHeadingChangesShouldNotifyAllChanges
+
+	| marsRover logger window logStream |
+	
+	marsRover := MarsRover at: 1@1 heading: MarsRoverHeadingNorth .
+	logger := MarsRoverLogger followPositionChangesOn: marsRover.
+	window := MarsRoverWindow followPositionChangesOn: marsRover.
+
+	marsRover process: 'ff'.
+	
+	logStream := logger readStream.
+	self assert: '1@2' equals: logStream nextLine.
+	self assert: '1@3' equals: logStream nextLine.
+	self assert: logStream atEnd.
+	
+	self assert: '1@3' equals: window position.! !
+
+!methodRemoval: MarsRoverTrackerTest #test01SeveralTrackersOverHeadingChangesShouldNotifyAllChanges stamp: 'FG 6/2/2022 11:08:06'!
+test01SeveralTrackersOverHeadingChangesShouldNotifyAllChanges
+
+	| marsRover logger window logStream |
+	
+	marsRover := MarsRover at: 1@1 heading: MarsRoverHeadingNorth .
+	logger := MarsRoverLogger followPositionChangesOn: marsRover.
+	window := MarsRoverWindow followPositionChangesOn: marsRover.
+
+	marsRover process: 'ff'.
+	
+	logStream := logger readStream.
+	self assert: '1@2' equals: logStream nextLine.
+	self assert: '1@3' equals: logStream nextLine.
+	self assert: logStream atEnd.
+	
+	self assert: '1@3' equals: window position.!
+!MarsRoverTrackerTest methodsFor: 'test' stamp: 'FG 6/2/2022 11:08:17'!
+test01SeveralTrackersOverPositionChangesShouldNotifyAllChanges
+
+	| marsRover logger window logStream |
+	
+	marsRover := MarsRover at: 1@1 heading: MarsRoverHeadingNorth .
+	logger := MarsRoverLogger followPositionChangesOn: marsRover.
+	window := MarsRoverWindow followPositionChangesOn: marsRover.
+
+	marsRover process: 'ff'.
+	
+	logStream := logger readStream.
+	self assert: '1@2' equals: logStream nextLine.
+	self assert: '1@3' equals: logStream nextLine.
+	self assert: logStream atEnd.
+	
+	self assert: '1@3' equals: window position.! !
+
+!methodRemoval: MarsRoverTrackerTest #test01SeveralTrackersOverPositionChangesShouldLogAllChanges stamp: 'FG 6/2/2022 11:08:17'!
+test01SeveralTrackersOverPositionChangesShouldLogAllChanges
+
+	| marsRover logger window logStream |
+	
+	marsRover := MarsRover at: 1@1 heading: MarsRoverHeadingNorth .
+	logger := MarsRoverLogger followPositionChangesOn: marsRover.
+	window := MarsRoverWindow followPositionChangesOn: marsRover.
+
+	marsRover process: 'ff'.
+	
+	logStream := logger readStream.
+	self assert: '1@2' equals: logStream nextLine.
+	self assert: '1@3' equals: logStream nextLine.
+	self assert: logStream atEnd.
+	
+	self assert: '1@3' equals: window position.!
+!MarsRoverTrackerTest methodsFor: 'test' stamp: 'FG 6/2/2022 11:08:40' prior: 50482332!
+test02SeveralTrackersOverHeadingChangesShouldNotifyAllChanges
+
+	| marsRover logger window logStream |
+	
+	marsRover := MarsRover at: 1@1 heading: MarsRoverHeadingNorth .
+	logger := MarsRoverLogger followHeadingChangesOn: marsRover.
+	window := MarsRoverWindow followHeadingChangesOn: marsRover.
+
+	marsRover process: 'rr'.
+	
+	logStream := logger readStream.
+	self assert: '1@2' equals: logStream nextLine.
+	self assert: '1@3' equals: logStream nextLine.
+	self assert: logStream atEnd.
+	
+	self assert: '1@3' equals: window position.! !
+!MarsRoverTrackerTest methodsFor: 'test' stamp: 'FG 6/2/2022 11:09:31' prior: 50482413!
+test02SeveralTrackersOverHeadingChangesShouldNotifyAllChanges
+
+	| marsRover logger window logStream |
+	
+	marsRover := MarsRover at: 1@1 heading: MarsRoverHeadingNorth .
+	logger := MarsRoverLogger followHeadingChangesOn: marsRover.
+	window := MarsRoverWindow followHeadingChangesOn: marsRover.
+
+	marsRover process: 'rr'.
+	
+	logStream := logger readStream.
+	self assert: 'East' equals: logStream nextLine.
+	self assert: 'South' equals: logStream nextLine.
+	self assert: logStream atEnd.
+	
+	self assert: 'Apuntando al Sur' equals: window heading.! !
+
+!testRun: #MarsRoverTrackerTest #test02SeveralTrackersOverHeadingChangesShouldNotifyAllChanges stamp: 'FG 6/2/2022 11:10:11'!
+FAILURE!
+
+!classDefinition: #MarsRover category: 'MarsRover-WithHeading' stamp: 'FG 6/2/2022 11:10:26'!
+Object subclass: #MarsRover
+	instanceVariableNames: 'position head headingTracker positionTrackers headingTrackers'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'MarsRover-WithHeading'!
+!MarsRover methodsFor: 'tracking' stamp: 'FG 6/2/2022 11:10:25' prior: 50481636!
+followHeadingChangesWith: aMarsRoverTracker
+
+	headingTrackers add: aMarsRoverTracker! !
+!MarsRover methodsFor: 'heading' stamp: 'FG 6/2/2022 11:10:50' prior: 50481627!
+changeHeadingAndNotifyChanges: AMarsRoverHeadingClassToUpdate
+
+	head := AMarsRoverHeadingClassToUpdate for: self.
+	headingTrackers do: [:aHeadingTracker | aHeadingTracker headingChangedTo: head].! !
+!MarsRover methodsFor: 'initialization' stamp: 'FG 6/2/2022 11:11:10' prior: 50482122!
+initializeAt: aPosition heading: aHeadingType
+
+	position := aPosition.
+	head := aHeadingType for: self.
+	positionTrackers := OrderedCollection new.
+	headingTrackers := OrderedCollection new.! !
+
+Object subclass: #MarsRover
+	instanceVariableNames: 'position head positionTrackers headingTrackers'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'MarsRover-WithHeading'!
+
+!classDefinition: #MarsRover category: 'MarsRover-WithHeading' stamp: 'FG 6/2/2022 11:11:26'!
+Object subclass: #MarsRover
+	instanceVariableNames: 'position head positionTrackers headingTrackers'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'MarsRover-WithHeading'!
+!MarsRoverWindowTest methodsFor: 'test' stamp: 'FG 6/2/2022 11:11:53' prior: 50476289!
+test05WindowOverHeadingChangesReturnsEmptyHeadingAfterProcesingEmptyCommand
+
+	| marsRover window |
+	
+	marsRover := MarsRover at: 1@1 heading: MarsRoverHeadingNorth.
+	window := MarsRoverWindow followHeadingChangesOn: marsRover.
+	
+	marsRover process: ''.
+	
+	self assert: '' equals: window heading.	
+	self assert: '' equals: window position.	! !
+!MarsRoverWindowTest methodsFor: 'test' stamp: 'FG 6/2/2022 11:12:00' prior: 50476554!
+test06WindowOverHeadingChangesReturnsNewHeadingAfterRotateToTheEast
+
+	| marsRover window |
+	
+	marsRover := MarsRover at: 1@1 heading: MarsRoverHeadingNorth.
+	window := MarsRoverWindow followHeadingChangesOn: marsRover.
+	
+	marsRover process: 'r'.
+	
+	self assert: 'Apuntando al Este' equals: window heading.	
+	self assert: '' equals: window position.	! !
+!MarsRoverWindowTest methodsFor: 'test' stamp: 'FG 6/2/2022 11:12:08' prior: 50476687!
+test07WindowOverHeadingChangesReturnsNewHeadingAfterRotateToTheSouth
+
+	| marsRover window |
+	
+	marsRover := MarsRover at: 1@1 heading: MarsRoverHeadingEast.
+	window := MarsRoverWindow followHeadingChangesOn: marsRover.
+	
+	marsRover process: 'r'.
+	
+	self assert: 'Apuntando al Sur' equals: window heading.	
+	self assert: '' equals: window position.	! !
+!MarsRoverWindowTest methodsFor: 'test' stamp: 'FG 6/2/2022 11:12:14' prior: 50476794!
+test08WindowOverHeadingChangesReturnsNewHeadingAfterRotateToTheNorthAndWest
+
+	| marsRover window |
+	
+	marsRover := MarsRover at: 1@1 heading: MarsRoverHeadingSouth.
+	window := MarsRoverWindow followHeadingChangesOn: marsRover.
+	
+	marsRover process: 'r'.
+	
+	self assert: 'Apuntando al Oeste' equals: window heading.	
+	
+	marsRover process: 'r'.
+	
+	self assert: 'Apuntando al Norte' equals: window heading.	
+	self assert: '' equals: window position.	! !
+!MarsRoverWindowTest methodsFor: 'test' stamp: 'FG 6/2/2022 11:12:22' prior: 50482548!
+test08WindowOverHeadingChangesReturnsNewHeadingAfterRotateToTheNorthAndWest
+
+	| marsRover window |
+	
+	marsRover := MarsRover at: 1@1 heading: MarsRoverHeadingSouth.
+	window := MarsRoverWindow followHeadingChangesOn: marsRover.
+	
+	marsRover process: 'r'.
+	
+	self assert: 'Apuntando al Oeste' equals: window heading.	
+	self assert: '' equals: window position.	
+		
+	marsRover process: 'r'.
+	
+	self assert: 'Apuntando al Norte' equals: window heading.	
+	self assert: '' equals: window position.	! !
+
+!testRun: #MarsRoverWindowTest #test08WindowOverHeadingChangesReturnsNewHeadingAfterRotateToTheNorthAndWest stamp: 'FG 6/2/2022 11:12:24'!
+PASSED!
+
+!testRun: #MarsRoverLoggerTest #test01LoggerOverPositionChangesShouldBeEmptyAfterProcesingEmptyCommand stamp: 'FG 6/2/2022 11:12:24'!
+PASSED!
+
+!testRun: #MarsRoverLoggerTest #test02LoggerOverPositionChangesShouldLogNewPositionAfterMovingToTheNorth stamp: 'FG 6/2/2022 11:12:24'!
+PASSED!
+
+!testRun: #MarsRoverLoggerTest #test03LoggerOverPositionChangesShouldLogNewPositionAfterMovingToTheShouth stamp: 'FG 6/2/2022 11:12:24'!
+PASSED!
+
+!testRun: #MarsRoverLoggerTest #test04LoggerOverPositionChangesShouldLogNewPositionAfterMovingToTheEastAndWest stamp: 'FG 6/2/2022 11:12:24'!
+PASSED!
+
+!testRun: #MarsRoverLoggerTest #test05LoggerOverHeadingChangesShouldLogNewHeadingAfterRotateToTheEast stamp: 'FG 6/2/2022 11:12:24'!
+PASSED!
+
+!testRun: #MarsRoverLoggerTest #test06LoggerOverHeadingChangesShouldLogNewHeadingAfterRotateToTheSouth stamp: 'FG 6/2/2022 11:12:24'!
+PASSED!
+
+!testRun: #MarsRoverLoggerTest #test07LoggerOverHeadingChangesShouldLogNewHeadingAfterFullRotation stamp: 'FG 6/2/2022 11:12:24'!
+PASSED!
+
+!testRun: #MarsRoverLoggerTest #test08LoggerOverHeadingAndPositionChangesShouldLogAllChanges stamp: 'FG 6/2/2022 11:12:24'!
+PASSED!
+
+!testRun: #MarsRoverLoggerTest #testPROXY02LoggerOverPositionChangesShouldLogNewPositionAfterMovingToTheNorth stamp: 'FG 6/2/2022 11:12:24'!
+PASSED!
+
+!testRun: #MarsRoverTest #test01DoesNotMoveWhenNoCommand stamp: 'FG 6/2/2022 11:12:24'!
+PASSED!
+
+!testRun: #MarsRoverTest #test02IsAtFailsForDifferentPosition stamp: 'FG 6/2/2022 11:12:24'!
+PASSED!
+
+!testRun: #MarsRoverTest #test03IsAtFailsForDifferentHeading stamp: 'FG 6/2/2022 11:12:24'!
+PASSED!
+
+!testRun: #MarsRoverTest #test04IncrementsYAfterMovingForwardWhenHeadingNorth stamp: 'FG 6/2/2022 11:12:24'!
+PASSED!
+
+!testRun: #MarsRoverTest #test06DecrementsYAfterMovingBackwardsWhenHeadingNorth stamp: 'FG 6/2/2022 11:12:24'!
+PASSED!
+
+!testRun: #MarsRoverTest #test07PointToEashAfterRotatingRightWhenHeadingNorth stamp: 'FG 6/2/2022 11:12:24'!
+PASSED!
+
+!testRun: #MarsRoverTest #test08PointsToWestAfterRotatingLeftWhenPointingNorth stamp: 'FG 6/2/2022 11:12:24'!
+PASSED!
+
+!testRun: #MarsRoverTest #test09DoesNotProcessInvalidCommand stamp: 'FG 6/2/2022 11:12:24'!
+PASSED!
+
+!testRun: #MarsRoverTest #test10CanProcessMoreThanOneCommand stamp: 'FG 6/2/2022 11:12:24'!
+PASSED!
+
+!testRun: #MarsRoverTest #test11IncrementsXAfterMovingForwareWhenHeadingEast stamp: 'FG 6/2/2022 11:12:24'!
+PASSED!
+
+!testRun: #MarsRoverTest #test12DecrementsXAfterMovingBackwardWhenHeadingEast stamp: 'FG 6/2/2022 11:12:24'!
+PASSED!
+
+!testRun: #MarsRoverTest #test13PointsToSouthAfterRotatingRightWhenHeadingEast stamp: 'FG 6/2/2022 11:12:24'!
+PASSED!
+
+!testRun: #MarsRoverTest #test14PointsToNorthAfterRotatingLeftWhenPointingEast stamp: 'FG 6/2/2022 11:12:24'!
+PASSED!
+
+!testRun: #MarsRoverTest #test15ForwardBackwardsAndRotateRightWorkAsExpectedWhenPointingSouth stamp: 'FG 6/2/2022 11:12:24'!
+PASSED!
+
+!testRun: #MarsRoverTest #test16ForwardBackwardsAndRotateRightWorkAsExpectedWhenPointingWest stamp: 'FG 6/2/2022 11:12:24'!
+PASSED!
+
+!testRun: #MarsRoverTrackerTest #test01SeveralTrackersOverPositionChangesShouldNotifyAllChanges stamp: 'FG 6/2/2022 11:12:24'!
+PASSED!
+
+!testRun: #MarsRoverTrackerTest #test02SeveralTrackersOverHeadingChangesShouldNotifyAllChanges stamp: 'FG 6/2/2022 11:12:24'!
+PASSED!
+
+!testRun: #MarsRoverWindowTest #test01WindowOverPositionChangesReturnsEmptyPositionAfterProcesingEmptyCommand stamp: 'FG 6/2/2022 11:12:24'!
+PASSED!
+
+!testRun: #MarsRoverWindowTest #test02WindowOverPositionChangesReturnsNewPositionAfterMovingToTheNorth stamp: 'FG 6/2/2022 11:12:24'!
+PASSED!
+
+!testRun: #MarsRoverWindowTest #test03WindowOverPositionChangesReturnsNewPositionAfterMovingToTheSouth stamp: 'FG 6/2/2022 11:12:24'!
+PASSED!
+
+!testRun: #MarsRoverWindowTest #test04WindowOverPositionChangesReturnsNewPositionAfterMovingToTheEastAndWest stamp: 'FG 6/2/2022 11:12:24'!
+PASSED!
+
+!testRun: #MarsRoverWindowTest #test05WindowOverHeadingChangesReturnsEmptyHeadingAfterProcesingEmptyCommand stamp: 'FG 6/2/2022 11:12:24'!
+PASSED!
+
+!testRun: #MarsRoverWindowTest #test06WindowOverHeadingChangesReturnsNewHeadingAfterRotateToTheEast stamp: 'FG 6/2/2022 11:12:24'!
+PASSED!
+
+!testRun: #MarsRoverWindowTest #test07WindowOverHeadingChangesReturnsNewHeadingAfterRotateToTheSouth stamp: 'FG 6/2/2022 11:12:24'!
+PASSED!
+
+!testRun: #MarsRoverWindowTest #test08WindowOverHeadingChangesReturnsNewHeadingAfterRotateToTheNorthAndWest stamp: 'FG 6/2/2022 11:12:24'!
+PASSED!
+
+!testRun: #MarsRoverWindowTest #test09WindowOverHeadingAndPositionChangesShouldChangeBothVariables stamp: 'FG 6/2/2022 11:12:24'!
+PASSED!
+
+!methodRemoval: MarsRoverLoggerTest #testPROXY02LoggerOverPositionChangesShouldLogNewPositionAfterMovingToTheNorth stamp: 'FG 6/2/2022 11:24:06'!
+testPROXY02LoggerOverPositionChangesShouldLogNewPositionAfterMovingToTheNorth
+
+	| marsRover logger logStream marsRoverProxy |
+	
+	marsRover := MarsRover at: 1@1 heading: MarsRoverHeadingNorth.
+	marsRoverProxy := MarsRoverProxy of: marsRover.
+	logger := MarsRoverLogger followPositionChangesOn: marsRoverProxy.
+	
+	marsRoverProxy process: 'f'.
+	
+	logStream := logger readStream.
+	self assert: '1@2' equals: logStream nextLine.
+	self assert: logStream atEnd.
+!
+!MarsRoverWindowTest methodsFor: 'test' stamp: 'FG 6/2/2022 11:29:00'!
+createMarsRoverHeadingNorth
+
+	^ MarsRover at: 1@1 heading: MarsRoverHeadingNorth! !
+!MarsRoverWindowTest methodsFor: 'test' stamp: 'FG 6/2/2022 11:29:00' prior: 50475918!
+test02WindowOverPositionChangesReturnsNewPositionAfterMovingToTheNorth
+
+	| marsRover window |
+	
+	marsRover := self createMarsRoverHeadingNorth.
+	window := MarsRoverWindow followPositionChangesOn: marsRover.
+	
+	marsRover process: 'f'.
+	
+	self assert: '1@2' equals: window position.	! !
+!MarsRoverWindowTest methodsFor: 'test' stamp: 'FG 6/2/2022 11:29:00' prior: 50482506!
+test05WindowOverHeadingChangesReturnsEmptyHeadingAfterProcesingEmptyCommand
+
+	| marsRover window |
+	
+	marsRover := self createMarsRoverHeadingNorth.
+	window := MarsRoverWindow followHeadingChangesOn: marsRover.
+	
+	marsRover process: ''.
+	
+	self assert: '' equals: window heading.	
+	self assert: '' equals: window position.	! !
+!MarsRoverWindowTest methodsFor: 'test' stamp: 'FG 6/2/2022 11:29:00' prior: 50475762!
+test01WindowOverPositionChangesReturnsEmptyPositionAfterProcesingEmptyCommand
+
+	| marsRover window |
+	
+	marsRover := self createMarsRoverHeadingNorth.
+	window := MarsRoverWindow followPositionChangesOn: marsRover.
+	
+	marsRover process: ''.
+	
+	self assert: '' equals: window position.	! !
+!MarsRoverWindowTest methodsFor: 'test' stamp: 'FG 6/2/2022 11:29:00' prior: 50482520!
+test06WindowOverHeadingChangesReturnsNewHeadingAfterRotateToTheEast
+
+	| marsRover window |
+	
+	marsRover := self createMarsRoverHeadingNorth.
+	window := MarsRoverWindow followHeadingChangesOn: marsRover.
+	
+	marsRover process: 'r'.
+	
+	self assert: 'Apuntando al Este' equals: window heading.	
+	self assert: '' equals: window position.	! !
+!MarsRoverWindowTest methodsFor: 'test' stamp: 'FG 6/2/2022 11:29:00' prior: 50475990!
+test03WindowOverPositionChangesReturnsNewPositionAfterMovingToTheSouth
+
+	| marsRover window |
+	
+	marsRover := self createMarsRoverHeadingNorth.
+	window := MarsRoverWindow followPositionChangesOn: marsRover.
+	
+	marsRover process: 'b'.
+	
+	self assert: '1@0' equals: window position.	! !
+!MarsRoverWindowTest methodsFor: 'test' stamp: 'FG 6/2/2022 11:29:32'!
+createMarsRoverHeadingSouth
+
+	^ MarsRover at: 1@1 heading: MarsRoverHeadingSouth! !
+!MarsRoverWindowTest methodsFor: 'test' stamp: 'FG 6/2/2022 11:29:32' prior: 50477300!
+test09WindowOverHeadingAndPositionChangesShouldChangeBothVariables
+
+	| marsRover window |
+	
+	marsRover := self createMarsRoverHeadingSouth.
+	window := MarsRoverWindow followHeadingAndPositionChangesOn: marsRover.
+	
+	marsRover process: 'r'.
+	
+	self assert: 'Apuntando al Oeste' equals: window heading.	
+	self assert: '' equals: window position.	
+
+	marsRover process: 'f'.
+	
+	self assert: 'Apuntando al Oeste' equals: window heading.	
+	self assert: '0@1' equals: window position.	! !
+!MarsRoverWindowTest methodsFor: 'test' stamp: 'FG 6/2/2022 11:29:32' prior: 50482565!
+test08WindowOverHeadingChangesReturnsNewHeadingAfterRotateToTheNorthAndWest
+
+	| marsRover window |
+	
+	marsRover := self createMarsRoverHeadingSouth.
+	window := MarsRoverWindow followHeadingChangesOn: marsRover.
+	
+	marsRover process: 'r'.
+	
+	self assert: 'Apuntando al Oeste' equals: window heading.	
+	self assert: '' equals: window position.	
+		
+	marsRover process: 'r'.
+	
+	self assert: 'Apuntando al Norte' equals: window heading.	
+	self assert: '' equals: window position.	! !
+!MarsRoverWindowTest methodsFor: 'test' stamp: 'FG 6/2/2022 11:29:57'!
+createMarsRoverHeadingEast
+
+	^ MarsRover at: 1@1 heading: MarsRoverHeadingEast! !
+!MarsRoverWindowTest methodsFor: 'test' stamp: 'FG 6/2/2022 11:29:57' prior: 50476251!
+test04WindowOverPositionChangesReturnsNewPositionAfterMovingToTheEastAndWest
+
+	| marsRover window |
+	
+	marsRover := self createMarsRoverHeadingEast.
+	window := MarsRoverWindow followPositionChangesOn: marsRover.
+	
+	marsRover process: 'f'.
+	
+	self assert: '2@1' equals: window position.	
+	
+	marsRover process: 'b'.
+	
+	self assert: '1@1' equals: window position.	! !
+!MarsRoverWindowTest methodsFor: 'test' stamp: 'FG 6/2/2022 11:29:57' prior: 50482534!
+test07WindowOverHeadingChangesReturnsNewHeadingAfterRotateToTheSouth
+
+	| marsRover window |
+	
+	marsRover := self createMarsRoverHeadingEast.
+	window := MarsRoverWindow followHeadingChangesOn: marsRover.
+	
+	marsRover process: 'r'.
+	
+	self assert: 'Apuntando al Sur' equals: window heading.	
+	self assert: '' equals: window position.	! !
+!MarsRoverWindowTest methodsFor: 'test' stamp: 'FG 6/2/2022 11:35:52'!
+createWindowFollowingPositionOn: marsRover
+
+	^ MarsRoverWindow followPositionChangesOn: marsRover! !
+!MarsRoverWindowTest methodsFor: 'test' stamp: 'FG 6/2/2022 11:35:52' prior: 50482867!
+test04WindowOverPositionChangesReturnsNewPositionAfterMovingToTheEastAndWest
+
+	| marsRover window |
+	
+	marsRover := self createMarsRoverHeadingEast.
+	window := self createWindowFollowingPositionOn: marsRover.
+	
+	marsRover process: 'f'.
+	
+	self assert: '2@1' equals: window position.	
+	
+	marsRover process: 'b'.
+	
+	self assert: '1@1' equals: window position.	! !
+!MarsRoverWindowTest methodsFor: 'test' stamp: 'FG 6/2/2022 11:35:52' prior: 50482781!
+test01WindowOverPositionChangesReturnsEmptyPositionAfterProcesingEmptyCommand
+
+	| marsRover window |
+	
+	marsRover := self createMarsRoverHeadingNorth.
+	window := self createWindowFollowingPositionOn: marsRover.
+	
+	marsRover process: ''.
+	
+	self assert: '' equals: window position.	! !
+!MarsRoverWindowTest methodsFor: 'test' stamp: 'FG 6/2/2022 11:35:52' prior: 50482756!
+test02WindowOverPositionChangesReturnsNewPositionAfterMovingToTheNorth
+
+	| marsRover window |
+	
+	marsRover := self createMarsRoverHeadingNorth.
+	window := self createWindowFollowingPositionOn: marsRover.
+	
+	marsRover process: 'f'.
+	
+	self assert: '1@2' equals: window position.	! !
+!MarsRoverWindowTest methodsFor: 'test' stamp: 'FG 6/2/2022 11:35:52' prior: 50482807!
+test03WindowOverPositionChangesReturnsNewPositionAfterMovingToTheSouth
+
+	| marsRover window |
+	
+	marsRover := self createMarsRoverHeadingNorth.
+	window := self createWindowFollowingPositionOn: marsRover.
+	
+	marsRover process: 'b'.
+	
+	self assert: '1@0' equals: window position.	! !
+!MarsRoverWindowTest methodsFor: 'test' stamp: 'FG 6/2/2022 11:36:22'!
+createWindowFollowingHeadingOn: marsRover
+
+	^ MarsRoverWindow followHeadingChangesOn: marsRover! !
+!MarsRoverWindowTest methodsFor: 'test' stamp: 'FG 6/2/2022 11:36:22' prior: 50482768!
+test05WindowOverHeadingChangesReturnsEmptyHeadingAfterProcesingEmptyCommand
+
+	| marsRover window |
+	
+	marsRover := self createMarsRoverHeadingNorth.
+	window := self createWindowFollowingHeadingOn: marsRover.
+	
+	marsRover process: ''.
+	
+	self assert: '' equals: window heading.	
+	self assert: '' equals: window position.	! !
+!MarsRoverWindowTest methodsFor: 'test' stamp: 'FG 6/2/2022 11:36:22' prior: 50482843!
+test08WindowOverHeadingChangesReturnsNewHeadingAfterRotateToTheNorthAndWest
+
+	| marsRover window |
+	
+	marsRover := self createMarsRoverHeadingSouth.
+	window := self createWindowFollowingHeadingOn: marsRover.
+	
+	marsRover process: 'r'.
+	
+	self assert: 'Apuntando al Oeste' equals: window heading.	
+	self assert: '' equals: window position.	
+		
+	marsRover process: 'r'.
+	
+	self assert: 'Apuntando al Norte' equals: window heading.	
+	self assert: '' equals: window position.	! !
+!MarsRoverWindowTest methodsFor: 'test' stamp: 'FG 6/2/2022 11:36:22' prior: 50482793!
+test06WindowOverHeadingChangesReturnsNewHeadingAfterRotateToTheEast
+
+	| marsRover window |
+	
+	marsRover := self createMarsRoverHeadingNorth.
+	window := self createWindowFollowingHeadingOn: marsRover.
+	
+	marsRover process: 'r'.
+	
+	self assert: 'Apuntando al Este' equals: window heading.	
+	self assert: '' equals: window position.	! !
+!MarsRoverWindowTest methodsFor: 'test' stamp: 'FG 6/2/2022 11:36:22' prior: 50482882!
+test07WindowOverHeadingChangesReturnsNewHeadingAfterRotateToTheSouth
+
+	| marsRover window |
+	
+	marsRover := self createMarsRoverHeadingEast.
+	window := self createWindowFollowingHeadingOn: marsRover.
+	
+	marsRover process: 'r'.
+	
+	self assert: 'Apuntando al Sur' equals: window heading.	
+	self assert: '' equals: window position.	! !
+
+!testRun: #MarsRoverWindowTest #test09WindowOverHeadingAndPositionChangesShouldChangeBothVariables stamp: 'FG 6/2/2022 11:36:38'!
+PASSED!
+
+!testRun: #MarsRoverLoggerTest #test01LoggerOverPositionChangesShouldBeEmptyAfterProcesingEmptyCommand stamp: 'FG 6/2/2022 11:36:38'!
+PASSED!
+
+!testRun: #MarsRoverLoggerTest #test02LoggerOverPositionChangesShouldLogNewPositionAfterMovingToTheNorth stamp: 'FG 6/2/2022 11:36:38'!
+PASSED!
+
+!testRun: #MarsRoverLoggerTest #test03LoggerOverPositionChangesShouldLogNewPositionAfterMovingToTheShouth stamp: 'FG 6/2/2022 11:36:38'!
+PASSED!
+
+!testRun: #MarsRoverLoggerTest #test04LoggerOverPositionChangesShouldLogNewPositionAfterMovingToTheEastAndWest stamp: 'FG 6/2/2022 11:36:38'!
+PASSED!
+
+!testRun: #MarsRoverLoggerTest #test05LoggerOverHeadingChangesShouldLogNewHeadingAfterRotateToTheEast stamp: 'FG 6/2/2022 11:36:38'!
+PASSED!
+
+!testRun: #MarsRoverLoggerTest #test06LoggerOverHeadingChangesShouldLogNewHeadingAfterRotateToTheSouth stamp: 'FG 6/2/2022 11:36:38'!
+PASSED!
+
+!testRun: #MarsRoverLoggerTest #test07LoggerOverHeadingChangesShouldLogNewHeadingAfterFullRotation stamp: 'FG 6/2/2022 11:36:38'!
+PASSED!
+
+!testRun: #MarsRoverLoggerTest #test08LoggerOverHeadingAndPositionChangesShouldLogAllChanges stamp: 'FG 6/2/2022 11:36:38'!
+PASSED!
+
+!testRun: #MarsRoverTest #test01DoesNotMoveWhenNoCommand stamp: 'FG 6/2/2022 11:36:38'!
+PASSED!
+
+!testRun: #MarsRoverTest #test02IsAtFailsForDifferentPosition stamp: 'FG 6/2/2022 11:36:38'!
+PASSED!
+
+!testRun: #MarsRoverTest #test03IsAtFailsForDifferentHeading stamp: 'FG 6/2/2022 11:36:38'!
+PASSED!
+
+!testRun: #MarsRoverTest #test04IncrementsYAfterMovingForwardWhenHeadingNorth stamp: 'FG 6/2/2022 11:36:38'!
+PASSED!
+
+!testRun: #MarsRoverTest #test06DecrementsYAfterMovingBackwardsWhenHeadingNorth stamp: 'FG 6/2/2022 11:36:38'!
+PASSED!
+
+!testRun: #MarsRoverTest #test07PointToEashAfterRotatingRightWhenHeadingNorth stamp: 'FG 6/2/2022 11:36:38'!
+PASSED!
+
+!testRun: #MarsRoverTest #test08PointsToWestAfterRotatingLeftWhenPointingNorth stamp: 'FG 6/2/2022 11:36:38'!
+PASSED!
+
+!testRun: #MarsRoverTest #test09DoesNotProcessInvalidCommand stamp: 'FG 6/2/2022 11:36:38'!
+PASSED!
+
+!testRun: #MarsRoverTest #test10CanProcessMoreThanOneCommand stamp: 'FG 6/2/2022 11:36:38'!
+PASSED!
+
+!testRun: #MarsRoverTest #test11IncrementsXAfterMovingForwareWhenHeadingEast stamp: 'FG 6/2/2022 11:36:38'!
+PASSED!
+
+!testRun: #MarsRoverTest #test12DecrementsXAfterMovingBackwardWhenHeadingEast stamp: 'FG 6/2/2022 11:36:38'!
+PASSED!
+
+!testRun: #MarsRoverTest #test13PointsToSouthAfterRotatingRightWhenHeadingEast stamp: 'FG 6/2/2022 11:36:38'!
+PASSED!
+
+!testRun: #MarsRoverTest #test14PointsToNorthAfterRotatingLeftWhenPointingEast stamp: 'FG 6/2/2022 11:36:38'!
+PASSED!
+
+!testRun: #MarsRoverTest #test15ForwardBackwardsAndRotateRightWorkAsExpectedWhenPointingSouth stamp: 'FG 6/2/2022 11:36:38'!
+PASSED!
+
+!testRun: #MarsRoverTest #test16ForwardBackwardsAndRotateRightWorkAsExpectedWhenPointingWest stamp: 'FG 6/2/2022 11:36:38'!
+PASSED!
+
+!testRun: #MarsRoverTrackerTest #test01SeveralTrackersOverPositionChangesShouldNotifyAllChanges stamp: 'FG 6/2/2022 11:36:38'!
+PASSED!
+
+!testRun: #MarsRoverTrackerTest #test02SeveralTrackersOverHeadingChangesShouldNotifyAllChanges stamp: 'FG 6/2/2022 11:36:38'!
+PASSED!
+
+!testRun: #MarsRoverWindowTest #test01WindowOverPositionChangesReturnsEmptyPositionAfterProcesingEmptyCommand stamp: 'FG 6/2/2022 11:36:38'!
+PASSED!
+
+!testRun: #MarsRoverWindowTest #test02WindowOverPositionChangesReturnsNewPositionAfterMovingToTheNorth stamp: 'FG 6/2/2022 11:36:38'!
+PASSED!
+
+!testRun: #MarsRoverWindowTest #test03WindowOverPositionChangesReturnsNewPositionAfterMovingToTheSouth stamp: 'FG 6/2/2022 11:36:38'!
+PASSED!
+
+!testRun: #MarsRoverWindowTest #test04WindowOverPositionChangesReturnsNewPositionAfterMovingToTheEastAndWest stamp: 'FG 6/2/2022 11:36:38'!
+PASSED!
+
+!testRun: #MarsRoverWindowTest #test05WindowOverHeadingChangesReturnsEmptyHeadingAfterProcesingEmptyCommand stamp: 'FG 6/2/2022 11:36:38'!
+PASSED!
+
+!testRun: #MarsRoverWindowTest #test06WindowOverHeadingChangesReturnsNewHeadingAfterRotateToTheEast stamp: 'FG 6/2/2022 11:36:38'!
+PASSED!
+
+!testRun: #MarsRoverWindowTest #test07WindowOverHeadingChangesReturnsNewHeadingAfterRotateToTheSouth stamp: 'FG 6/2/2022 11:36:38'!
+PASSED!
+
+!testRun: #MarsRoverWindowTest #test08WindowOverHeadingChangesReturnsNewHeadingAfterRotateToTheNorthAndWest stamp: 'FG 6/2/2022 11:36:38'!
+PASSED!
+
+!testRun: #MarsRoverWindowTest #test09WindowOverHeadingAndPositionChangesShouldChangeBothVariables stamp: 'FG 6/2/2022 11:36:38'!
+PASSED!
+!MarsRoverLoggerTest methodsFor: 'test' stamp: 'FG 6/2/2022 11:38:22'!
+createMarsRoverHeadingNorth
+
+	^ MarsRover at: 1@1 heading: MarsRoverHeadingNorth! !
+!MarsRoverLoggerTest methodsFor: 'test' stamp: 'FG 6/2/2022 11:38:22' prior: 50481894!
+test02LoggerOverPositionChangesShouldLogNewPositionAfterMovingToTheNorth
+
+	| marsRover logger logStream |
+	
+	marsRover := self createMarsRoverHeadingNorth.
+	logger := MarsRoverLogger followPositionChangesOn: marsRover.
+	
+	marsRover process: 'f'.
+	
+	logStream := logger readStream.
+	self assert: '1@2' equals: logStream nextLine.
+	self assert: logStream atEnd.
+! !
+!MarsRoverLoggerTest methodsFor: 'test' stamp: 'FG 6/2/2022 11:38:22' prior: 50475527!
+test08LoggerOverHeadingAndPositionChangesShouldLogAllChanges
+
+	| marsRover logger logStream |
+	
+	marsRover := self createMarsRoverHeadingNorth .
+	logger := MarsRoverLogger followHeadingAndPositionChangesOn: marsRover.
+	
+	marsRover process: 'frfr'.
+	
+	logStream := logger readStream.
+	self assert: '1@2' equals: logStream nextLine.
+	self assert: 'East' equals: logStream nextLine.
+	self assert: '2@2' equals: logStream nextLine.
+	self assert: 'South' equals: logStream nextLine.
+	self assert: logStream atEnd.
+
+! !
+!MarsRoverLoggerTest methodsFor: 'test' stamp: 'FG 6/2/2022 11:38:22' prior: 50474807!
+test03LoggerOverPositionChangesShouldLogNewPositionAfterMovingToTheShouth
+
+	| marsRover logger logStream |
+	
+	marsRover := self createMarsRoverHeadingNorth.
+	logger := MarsRoverLogger followPositionChangesOn: marsRover.
+	
+	marsRover process: 'b'.
+	
+	logStream := logger readStream.
+	self assert: '1@0' equals: logStream nextLine.
+	self assert: logStream atEnd.
+! !
+!MarsRoverLoggerTest methodsFor: 'test' stamp: 'FG 6/2/2022 11:38:22' prior: 50475109!
+test05LoggerOverHeadingChangesShouldLogNewHeadingAfterRotateToTheEast
+
+	| marsRover logger logStream |
+	
+	marsRover := self createMarsRoverHeadingNorth.
+	logger := MarsRoverLogger followHeadingChangesOn: marsRover.
+	
+	marsRover process: 'r'.
+	
+	logStream := logger readStream.
+	self assert: 'East' equals: logStream nextLine.
+	self assert: logStream atEnd.
+
+! !
+!MarsRoverLoggerTest methodsFor: 'test' stamp: 'FG 6/2/2022 11:38:22' prior: 50480913!
+test01LoggerOverPositionChangesShouldBeEmptyAfterProcesingEmptyCommand
+
+	| marsRover logger |
+	
+	marsRover := self createMarsRoverHeadingNorth.
+	logger := MarsRoverLogger followPositionChangesOn: marsRover.
+	
+	marsRover process: ''.
+	
+	self assert: logger readStream atEnd.! !
+!MarsRoverLoggerTest methodsFor: 'test' stamp: 'FG 6/2/2022 11:38:48'!
+createMarsRoverHeadingEast
+
+	^ MarsRover at: 1@1 heading: MarsRoverHeadingEast! !
+!MarsRoverLoggerTest methodsFor: 'test' stamp: 'FG 6/2/2022 11:38:48' prior: 50475356!
+test07LoggerOverHeadingChangesShouldLogNewHeadingAfterFullRotation
+
+	| marsRover logger logStream |
+	
+	marsRover := self createMarsRoverHeadingEast.
+	logger := MarsRoverLogger followHeadingChangesOn: marsRover.
+	
+	marsRover process: 'rrrr'.
+	
+	logStream := logger readStream.
+	self assert: 'South' equals: logStream nextLine.
+	self assert: 'West' equals: logStream nextLine.
+	self assert: 'North' equals: logStream nextLine.
+	self assert: 'East' equals: logStream nextLine.
+	self assert: logStream atEnd.
+
+! !
+!MarsRoverLoggerTest methodsFor: 'test' stamp: 'FG 6/2/2022 11:38:48' prior: 50474854!
+test04LoggerOverPositionChangesShouldLogNewPositionAfterMovingToTheEastAndWest
+
+	| marsRover logger logStream |
+	
+	marsRover := self createMarsRoverHeadingEast.
+	logger := MarsRoverLogger followPositionChangesOn: marsRover.
+	
+	marsRover process: 'fb'.
+	
+	logStream := logger readStream.
+	self assert: '2@1' equals: logStream nextLine.
+	self assert: '1@1' equals: logStream nextLine.
+	self assert: logStream atEnd.
+
+! !
+!MarsRoverLoggerTest methodsFor: 'test' stamp: 'FG 6/2/2022 11:38:48' prior: 50475268!
+test06LoggerOverHeadingChangesShouldLogNewHeadingAfterRotateToTheSouth
+
+	| marsRover logger logStream |
+	
+	marsRover := self createMarsRoverHeadingEast.
+	logger := MarsRoverLogger followHeadingChangesOn: marsRover.
+	
+	marsRover process: 'r'.
+	
+	logStream := logger readStream.
+	self assert: 'South' equals: logStream nextLine.
+	self assert: logStream atEnd.
+
+! !
+!MarsRoverLoggerTest methodsFor: 'test' stamp: 'FG 6/2/2022 11:39:31'!
+createLoggerFollowingPositionOn: marsRover
+
+	^ MarsRoverLogger followPositionChangesOn: marsRover! !
+!MarsRoverLoggerTest methodsFor: 'test' stamp: 'FG 6/2/2022 11:39:31' prior: 50483165!
+test02LoggerOverPositionChangesShouldLogNewPositionAfterMovingToTheNorth
+
+	| marsRover logger logStream |
+	
+	marsRover := self createMarsRoverHeadingNorth.
+	logger := self createLoggerFollowingPositionOn: marsRover.
+	
+	marsRover process: 'f'.
+	
+	logStream := logger readStream.
+	self assert: '1@2' equals: logStream nextLine.
+	self assert: logStream atEnd.
+! !
+!MarsRoverLoggerTest methodsFor: 'test' stamp: 'FG 6/2/2022 11:39:31' prior: 50483265!
+test04LoggerOverPositionChangesShouldLogNewPositionAfterMovingToTheEastAndWest
+
+	| marsRover logger logStream |
+	
+	marsRover := self createMarsRoverHeadingEast.
+	logger := self createLoggerFollowingPositionOn: marsRover.
+	
+	marsRover process: 'fb'.
+	
+	logStream := logger readStream.
+	self assert: '2@1' equals: logStream nextLine.
+	self assert: '1@1' equals: logStream nextLine.
+	self assert: logStream atEnd.
+
+! !
+!MarsRoverLoggerTest methodsFor: 'test' stamp: 'FG 6/2/2022 11:39:31' prior: 50483199!
+test03LoggerOverPositionChangesShouldLogNewPositionAfterMovingToTheShouth
+
+	| marsRover logger logStream |
+	
+	marsRover := self createMarsRoverHeadingNorth.
+	logger := self createLoggerFollowingPositionOn: marsRover.
+	
+	marsRover process: 'b'.
+	
+	logStream := logger readStream.
+	self assert: '1@0' equals: logStream nextLine.
+	self assert: logStream atEnd.
+! !
+!MarsRoverLoggerTest methodsFor: 'test' stamp: 'FG 6/2/2022 11:39:31' prior: 50483229!
+test01LoggerOverPositionChangesShouldBeEmptyAfterProcesingEmptyCommand
+
+	| marsRover logger |
+	
+	marsRover := self createMarsRoverHeadingNorth.
+	logger := self createLoggerFollowingPositionOn: marsRover.
+	
+	marsRover process: ''.
+	
+	self assert: logger readStream atEnd.! !
+!MarsRoverLoggerTest methodsFor: 'test' stamp: 'FG 6/2/2022 11:39:58'!
+createLoggerFollowingHeadingOn: marsRover
+
+	^ MarsRoverLogger followHeadingChangesOn: marsRover! !
+!MarsRoverLoggerTest methodsFor: 'test' stamp: 'FG 6/2/2022 11:39:58' prior: 50483246!
+test07LoggerOverHeadingChangesShouldLogNewHeadingAfterFullRotation
+
+	| marsRover logger logStream |
+	
+	marsRover := self createMarsRoverHeadingEast.
+	logger := self createLoggerFollowingHeadingOn: marsRover.
+	
+	marsRover process: 'rrrr'.
+	
+	logStream := logger readStream.
+	self assert: 'South' equals: logStream nextLine.
+	self assert: 'West' equals: logStream nextLine.
+	self assert: 'North' equals: logStream nextLine.
+	self assert: 'East' equals: logStream nextLine.
+	self assert: logStream atEnd.
+
+! !
+!MarsRoverLoggerTest methodsFor: 'test' stamp: 'FG 6/2/2022 11:39:58' prior: 50483214!
+test05LoggerOverHeadingChangesShouldLogNewHeadingAfterRotateToTheEast
+
+	| marsRover logger logStream |
+	
+	marsRover := self createMarsRoverHeadingNorth.
+	logger := self createLoggerFollowingHeadingOn: marsRover.
+	
+	marsRover process: 'r'.
+	
+	logStream := logger readStream.
+	self assert: 'East' equals: logStream nextLine.
+	self assert: logStream atEnd.
+
+! !
+!MarsRoverLoggerTest methodsFor: 'test' stamp: 'FG 6/2/2022 11:39:58' prior: 50483281!
+test06LoggerOverHeadingChangesShouldLogNewHeadingAfterRotateToTheSouth
+
+	| marsRover logger logStream |
+	
+	marsRover := self createMarsRoverHeadingEast.
+	logger := self createLoggerFollowingHeadingOn: marsRover.
+	
+	marsRover process: 'r'.
+	
+	logStream := logger readStream.
+	self assert: 'South' equals: logStream nextLine.
+	self assert: logStream atEnd.
+
+! !
+
+!classRemoval: #MarsRoverProxy stamp: 'FG 6/2/2022 11:40:42'!
+Object subclass: #MarsRoverProxy
+	instanceVariableNames: 'proxee headingTracker positionTracker'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'MarsRover-WithHeading'!
+
+!testRun: #MarsRoverTrackerTest #test02SeveralTrackersOverHeadingChangesShouldNotifyAllChanges stamp: 'FG 6/2/2022 11:40:49'!
+PASSED!
+
+!testRun: #MarsRoverLoggerTest #test01LoggerOverPositionChangesShouldBeEmptyAfterProcesingEmptyCommand stamp: 'FG 6/2/2022 11:40:49'!
+PASSED!
+
+!testRun: #MarsRoverLoggerTest #test02LoggerOverPositionChangesShouldLogNewPositionAfterMovingToTheNorth stamp: 'FG 6/2/2022 11:40:49'!
+PASSED!
+
+!testRun: #MarsRoverLoggerTest #test03LoggerOverPositionChangesShouldLogNewPositionAfterMovingToTheShouth stamp: 'FG 6/2/2022 11:40:49'!
+PASSED!
+
+!testRun: #MarsRoverLoggerTest #test04LoggerOverPositionChangesShouldLogNewPositionAfterMovingToTheEastAndWest stamp: 'FG 6/2/2022 11:40:49'!
+PASSED!
+
+!testRun: #MarsRoverLoggerTest #test05LoggerOverHeadingChangesShouldLogNewHeadingAfterRotateToTheEast stamp: 'FG 6/2/2022 11:40:49'!
+PASSED!
+
+!testRun: #MarsRoverLoggerTest #test06LoggerOverHeadingChangesShouldLogNewHeadingAfterRotateToTheSouth stamp: 'FG 6/2/2022 11:40:49'!
+PASSED!
+
+!testRun: #MarsRoverLoggerTest #test07LoggerOverHeadingChangesShouldLogNewHeadingAfterFullRotation stamp: 'FG 6/2/2022 11:40:49'!
+PASSED!
+
+!testRun: #MarsRoverLoggerTest #test08LoggerOverHeadingAndPositionChangesShouldLogAllChanges stamp: 'FG 6/2/2022 11:40:49'!
+PASSED!
+
+!testRun: #MarsRoverTest #test01DoesNotMoveWhenNoCommand stamp: 'FG 6/2/2022 11:40:49'!
+PASSED!
+
+!testRun: #MarsRoverTest #test02IsAtFailsForDifferentPosition stamp: 'FG 6/2/2022 11:40:49'!
+PASSED!
+
+!testRun: #MarsRoverTest #test03IsAtFailsForDifferentHeading stamp: 'FG 6/2/2022 11:40:49'!
+PASSED!
+
+!testRun: #MarsRoverTest #test04IncrementsYAfterMovingForwardWhenHeadingNorth stamp: 'FG 6/2/2022 11:40:49'!
+PASSED!
+
+!testRun: #MarsRoverTest #test06DecrementsYAfterMovingBackwardsWhenHeadingNorth stamp: 'FG 6/2/2022 11:40:49'!
+PASSED!
+
+!testRun: #MarsRoverTest #test07PointToEashAfterRotatingRightWhenHeadingNorth stamp: 'FG 6/2/2022 11:40:49'!
+PASSED!
+
+!testRun: #MarsRoverTest #test08PointsToWestAfterRotatingLeftWhenPointingNorth stamp: 'FG 6/2/2022 11:40:49'!
+PASSED!
+
+!testRun: #MarsRoverTest #test09DoesNotProcessInvalidCommand stamp: 'FG 6/2/2022 11:40:49'!
+PASSED!
+
+!testRun: #MarsRoverTest #test10CanProcessMoreThanOneCommand stamp: 'FG 6/2/2022 11:40:49'!
+PASSED!
+
+!testRun: #MarsRoverTest #test11IncrementsXAfterMovingForwareWhenHeadingEast stamp: 'FG 6/2/2022 11:40:49'!
+PASSED!
+
+!testRun: #MarsRoverTest #test12DecrementsXAfterMovingBackwardWhenHeadingEast stamp: 'FG 6/2/2022 11:40:49'!
+PASSED!
+
+!testRun: #MarsRoverTest #test13PointsToSouthAfterRotatingRightWhenHeadingEast stamp: 'FG 6/2/2022 11:40:49'!
+PASSED!
+
+!testRun: #MarsRoverTest #test14PointsToNorthAfterRotatingLeftWhenPointingEast stamp: 'FG 6/2/2022 11:40:49'!
+PASSED!
+
+!testRun: #MarsRoverTest #test15ForwardBackwardsAndRotateRightWorkAsExpectedWhenPointingSouth stamp: 'FG 6/2/2022 11:40:49'!
+PASSED!
+
+!testRun: #MarsRoverTest #test16ForwardBackwardsAndRotateRightWorkAsExpectedWhenPointingWest stamp: 'FG 6/2/2022 11:40:49'!
+PASSED!
+
+!testRun: #MarsRoverTrackerTest #test01SeveralTrackersOverPositionChangesShouldNotifyAllChanges stamp: 'FG 6/2/2022 11:40:49'!
+PASSED!
+
+!testRun: #MarsRoverTrackerTest #test02SeveralTrackersOverHeadingChangesShouldNotifyAllChanges stamp: 'FG 6/2/2022 11:40:49'!
+PASSED!
+
+!testRun: #MarsRoverWindowTest #test01WindowOverPositionChangesReturnsEmptyPositionAfterProcesingEmptyCommand stamp: 'FG 6/2/2022 11:40:49'!
+PASSED!
+
+!testRun: #MarsRoverWindowTest #test02WindowOverPositionChangesReturnsNewPositionAfterMovingToTheNorth stamp: 'FG 6/2/2022 11:40:49'!
+PASSED!
+
+!testRun: #MarsRoverWindowTest #test03WindowOverPositionChangesReturnsNewPositionAfterMovingToTheSouth stamp: 'FG 6/2/2022 11:40:49'!
+PASSED!
+
+!testRun: #MarsRoverWindowTest #test04WindowOverPositionChangesReturnsNewPositionAfterMovingToTheEastAndWest stamp: 'FG 6/2/2022 11:40:49'!
+PASSED!
+
+!testRun: #MarsRoverWindowTest #test05WindowOverHeadingChangesReturnsEmptyHeadingAfterProcesingEmptyCommand stamp: 'FG 6/2/2022 11:40:49'!
+PASSED!
+
+!testRun: #MarsRoverWindowTest #test06WindowOverHeadingChangesReturnsNewHeadingAfterRotateToTheEast stamp: 'FG 6/2/2022 11:40:49'!
+PASSED!
+
+!testRun: #MarsRoverWindowTest #test07WindowOverHeadingChangesReturnsNewHeadingAfterRotateToTheSouth stamp: 'FG 6/2/2022 11:40:49'!
+PASSED!
+
+!testRun: #MarsRoverWindowTest #test08WindowOverHeadingChangesReturnsNewHeadingAfterRotateToTheNorthAndWest stamp: 'FG 6/2/2022 11:40:49'!
+PASSED!
+
+!testRun: #MarsRoverWindowTest #test09WindowOverHeadingAndPositionChangesShouldChangeBothVariables stamp: 'FG 6/2/2022 11:40:49'!
+PASSED!
+
+Object subclass: #MarsRoverProxy
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'MarsRover-WithHeading'!
+
+!classDefinition: #MarsRoverProxy category: 'MarsRover-WithHeading' stamp: 'FG 6/2/2022 11:41:33'!
+Object subclass: #MarsRoverProxy
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'MarsRover-WithHeading'!
+
+!classDefinition: #MarsRoverProxy category: 'MarsRover-WithHeading' stamp: 'FG 6/2/2022 11:42:14'!
+Object subclass: #MarsRoverProxy
+	instanceVariableNames: 'headingTrackers'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'MarsRover-WithHeading'!
+!MarsRoverProxy methodsFor: 'tracking' stamp: 'FG 6/2/2022 11:42:09'!
+followHeadingChangesWith: aMarsRoverTracker
+
+	headingTrackers add: aMarsRoverTracker! !
+
+!classDefinition: #MarsRoverProxy category: 'MarsRover-WithHeading' stamp: 'FG 6/2/2022 11:42:23'!
+Object subclass: #MarsRoverProxy
+	instanceVariableNames: 'headingTrackers positionTrackers'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'MarsRover-WithHeading'!
+!MarsRoverProxy methodsFor: 'tracking' stamp: 'FG 6/2/2022 11:42:22'!
+followPositionChangesWith: aMarsRoverTracker
+	
+	positionTrackers add: aMarsRoverTracker.! !
+!MarsRoverProxy class methodsFor: 'instance creation' stamp: 'FG 6/2/2022 11:43:48'!
+of: aMarsRover
+
+	^ self new initializeOf: aMarsRover.! !
+
+!classDefinition: #MarsRoverProxy category: 'MarsRover-WithHeading' stamp: 'FG 6/2/2022 11:44:41'!
+Object subclass: #MarsRoverProxy
+	instanceVariableNames: 'headingTrackers positionTrackers proxee'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'MarsRover-WithHeading'!
+!MarsRoverProxy methodsFor: 'initialization' stamp: 'FG 6/2/2022 11:44:39'!
+initializeOf: aMarsRover
+
+	proxee := aMarsRover.
+	aMarsRover proxyOf: self.! !
+
+!classDefinition: #MarsRover category: 'MarsRover-WithHeading' stamp: 'FG 6/2/2022 11:45:45'!
+Object subclass: #MarsRover
+	instanceVariableNames: 'position head positionTrackers headingTrackers proxy'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'MarsRover-WithHeading'!
+!MarsRover methodsFor: 'tracking' stamp: 'FG 6/2/2022 11:45:38'!
+proxeeOf: aMarsRoverProxy
+
+	proxy := aMarsRoverProxy.! !
+!MarsRover methodsFor: 'moving' stamp: 'FG 6/2/2022 11:46:21' prior: 50482139!
+changePositionAndNotifyChanges: aPositionToBeAdded
+
+	position := position + aPositionToBeAdded.
+	proxy positionChangedTo: position.! !
+!MarsRover methodsFor: 'heading' stamp: 'FG 6/2/2022 11:46:43' prior: 50482473!
+changeHeadingAndNotifyChanges: AMarsRoverHeadingClassToUpdate
+
+	head := AMarsRoverHeadingClassToUpdate for: self.
+	proxy headingChangedTo: head.! !
+!MarsRoverProxy methodsFor: 'initialization' stamp: 'FG 6/2/2022 11:47:03' prior: 50483613!
+initializeOf: aMarsRover
+
+	proxee := aMarsRover.
+	aMarsRover proxeeOf: self.! !
+!MarsRoverProxy methodsFor: 'tracking' stamp: 'FG 6/2/2022 11:47:46'!
+positionChangedTo: aPosition
+
+	positionTrackers do: [:aPositionTracker | aPositionTracker positionChangedTo: aPosition ]! !
+!MarsRoverProxy methodsFor: 'tracking' stamp: 'FG 6/2/2022 11:48:19'!
+headingChangedTo: aHeading
+
+	headingTrackers do: [:aHeadingTracker | aHeadingTracker headingChangedTo: aHeading ]! !
+!MarsRoverProxy methodsFor: 'initialization' stamp: 'FG 6/2/2022 11:49:35' prior: 50483647!
+initializeOf: aMarsRover
+
+	positionTrackers := OrderedCollection new.
+	headingTrackers := OrderedCollection new.
+	proxee := aMarsRover.
+	aMarsRover proxeeOf: self.! !
+!MarsRover methodsFor: 'initialization' stamp: 'FG 6/2/2022 11:50:05' prior: 50482482!
+initializeAt: aPosition heading: aHeadingType
+
+	position := aPosition.
+	head := aHeadingType for: self.! !
+
+!methodRemoval: MarsRover #followHeadingChangesWith: stamp: 'FG 6/2/2022 11:50:16'!
+followHeadingChangesWith: aMarsRoverTracker
+
+	headingTrackers add: aMarsRoverTracker!
+
+!methodRemoval: MarsRover #followPositionChangesWith: stamp: 'FG 6/2/2022 11:50:22'!
+followPositionChangesWith: aMarsRoverTracker
+	
+	positionTrackers add: aMarsRoverTracker.!
+
+Object subclass: #MarsRover
+	instanceVariableNames: 'position head proxy'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'MarsRover-WithHeading'!
+
+!classDefinition: #MarsRover category: 'MarsRover-WithHeading' stamp: 'FG 6/2/2022 11:50:36'!
+Object subclass: #MarsRover
+	instanceVariableNames: 'position head proxy'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'MarsRover-WithHeading'!
+!MarsRoverLoggerTest methodsFor: 'setup' stamp: 'FG 6/2/2022 11:54:03' prior: 50483240!
+createMarsRoverHeadingEast
+
+	|marsRover | 
+	marsRover := MarsRover at: 1@1 heading: MarsRoverHeadingEast.
+	MarsRoverProxy of: marsRover.
+	
+	^marsRover.! !
+!MarsRoverLoggerTest methodsFor: 'setup' stamp: 'FG 6/2/2022 11:54:44' prior: 50483704!
+createMarsRoverHeadingEast
+
+	^MarsRover at: 1@1 heading: MarsRoverHeadingEast.
+	
+! !
+!MarsRoverLoggerTest methodsFor: 'test' stamp: 'FG 6/2/2022 11:55:38' prior: 50483346!
+test01LoggerOverPositionChangesShouldBeEmptyAfterProcesingEmptyCommand
+
+	| marsRover proxy logger |
+	
+	marsRover := self createMarsRoverHeadingNorth.
+	proxy := self createMarsRoverProxyOf: marsRover.
+	logger := self createLoggerFollowingPositionOn: proxy.
+	
+	marsRover process: ''.
+	
+	self assert: logger readStream atEnd.! !
+
+!testRun: #MarsRoverLoggerTest #test01LoggerOverPositionChangesShouldBeEmptyAfterProcesingEmptyCommand stamp: 'FG 6/2/2022 11:55:44'!
+ERROR!
+!MarsRoverLoggerTest methodsFor: 'setup' stamp: 'FG 6/2/2022 11:55:49'!
+createMarsRoverProxyOf: aMarsRover 
+	self shouldBeImplemented.! !
+!MarsRoverLoggerTest methodsFor: 'setup' stamp: 'FG 6/2/2022 11:56:13' prior: 50483735!
+createMarsRoverProxyOf: aMarsRover 
+	
+	^MarsRoverProxy of: aMarsRover ! !
+
+!testRun: #MarsRoverLoggerTest #test01LoggerOverPositionChangesShouldBeEmptyAfterProcesingEmptyCommand stamp: 'FG 6/2/2022 11:56:22'!
+PASSED!
+
+!testRun: #MarsRoverLoggerTest #test01LoggerOverPositionChangesShouldBeEmptyAfterProcesingEmptyCommand stamp: 'FG 6/2/2022 11:56:22'!
+PASSED!
+
+!testRun: #MarsRoverLoggerTest #test02LoggerOverPositionChangesShouldLogNewPositionAfterMovingToTheNorth stamp: 'FG 6/2/2022 11:56:22'!
+ERROR!
+
+!testRun: #MarsRoverLoggerTest #test03LoggerOverPositionChangesShouldLogNewPositionAfterMovingToTheShouth stamp: 'FG 6/2/2022 11:56:22'!
+ERROR!
+
+!testRun: #MarsRoverLoggerTest #test04LoggerOverPositionChangesShouldLogNewPositionAfterMovingToTheEastAndWest stamp: 'FG 6/2/2022 11:56:22'!
+ERROR!
+
+!testRun: #MarsRoverLoggerTest #test05LoggerOverHeadingChangesShouldLogNewHeadingAfterRotateToTheEast stamp: 'FG 6/2/2022 11:56:22'!
+ERROR!
+
+!testRun: #MarsRoverLoggerTest #test06LoggerOverHeadingChangesShouldLogNewHeadingAfterRotateToTheSouth stamp: 'FG 6/2/2022 11:56:22'!
+ERROR!
+
+!testRun: #MarsRoverLoggerTest #test07LoggerOverHeadingChangesShouldLogNewHeadingAfterFullRotation stamp: 'FG 6/2/2022 11:56:22'!
+ERROR!
+
+!testRun: #MarsRoverLoggerTest #test08LoggerOverHeadingAndPositionChangesShouldLogAllChanges stamp: 'FG 6/2/2022 11:56:22'!
+ERROR!
+!MarsRoverLoggerTest methodsFor: 'test' stamp: 'FG 6/2/2022 11:56:46' prior: 50483301!
+test02LoggerOverPositionChangesShouldLogNewPositionAfterMovingToTheNorth
+
+	| marsRover logger logStream proxy |
+	
+	marsRover := self createMarsRoverHeadingNorth.
+	proxy := self createMarsRoverProxyOf: marsRover.
+	logger := self createLoggerFollowingPositionOn: proxy.
+		
+	marsRover process: 'f'.
+	
+	logStream := logger readStream.
+	self assert: '1@2' equals: logStream nextLine.
+	self assert: logStream atEnd.
+! !
+!MarsRoverLoggerTest methodsFor: 'test' stamp: 'FG 6/2/2022 11:57:00' prior: 50483331!
+test03LoggerOverPositionChangesShouldLogNewPositionAfterMovingToTheShouth
+
+	| marsRover logger logStream proxy |
+	
+	marsRover := self createMarsRoverHeadingNorth.
+	proxy := self createMarsRoverProxyOf: marsRover.
+	logger := self createLoggerFollowingPositionOn: proxy.
+	
+	marsRover process: 'b'.
+	
+	logStream := logger readStream.
+	self assert: '1@0' equals: logStream nextLine.
+	self assert: logStream atEnd.
+! !
+
+!testRun: #MarsRoverLoggerTest #test03LoggerOverPositionChangesShouldLogNewPositionAfterMovingToTheShouth stamp: 'FG 6/2/2022 11:57:05'!
+PASSED!
+
+!testRun: #MarsRoverLoggerTest #test01LoggerOverPositionChangesShouldBeEmptyAfterProcesingEmptyCommand stamp: 'FG 6/2/2022 11:57:05'!
+PASSED!
+
+!testRun: #MarsRoverLoggerTest #test02LoggerOverPositionChangesShouldLogNewPositionAfterMovingToTheNorth stamp: 'FG 6/2/2022 11:57:05'!
+PASSED!
+
+!testRun: #MarsRoverLoggerTest #test03LoggerOverPositionChangesShouldLogNewPositionAfterMovingToTheShouth stamp: 'FG 6/2/2022 11:57:05'!
+PASSED!
+
+!testRun: #MarsRoverLoggerTest #test04LoggerOverPositionChangesShouldLogNewPositionAfterMovingToTheEastAndWest stamp: 'FG 6/2/2022 11:57:05'!
+ERROR!
+
+!testRun: #MarsRoverLoggerTest #test05LoggerOverHeadingChangesShouldLogNewHeadingAfterRotateToTheEast stamp: 'FG 6/2/2022 11:57:05'!
+ERROR!
+
+!testRun: #MarsRoverLoggerTest #test06LoggerOverHeadingChangesShouldLogNewHeadingAfterRotateToTheSouth stamp: 'FG 6/2/2022 11:57:05'!
+ERROR!
+
+!testRun: #MarsRoverLoggerTest #test07LoggerOverHeadingChangesShouldLogNewHeadingAfterFullRotation stamp: 'FG 6/2/2022 11:57:05'!
+ERROR!
+
+!testRun: #MarsRoverLoggerTest #test08LoggerOverHeadingAndPositionChangesShouldLogAllChanges stamp: 'FG 6/2/2022 11:57:05'!
+ERROR!
+!MarsRoverLoggerTest methodsFor: 'test' stamp: 'FG 6/2/2022 11:57:20' prior: 50483315!
+test04LoggerOverPositionChangesShouldLogNewPositionAfterMovingToTheEastAndWest
+
+	| marsRover logger logStream proxy |
+	
+	marsRover := self createMarsRoverHeadingEast.
+	proxy := self createMarsRoverProxyOf: marsRover.
+	logger := self createLoggerFollowingPositionOn: proxy.
+	
+	marsRover process: 'fb'.
+	
+	logStream := logger readStream.
+	self assert: '2@1' equals: logStream nextLine.
+	self assert: '1@1' equals: logStream nextLine.
+	self assert: logStream atEnd.
+
+! !
+!MarsRoverLoggerTest methodsFor: 'test' stamp: 'FG 6/2/2022 11:57:36' prior: 50483382!
+test05LoggerOverHeadingChangesShouldLogNewHeadingAfterRotateToTheEast
+
+	| marsRover logger logStream proxy |
+	
+	marsRover := self createMarsRoverHeadingNorth.
+	proxy := self createMarsRoverProxyOf: marsRover.
+	logger := self createLoggerFollowingHeadingOn: proxy.
+	
+	marsRover process: 'r'.
+	
+	logStream := logger readStream.
+	self assert: 'East' equals: logStream nextLine.
+	self assert: logStream atEnd.
+
+! !
+
+!testRun: #MarsRoverLoggerTest #test05LoggerOverHeadingChangesShouldLogNewHeadingAfterRotateToTheEast stamp: 'FG 6/2/2022 11:57:43'!
+PASSED!
+
+!testRun: #MarsRoverLoggerTest #test01LoggerOverPositionChangesShouldBeEmptyAfterProcesingEmptyCommand stamp: 'FG 6/2/2022 11:57:43'!
+PASSED!
+
+!testRun: #MarsRoverLoggerTest #test02LoggerOverPositionChangesShouldLogNewPositionAfterMovingToTheNorth stamp: 'FG 6/2/2022 11:57:43'!
+PASSED!
+
+!testRun: #MarsRoverLoggerTest #test03LoggerOverPositionChangesShouldLogNewPositionAfterMovingToTheShouth stamp: 'FG 6/2/2022 11:57:43'!
+PASSED!
+
+!testRun: #MarsRoverLoggerTest #test04LoggerOverPositionChangesShouldLogNewPositionAfterMovingToTheEastAndWest stamp: 'FG 6/2/2022 11:57:43'!
+PASSED!
+
+!testRun: #MarsRoverLoggerTest #test05LoggerOverHeadingChangesShouldLogNewHeadingAfterRotateToTheEast stamp: 'FG 6/2/2022 11:57:43'!
+PASSED!
+
+!testRun: #MarsRoverLoggerTest #test06LoggerOverHeadingChangesShouldLogNewHeadingAfterRotateToTheSouth stamp: 'FG 6/2/2022 11:57:43'!
+ERROR!
+
+!testRun: #MarsRoverLoggerTest #test07LoggerOverHeadingChangesShouldLogNewHeadingAfterFullRotation stamp: 'FG 6/2/2022 11:57:43'!
+ERROR!
+
+!testRun: #MarsRoverLoggerTest #test08LoggerOverHeadingAndPositionChangesShouldLogAllChanges stamp: 'FG 6/2/2022 11:57:43'!
+ERROR!
+!MarsRoverLoggerTest methodsFor: 'test' stamp: 'FG 6/2/2022 11:57:53' prior: 50483396!
+test06LoggerOverHeadingChangesShouldLogNewHeadingAfterRotateToTheSouth
+
+	| marsRover logger logStream proxy |
+	
+	marsRover := self createMarsRoverHeadingEast.
+	proxy := self createMarsRoverProxyOf: marsRover.
+	logger := self createLoggerFollowingHeadingOn: proxy.
+	
+	marsRover process: 'r'.
+	
+	logStream := logger readStream.
+	self assert: 'South' equals: logStream nextLine.
+	self assert: logStream atEnd.
+
+! !
+!MarsRoverLoggerTest methodsFor: 'test' stamp: 'FG 6/2/2022 11:57:59' prior: 50483363!
+test07LoggerOverHeadingChangesShouldLogNewHeadingAfterFullRotation
+
+	| marsRover logger logStream proxy |
+	
+	marsRover := self createMarsRoverHeadingEast.
+	proxy := self createMarsRoverProxyOf: marsRover.
+	logger := self createLoggerFollowingHeadingOn: proxy.
+	
+	marsRover process: 'rrrr'.
+	
+	logStream := logger readStream.
+	self assert: 'South' equals: logStream nextLine.
+	self assert: 'West' equals: logStream nextLine.
+	self assert: 'North' equals: logStream nextLine.
+	self assert: 'East' equals: logStream nextLine.
+	self assert: logStream atEnd.
+
+! !
+!MarsRoverLoggerTest methodsFor: 'test' stamp: 'FG 6/2/2022 11:58:16' prior: 50483180!
+test08LoggerOverHeadingAndPositionChangesShouldLogAllChanges
+
+	| marsRover logger logStream proxy |
+	
+	marsRover := self createMarsRoverHeadingNorth .
+	proxy := self createMarsRoverProxyOf: marsRover.
+	logger := MarsRoverLogger followHeadingAndPositionChangesOn: proxy.
+	
+	marsRover process: 'frfr'.
+	
+	logStream := logger readStream.
+	self assert: '1@2' equals: logStream nextLine.
+	self assert: 'East' equals: logStream nextLine.
+	self assert: '2@2' equals: logStream nextLine.
+	self assert: 'South' equals: logStream nextLine.
+	self assert: logStream atEnd.
+
+! !
+
+!testRun: #MarsRoverLoggerTest #test08LoggerOverHeadingAndPositionChangesShouldLogAllChanges stamp: 'FG 6/2/2022 11:58:21'!
+PASSED!
+
+!testRun: #MarsRoverLoggerTest #test01LoggerOverPositionChangesShouldBeEmptyAfterProcesingEmptyCommand stamp: 'FG 6/2/2022 11:58:21'!
+PASSED!
+
+!testRun: #MarsRoverLoggerTest #test02LoggerOverPositionChangesShouldLogNewPositionAfterMovingToTheNorth stamp: 'FG 6/2/2022 11:58:21'!
+PASSED!
+
+!testRun: #MarsRoverLoggerTest #test03LoggerOverPositionChangesShouldLogNewPositionAfterMovingToTheShouth stamp: 'FG 6/2/2022 11:58:21'!
+PASSED!
+
+!testRun: #MarsRoverLoggerTest #test04LoggerOverPositionChangesShouldLogNewPositionAfterMovingToTheEastAndWest stamp: 'FG 6/2/2022 11:58:21'!
+PASSED!
+
+!testRun: #MarsRoverLoggerTest #test05LoggerOverHeadingChangesShouldLogNewHeadingAfterRotateToTheEast stamp: 'FG 6/2/2022 11:58:21'!
+PASSED!
+
+!testRun: #MarsRoverLoggerTest #test06LoggerOverHeadingChangesShouldLogNewHeadingAfterRotateToTheSouth stamp: 'FG 6/2/2022 11:58:21'!
+PASSED!
+
+!testRun: #MarsRoverLoggerTest #test07LoggerOverHeadingChangesShouldLogNewHeadingAfterFullRotation stamp: 'FG 6/2/2022 11:58:21'!
+PASSED!
+
+!testRun: #MarsRoverLoggerTest #test08LoggerOverHeadingAndPositionChangesShouldLogAllChanges stamp: 'FG 6/2/2022 11:58:21'!
+PASSED!
+
+!testRun: #MarsRoverWindowTest #test01WindowOverPositionChangesReturnsEmptyPositionAfterProcesingEmptyCommand stamp: 'FG 6/2/2022 11:58:29'!
+ERROR!
+
+!testRun: #MarsRoverWindowTest #test01WindowOverPositionChangesReturnsEmptyPositionAfterProcesingEmptyCommand stamp: 'FG 6/2/2022 11:58:37'!
+ERROR!
+!MarsRoverWindowTest methodsFor: 'test' stamp: 'FG 6/2/2022 11:59:13' prior: 50482916!
+test01WindowOverPositionChangesReturnsEmptyPositionAfterProcesingEmptyCommand
+
+	| marsRover window proxy |
+	
+	marsRover := self createMarsRoverHeadingNorth.
+	proxy := self createMarsRoverProxyOf: marsRover.
+	window := self createWindowFollowingPositionOn: marsRover.
+	
+	marsRover process: ''.
+	
+	self assert: '' equals: window position.	! !
+!MarsRoverWindowTest methodsFor: 'test' stamp: 'FG 6/2/2022 11:59:24' prior: 50484038!
+test01WindowOverPositionChangesReturnsEmptyPositionAfterProcesingEmptyCommand
+
+	| marsRover window proxy |
+	
+	marsRover := self createMarsRoverHeadingNorth.
+	proxy := self createMarsRoverProxyOf: marsRover.
+	window := self createWindowFollowingPositionOn: proxy.
+	
+	marsRover process: ''.
+	
+	self assert: '' equals: window position.	! !
+
+!testRun: #MarsRoverWindowTest #test01WindowOverPositionChangesReturnsEmptyPositionAfterProcesingEmptyCommand stamp: 'FG 6/2/2022 11:59:24'!
+ERROR!
+!MarsRoverWindowTest methodsFor: 'setup' stamp: 'FG 6/2/2022 11:59:31'!
+createMarsRoverProxyOf: aMarsRover 
+	self shouldBeImplemented.! !
+!MarsRoverWindowTest methodsFor: 'setup' stamp: 'FG 6/2/2022 11:59:48' prior: 50484070!
+createMarsRoverProxyOf: aMarsRover 
+
+	^MarsRoverProxy of: aMarsRover.! !
+
+!testRun: #MarsRoverWindowTest #test01WindowOverPositionChangesReturnsEmptyPositionAfterProcesingEmptyCommand stamp: 'FG 6/2/2022 11:59:50'!
+PASSED!
+
+!testRun: #MarsRoverWindowTest #test01WindowOverPositionChangesReturnsEmptyPositionAfterProcesingEmptyCommand stamp: 'FG 6/2/2022 11:59:50'!
+PASSED!
+
+!testRun: #MarsRoverWindowTest #test02WindowOverPositionChangesReturnsNewPositionAfterMovingToTheNorth stamp: 'FG 6/2/2022 11:59:50'!
+ERROR!
+
+!testRun: #MarsRoverWindowTest #test03WindowOverPositionChangesReturnsNewPositionAfterMovingToTheSouth stamp: 'FG 6/2/2022 11:59:50'!
+ERROR!
+
+!testRun: #MarsRoverWindowTest #test04WindowOverPositionChangesReturnsNewPositionAfterMovingToTheEastAndWest stamp: 'FG 6/2/2022 11:59:50'!
+ERROR!
+
+!testRun: #MarsRoverWindowTest #test05WindowOverHeadingChangesReturnsEmptyHeadingAfterProcesingEmptyCommand stamp: 'FG 6/2/2022 11:59:50'!
+ERROR!
+
+!testRun: #MarsRoverWindowTest #test06WindowOverHeadingChangesReturnsNewHeadingAfterRotateToTheEast stamp: 'FG 6/2/2022 11:59:50'!
+ERROR!
+
+!testRun: #MarsRoverWindowTest #test07WindowOverHeadingChangesReturnsNewHeadingAfterRotateToTheSouth stamp: 'FG 6/2/2022 11:59:50'!
+ERROR!
+
+!testRun: #MarsRoverWindowTest #test08WindowOverHeadingChangesReturnsNewHeadingAfterRotateToTheNorthAndWest stamp: 'FG 6/2/2022 11:59:50'!
+ERROR!
+
+!testRun: #MarsRoverWindowTest #test09WindowOverHeadingAndPositionChangesShouldChangeBothVariables stamp: 'FG 6/2/2022 11:59:51'!
+ERROR!
+!MarsRoverWindowTest methodsFor: 'test' stamp: 'FG 6/2/2022 12:00:04' prior: 50482928!
+test02WindowOverPositionChangesReturnsNewPositionAfterMovingToTheNorth
+
+	| marsRover window proxy |
+	
+	marsRover := self createMarsRoverHeadingNorth.
+	proxy := self createMarsRoverProxyOf: marsRover.
+	window := self createWindowFollowingPositionOn: proxy.
+	
+	marsRover process: 'f'.
+	
+	self assert: '1@2' equals: window position.	! !
+
+!testRun: #MarsRoverWindowTest #test02WindowOverPositionChangesReturnsNewPositionAfterMovingToTheNorth stamp: 'FG 6/2/2022 12:00:06'!
+PASSED!
+
+!testRun: #MarsRoverWindowTest #test01WindowOverPositionChangesReturnsEmptyPositionAfterProcesingEmptyCommand stamp: 'FG 6/2/2022 12:00:06'!
+PASSED!
+
+!testRun: #MarsRoverWindowTest #test02WindowOverPositionChangesReturnsNewPositionAfterMovingToTheNorth stamp: 'FG 6/2/2022 12:00:06'!
+PASSED!
+
+!testRun: #MarsRoverWindowTest #test03WindowOverPositionChangesReturnsNewPositionAfterMovingToTheSouth stamp: 'FG 6/2/2022 12:00:06'!
+ERROR!
+
+!testRun: #MarsRoverWindowTest #test04WindowOverPositionChangesReturnsNewPositionAfterMovingToTheEastAndWest stamp: 'FG 6/2/2022 12:00:06'!
+ERROR!
+
+!testRun: #MarsRoverWindowTest #test05WindowOverHeadingChangesReturnsEmptyHeadingAfterProcesingEmptyCommand stamp: 'FG 6/2/2022 12:00:06'!
+ERROR!
+
+!testRun: #MarsRoverWindowTest #test06WindowOverHeadingChangesReturnsNewHeadingAfterRotateToTheEast stamp: 'FG 6/2/2022 12:00:06'!
+ERROR!
+
+!testRun: #MarsRoverWindowTest #test07WindowOverHeadingChangesReturnsNewHeadingAfterRotateToTheSouth stamp: 'FG 6/2/2022 12:00:06'!
+ERROR!
+
+!testRun: #MarsRoverWindowTest #test08WindowOverHeadingChangesReturnsNewHeadingAfterRotateToTheNorthAndWest stamp: 'FG 6/2/2022 12:00:06'!
+ERROR!
+
+!testRun: #MarsRoverWindowTest #test09WindowOverHeadingAndPositionChangesShouldChangeBothVariables stamp: 'FG 6/2/2022 12:00:06'!
+ERROR!
+!MarsRoverWindowTest methodsFor: 'test' stamp: 'FG 6/2/2022 12:00:13' prior: 50482940!
+test03WindowOverPositionChangesReturnsNewPositionAfterMovingToTheSouth
+
+	| marsRover window proxy |
+	
+	marsRover := self createMarsRoverHeadingNorth.
+	proxy := self createMarsRoverProxyOf: marsRover.
+	window := self createWindowFollowingPositionOn: proxy.
+	
+	marsRover process: 'b'.
+	
+	self assert: '1@0' equals: window position.	! !
+!MarsRoverWindowTest methodsFor: 'test' stamp: 'FG 6/2/2022 12:00:21' prior: 50482901!
+test04WindowOverPositionChangesReturnsNewPositionAfterMovingToTheEastAndWest
+
+	| marsRover window proxy |
+	
+	marsRover := self createMarsRoverHeadingEast.
+	proxy := self createMarsRoverProxyOf: marsRover.
+	window := self createWindowFollowingPositionOn: proxy.
+		
+	marsRover process: 'f'.
+	
+	self assert: '2@1' equals: window position.	
+	
+	marsRover process: 'b'.
+	
+	self assert: '1@1' equals: window position.	! !
+!MarsRoverWindowTest methodsFor: 'test' stamp: 'FG 6/2/2022 12:00:36' prior: 50482958!
+test05WindowOverHeadingChangesReturnsEmptyHeadingAfterProcesingEmptyCommand
+
+	| marsRover window proxy |
+	
+	marsRover := self createMarsRoverHeadingNorth.
+	proxy := self createMarsRoverProxyOf: marsRover.
+	window := self createWindowFollowingPositionOn: proxy.
+	
+	marsRover process: ''.
+	
+	self assert: '' equals: window heading.	
+	self assert: '' equals: window position.	! !
+!MarsRoverWindowTest methodsFor: 'test' stamp: 'FG 6/2/2022 12:00:49' prior: 50484215!
+test05WindowOverHeadingChangesReturnsEmptyHeadingAfterProcesingEmptyCommand
+
+	| marsRover window proxy |
+	
+	marsRover := self createMarsRoverHeadingNorth.
+	proxy := self createMarsRoverProxyOf: marsRover.
+	window := self createWindowFollowingHeadingOn: proxy.
+	
+	marsRover process: ''.
+	
+	self assert: '' equals: window heading.	
+	self assert: '' equals: window position.	! !
+!MarsRoverWindowTest methodsFor: 'test' stamp: 'FG 6/2/2022 12:00:57' prior: 50482989!
+test06WindowOverHeadingChangesReturnsNewHeadingAfterRotateToTheEast
+
+	| marsRover window proxy |
+	
+	marsRover := self createMarsRoverHeadingNorth.
+	proxy := self createMarsRoverProxyOf: marsRover.
+	window := self createWindowFollowingHeadingOn: proxy.
+	
+	marsRover process: 'r'.
+	
+	self assert: 'Apuntando al Este' equals: window heading.	
+	self assert: '' equals: window position.	! !
+!MarsRoverWindowTest methodsFor: 'test' stamp: 'FG 6/2/2022 12:01:03' prior: 50483003!
+test07WindowOverHeadingChangesReturnsNewHeadingAfterRotateToTheSouth
+
+	| marsRover window proxy |
+	
+	marsRover := self createMarsRoverHeadingEast.
+	proxy := self createMarsRoverProxyOf: marsRover.
+	window := self createWindowFollowingHeadingOn: proxy.
+	
+	marsRover process: 'r'.
+	
+	self assert: 'Apuntando al Sur' equals: window heading.	
+	self assert: '' equals: window position.	! !
+!MarsRoverWindowTest methodsFor: 'test' stamp: 'FG 6/2/2022 12:01:10' prior: 50482971!
+test08WindowOverHeadingChangesReturnsNewHeadingAfterRotateToTheNorthAndWest
+
+	| marsRover window proxy |
+	
+	marsRover := self createMarsRoverHeadingSouth.
+	proxy := self createMarsRoverProxyOf: marsRover.
+	window := self createWindowFollowingHeadingOn: proxy.
+	
+	marsRover process: 'r'.
+	
+	self assert: 'Apuntando al Oeste' equals: window heading.	
+	self assert: '' equals: window position.	
+		
+	marsRover process: 'r'.
+	
+	self assert: 'Apuntando al Norte' equals: window heading.	
+	self assert: '' equals: window position.	! !
+!MarsRoverWindowTest methodsFor: 'test' stamp: 'FG 6/2/2022 12:01:23' prior: 50482825!
+test09WindowOverHeadingAndPositionChangesShouldChangeBothVariables
+
+	| marsRover window proxy |
+	
+	marsRover := self createMarsRoverHeadingSouth.
+	proxy := self createMarsRoverProxyOf: marsRover.
+	window := MarsRoverWindow followHeadingAndPositionChangesOn: proxy.
+	
+	marsRover process: 'r'.
+	
+	self assert: 'Apuntando al Oeste' equals: window heading.	
+	self assert: '' equals: window position.	
+
+	marsRover process: 'f'.
+	
+	self assert: 'Apuntando al Oeste' equals: window heading.	
+	self assert: '0@1' equals: window position.	! !
+
+!testRun: #MarsRoverWindowTest #test09WindowOverHeadingAndPositionChangesShouldChangeBothVariables stamp: 'FG 6/2/2022 12:01:26'!
+PASSED!
+
+!testRun: #MarsRoverLoggerTest #test01LoggerOverPositionChangesShouldBeEmptyAfterProcesingEmptyCommand stamp: 'FG 6/2/2022 12:01:26'!
+PASSED!
+
+!testRun: #MarsRoverLoggerTest #test02LoggerOverPositionChangesShouldLogNewPositionAfterMovingToTheNorth stamp: 'FG 6/2/2022 12:01:26'!
+PASSED!
+
+!testRun: #MarsRoverLoggerTest #test03LoggerOverPositionChangesShouldLogNewPositionAfterMovingToTheShouth stamp: 'FG 6/2/2022 12:01:26'!
+PASSED!
+
+!testRun: #MarsRoverLoggerTest #test04LoggerOverPositionChangesShouldLogNewPositionAfterMovingToTheEastAndWest stamp: 'FG 6/2/2022 12:01:26'!
+PASSED!
+
+!testRun: #MarsRoverLoggerTest #test05LoggerOverHeadingChangesShouldLogNewHeadingAfterRotateToTheEast stamp: 'FG 6/2/2022 12:01:26'!
+PASSED!
+
+!testRun: #MarsRoverLoggerTest #test06LoggerOverHeadingChangesShouldLogNewHeadingAfterRotateToTheSouth stamp: 'FG 6/2/2022 12:01:26'!
+PASSED!
+
+!testRun: #MarsRoverLoggerTest #test07LoggerOverHeadingChangesShouldLogNewHeadingAfterFullRotation stamp: 'FG 6/2/2022 12:01:27'!
+PASSED!
+
+!testRun: #MarsRoverLoggerTest #test08LoggerOverHeadingAndPositionChangesShouldLogAllChanges stamp: 'FG 6/2/2022 12:01:27'!
+PASSED!
+
+!testRun: #MarsRoverTest #test01DoesNotMoveWhenNoCommand stamp: 'FG 6/2/2022 12:01:27'!
+PASSED!
+
+!testRun: #MarsRoverTest #test02IsAtFailsForDifferentPosition stamp: 'FG 6/2/2022 12:01:27'!
+PASSED!
+
+!testRun: #MarsRoverTest #test03IsAtFailsForDifferentHeading stamp: 'FG 6/2/2022 12:01:27'!
+PASSED!
+
+!testRun: #MarsRoverTest #test04IncrementsYAfterMovingForwardWhenHeadingNorth stamp: 'FG 6/2/2022 12:01:27'!
+ERROR!
+
+!testRun: #MarsRoverTest #test06DecrementsYAfterMovingBackwardsWhenHeadingNorth stamp: 'FG 6/2/2022 12:01:27'!
+ERROR!
+
+!testRun: #MarsRoverTest #test07PointToEashAfterRotatingRightWhenHeadingNorth stamp: 'FG 6/2/2022 12:01:27'!
+ERROR!
+
+!testRun: #MarsRoverTest #test08PointsToWestAfterRotatingLeftWhenPointingNorth stamp: 'FG 6/2/2022 12:01:27'!
+ERROR!
+
+!testRun: #MarsRoverTest #test09DoesNotProcessInvalidCommand stamp: 'FG 6/2/2022 12:01:27'!
+PASSED!
+
+!testRun: #MarsRoverTest #test10CanProcessMoreThanOneCommand stamp: 'FG 6/2/2022 12:01:27'!
+ERROR!
+
+!testRun: #MarsRoverTest #test11IncrementsXAfterMovingForwareWhenHeadingEast stamp: 'FG 6/2/2022 12:01:27'!
+ERROR!
+
+!testRun: #MarsRoverTest #test12DecrementsXAfterMovingBackwardWhenHeadingEast stamp: 'FG 6/2/2022 12:01:27'!
+ERROR!
+
+!testRun: #MarsRoverTest #test13PointsToSouthAfterRotatingRightWhenHeadingEast stamp: 'FG 6/2/2022 12:01:27'!
+ERROR!
+
+!testRun: #MarsRoverTest #test14PointsToNorthAfterRotatingLeftWhenPointingEast stamp: 'FG 6/2/2022 12:01:27'!
+ERROR!
+
+!testRun: #MarsRoverTest #test15ForwardBackwardsAndRotateRightWorkAsExpectedWhenPointingSouth stamp: 'FG 6/2/2022 12:01:27'!
+ERROR!
+
+!testRun: #MarsRoverTest #test16ForwardBackwardsAndRotateRightWorkAsExpectedWhenPointingWest stamp: 'FG 6/2/2022 12:01:27'!
+ERROR!
+
+!testRun: #MarsRoverTrackerTest #test01SeveralTrackersOverPositionChangesShouldNotifyAllChanges stamp: 'FG 6/2/2022 12:01:27'!
+ERROR!
+
+!testRun: #MarsRoverTrackerTest #test02SeveralTrackersOverHeadingChangesShouldNotifyAllChanges stamp: 'FG 6/2/2022 12:01:27'!
+ERROR!
+
+!testRun: #MarsRoverWindowTest #test01WindowOverPositionChangesReturnsEmptyPositionAfterProcesingEmptyCommand stamp: 'FG 6/2/2022 12:01:27'!
+PASSED!
+
+!testRun: #MarsRoverWindowTest #test02WindowOverPositionChangesReturnsNewPositionAfterMovingToTheNorth stamp: 'FG 6/2/2022 12:01:27'!
+PASSED!
+
+!testRun: #MarsRoverWindowTest #test03WindowOverPositionChangesReturnsNewPositionAfterMovingToTheSouth stamp: 'FG 6/2/2022 12:01:27'!
+PASSED!
+
+!testRun: #MarsRoverWindowTest #test04WindowOverPositionChangesReturnsNewPositionAfterMovingToTheEastAndWest stamp: 'FG 6/2/2022 12:01:27'!
+PASSED!
+
+!testRun: #MarsRoverWindowTest #test05WindowOverHeadingChangesReturnsEmptyHeadingAfterProcesingEmptyCommand stamp: 'FG 6/2/2022 12:01:27'!
+PASSED!
+
+!testRun: #MarsRoverWindowTest #test06WindowOverHeadingChangesReturnsNewHeadingAfterRotateToTheEast stamp: 'FG 6/2/2022 12:01:27'!
+PASSED!
+
+!testRun: #MarsRoverWindowTest #test07WindowOverHeadingChangesReturnsNewHeadingAfterRotateToTheSouth stamp: 'FG 6/2/2022 12:01:27'!
+PASSED!
+
+!testRun: #MarsRoverWindowTest #test08WindowOverHeadingChangesReturnsNewHeadingAfterRotateToTheNorthAndWest stamp: 'FG 6/2/2022 12:01:27'!
+PASSED!
+
+!testRun: #MarsRoverWindowTest #test09WindowOverHeadingAndPositionChangesShouldChangeBothVariables stamp: 'FG 6/2/2022 12:01:27'!
+PASSED!
+!MarsRover methodsFor: 'moving' stamp: 'FG 6/2/2022 12:03:43' prior: 50483632!
+changePositionAndNotifyChanges: aPositionToBeAdded
+
+	position := position + aPositionToBeAdded.
+	proxy ifNotNil: [ proxy positionChangedTo: position.]! !
+!MarsRover methodsFor: 'heading' stamp: 'FG 6/2/2022 12:04:05' prior: 50483639!
+changeHeadingAndNotifyChanges: AMarsRoverHeadingClassToUpdate
+
+	head := AMarsRoverHeadingClassToUpdate for: self.
+	proxy ifNotNil: [ proxy headingChangedTo: head.]! !
+
+!testRun: #MarsRoverLoggerTest #test01LoggerOverPositionChangesShouldBeEmptyAfterProcesingEmptyCommand stamp: 'FG 6/2/2022 12:04:07'!
+PASSED!
+
+!testRun: #MarsRoverLoggerTest #test02LoggerOverPositionChangesShouldLogNewPositionAfterMovingToTheNorth stamp: 'FG 6/2/2022 12:04:07'!
+PASSED!
+
+!testRun: #MarsRoverLoggerTest #test03LoggerOverPositionChangesShouldLogNewPositionAfterMovingToTheShouth stamp: 'FG 6/2/2022 12:04:07'!
+PASSED!
+
+!testRun: #MarsRoverLoggerTest #test04LoggerOverPositionChangesShouldLogNewPositionAfterMovingToTheEastAndWest stamp: 'FG 6/2/2022 12:04:07'!
+PASSED!
+
+!testRun: #MarsRoverLoggerTest #test05LoggerOverHeadingChangesShouldLogNewHeadingAfterRotateToTheEast stamp: 'FG 6/2/2022 12:04:07'!
+PASSED!
+
+!testRun: #MarsRoverLoggerTest #test06LoggerOverHeadingChangesShouldLogNewHeadingAfterRotateToTheSouth stamp: 'FG 6/2/2022 12:04:07'!
+PASSED!
+
+!testRun: #MarsRoverLoggerTest #test07LoggerOverHeadingChangesShouldLogNewHeadingAfterFullRotation stamp: 'FG 6/2/2022 12:04:07'!
+PASSED!
+
+!testRun: #MarsRoverLoggerTest #test08LoggerOverHeadingAndPositionChangesShouldLogAllChanges stamp: 'FG 6/2/2022 12:04:07'!
+PASSED!
+
+!testRun: #MarsRoverTest #test01DoesNotMoveWhenNoCommand stamp: 'FG 6/2/2022 12:04:07'!
+PASSED!
+
+!testRun: #MarsRoverTest #test02IsAtFailsForDifferentPosition stamp: 'FG 6/2/2022 12:04:07'!
+PASSED!
+
+!testRun: #MarsRoverTest #test03IsAtFailsForDifferentHeading stamp: 'FG 6/2/2022 12:04:07'!
+PASSED!
+
+!testRun: #MarsRoverTest #test04IncrementsYAfterMovingForwardWhenHeadingNorth stamp: 'FG 6/2/2022 12:04:07'!
+PASSED!
+
+!testRun: #MarsRoverTest #test06DecrementsYAfterMovingBackwardsWhenHeadingNorth stamp: 'FG 6/2/2022 12:04:07'!
+PASSED!
+
+!testRun: #MarsRoverTest #test07PointToEashAfterRotatingRightWhenHeadingNorth stamp: 'FG 6/2/2022 12:04:07'!
+PASSED!
+
+!testRun: #MarsRoverTest #test08PointsToWestAfterRotatingLeftWhenPointingNorth stamp: 'FG 6/2/2022 12:04:07'!
+PASSED!
+
+!testRun: #MarsRoverTest #test09DoesNotProcessInvalidCommand stamp: 'FG 6/2/2022 12:04:07'!
+PASSED!
+
+!testRun: #MarsRoverTest #test10CanProcessMoreThanOneCommand stamp: 'FG 6/2/2022 12:04:07'!
+PASSED!
+
+!testRun: #MarsRoverTest #test11IncrementsXAfterMovingForwareWhenHeadingEast stamp: 'FG 6/2/2022 12:04:07'!
+PASSED!
+
+!testRun: #MarsRoverTest #test12DecrementsXAfterMovingBackwardWhenHeadingEast stamp: 'FG 6/2/2022 12:04:07'!
+PASSED!
+
+!testRun: #MarsRoverTest #test13PointsToSouthAfterRotatingRightWhenHeadingEast stamp: 'FG 6/2/2022 12:04:07'!
+PASSED!
+
+!testRun: #MarsRoverTest #test14PointsToNorthAfterRotatingLeftWhenPointingEast stamp: 'FG 6/2/2022 12:04:07'!
+PASSED!
+
+!testRun: #MarsRoverTest #test15ForwardBackwardsAndRotateRightWorkAsExpectedWhenPointingSouth stamp: 'FG 6/2/2022 12:04:07'!
+PASSED!
+
+!testRun: #MarsRoverTest #test16ForwardBackwardsAndRotateRightWorkAsExpectedWhenPointingWest stamp: 'FG 6/2/2022 12:04:07'!
+PASSED!
+
+!testRun: #MarsRoverTrackerTest #test01SeveralTrackersOverPositionChangesShouldNotifyAllChanges stamp: 'FG 6/2/2022 12:04:07'!
+ERROR!
+
+!testRun: #MarsRoverTrackerTest #test02SeveralTrackersOverHeadingChangesShouldNotifyAllChanges stamp: 'FG 6/2/2022 12:04:07'!
+ERROR!
+
+!testRun: #MarsRoverWindowTest #test01WindowOverPositionChangesReturnsEmptyPositionAfterProcesingEmptyCommand stamp: 'FG 6/2/2022 12:04:07'!
+PASSED!
+
+!testRun: #MarsRoverWindowTest #test02WindowOverPositionChangesReturnsNewPositionAfterMovingToTheNorth stamp: 'FG 6/2/2022 12:04:07'!
+PASSED!
+
+!testRun: #MarsRoverWindowTest #test03WindowOverPositionChangesReturnsNewPositionAfterMovingToTheSouth stamp: 'FG 6/2/2022 12:04:07'!
+PASSED!
+
+!testRun: #MarsRoverWindowTest #test04WindowOverPositionChangesReturnsNewPositionAfterMovingToTheEastAndWest stamp: 'FG 6/2/2022 12:04:07'!
+PASSED!
+
+!testRun: #MarsRoverWindowTest #test05WindowOverHeadingChangesReturnsEmptyHeadingAfterProcesingEmptyCommand stamp: 'FG 6/2/2022 12:04:07'!
+PASSED!
+
+!testRun: #MarsRoverWindowTest #test06WindowOverHeadingChangesReturnsNewHeadingAfterRotateToTheEast stamp: 'FG 6/2/2022 12:04:07'!
+PASSED!
+
+!testRun: #MarsRoverWindowTest #test07WindowOverHeadingChangesReturnsNewHeadingAfterRotateToTheSouth stamp: 'FG 6/2/2022 12:04:07'!
+PASSED!
+
+!testRun: #MarsRoverWindowTest #test08WindowOverHeadingChangesReturnsNewHeadingAfterRotateToTheNorthAndWest stamp: 'FG 6/2/2022 12:04:07'!
+PASSED!
+
+!testRun: #MarsRoverWindowTest #test09WindowOverHeadingAndPositionChangesShouldChangeBothVariables stamp: 'FG 6/2/2022 12:04:07'!
+PASSED!
+!MarsRoverTrackerTest methodsFor: 'test' stamp: 'FG 6/2/2022 12:04:44' prior: 50482372!
+test01SeveralTrackersOverPositionChangesShouldNotifyAllChanges
+
+	| marsRover logger window logStream proxy |
+	
+	marsRover := MarsRover at: 1@1 heading: MarsRoverHeadingNorth .
+	proxy := MarsRoverProxy of: marsRover.
+	logger := MarsRoverLogger followPositionChangesOn: proxy.
+	window := MarsRoverWindow followPositionChangesOn: proxy.
+
+	marsRover process: 'ff'.
+	
+	logStream := logger readStream.
+	self assert: '1@2' equals: logStream nextLine.
+	self assert: '1@3' equals: logStream nextLine.
+	self assert: logStream atEnd.
+	
+	self assert: '1@3' equals: window position.! !
+
+!testRun: #MarsRoverTrackerTest #test01SeveralTrackersOverPositionChangesShouldNotifyAllChanges stamp: 'FG 6/2/2022 12:04:47'!
+PASSED!
+
+!testRun: #MarsRoverTrackerTest #test01SeveralTrackersOverPositionChangesShouldNotifyAllChanges stamp: 'FG 6/2/2022 12:04:47'!
+PASSED!
+
+!testRun: #MarsRoverTrackerTest #test02SeveralTrackersOverHeadingChangesShouldNotifyAllChanges stamp: 'FG 6/2/2022 12:04:47'!
+ERROR!
+
+!testRun: #MarsRoverTrackerTest #test02SeveralTrackersOverHeadingChangesShouldNotifyAllChanges stamp: 'FG 6/2/2022 12:04:47'!
+ERROR!
+!MarsRoverTrackerTest methodsFor: 'test' stamp: 'FG 6/2/2022 12:05:06' prior: 50482433!
+test02SeveralTrackersOverHeadingChangesShouldNotifyAllChanges
+
+	| marsRover logger window logStream proxy |
+	
+	marsRover := MarsRover at: 1@1 heading: MarsRoverHeadingNorth .
+	proxy := MarsRoverProxy of: marsRover.
+	logger := MarsRoverLogger followPositionChangesOn: proxy.
+	window := MarsRoverWindow followPositionChangesOn: proxy.
+
+	marsRover process: 'rr'.
+	
+	logStream := logger readStream.
+	self assert: 'East' equals: logStream nextLine.
+	self assert: 'South' equals: logStream nextLine.
+	self assert: logStream atEnd.
+	
+	self assert: 'Apuntando al Sur' equals: window heading.! !
+
+!testRun: #MarsRoverTrackerTest #test02SeveralTrackersOverHeadingChangesShouldNotifyAllChanges stamp: 'FG 6/2/2022 12:05:09'!
+FAILURE!
+!MarsRoverTrackerTest methodsFor: 'test' stamp: 'FG 6/2/2022 12:05:28' prior: 50484650!
+test02SeveralTrackersOverHeadingChangesShouldNotifyAllChanges
+
+	| marsRover logger window logStream proxy |
+	
+	marsRover := MarsRover at: 1@1 heading: MarsRoverHeadingNorth .
+	proxy := MarsRoverProxy of: marsRover.
+	logger := MarsRoverLogger followHeadingChangesOn: proxy.
+	window := MarsRoverWindow followHeadingChangesOn: proxy.
+
+	marsRover process: 'rr'.
+	
+	logStream := logger readStream.
+	self assert: 'East' equals: logStream nextLine.
+	self assert: 'South' equals: logStream nextLine.
+	self assert: logStream atEnd.
+	
+	self assert: 'Apuntando al Sur' equals: window heading.! !
+
+!testRun: #MarsRoverTrackerTest #test02SeveralTrackersOverHeadingChangesShouldNotifyAllChanges stamp: 'FG 6/2/2022 12:05:29'!
+PASSED!
+
+!testRun: #MarsRoverTrackerTest #test01SeveralTrackersOverPositionChangesShouldNotifyAllChanges stamp: 'FG 6/2/2022 12:05:29'!
+PASSED!
+
+!testRun: #MarsRoverTrackerTest #test02SeveralTrackersOverHeadingChangesShouldNotifyAllChanges stamp: 'FG 6/2/2022 12:05:29'!
+PASSED!
+
+!testRun: #MarsRoverTrackerTest #test02SeveralTrackersOverHeadingChangesShouldNotifyAllChanges stamp: 'FG 6/2/2022 12:05:31'!
+PASSED!
+
+!testRun: #MarsRoverLoggerTest #test01LoggerOverPositionChangesShouldBeEmptyAfterProcesingEmptyCommand stamp: 'FG 6/2/2022 12:05:31'!
+PASSED!
+
+!testRun: #MarsRoverLoggerTest #test02LoggerOverPositionChangesShouldLogNewPositionAfterMovingToTheNorth stamp: 'FG 6/2/2022 12:05:31'!
+PASSED!
+
+!testRun: #MarsRoverLoggerTest #test03LoggerOverPositionChangesShouldLogNewPositionAfterMovingToTheShouth stamp: 'FG 6/2/2022 12:05:31'!
+PASSED!
+
+!testRun: #MarsRoverLoggerTest #test04LoggerOverPositionChangesShouldLogNewPositionAfterMovingToTheEastAndWest stamp: 'FG 6/2/2022 12:05:31'!
+PASSED!
+
+!testRun: #MarsRoverLoggerTest #test05LoggerOverHeadingChangesShouldLogNewHeadingAfterRotateToTheEast stamp: 'FG 6/2/2022 12:05:31'!
+PASSED!
+
+!testRun: #MarsRoverLoggerTest #test06LoggerOverHeadingChangesShouldLogNewHeadingAfterRotateToTheSouth stamp: 'FG 6/2/2022 12:05:31'!
+PASSED!
+
+!testRun: #MarsRoverLoggerTest #test07LoggerOverHeadingChangesShouldLogNewHeadingAfterFullRotation stamp: 'FG 6/2/2022 12:05:31'!
+PASSED!
+
+!testRun: #MarsRoverLoggerTest #test08LoggerOverHeadingAndPositionChangesShouldLogAllChanges stamp: 'FG 6/2/2022 12:05:31'!
+PASSED!
+
+!testRun: #MarsRoverTest #test01DoesNotMoveWhenNoCommand stamp: 'FG 6/2/2022 12:05:31'!
+PASSED!
+
+!testRun: #MarsRoverTest #test02IsAtFailsForDifferentPosition stamp: 'FG 6/2/2022 12:05:31'!
+PASSED!
+
+!testRun: #MarsRoverTest #test03IsAtFailsForDifferentHeading stamp: 'FG 6/2/2022 12:05:31'!
+PASSED!
+
+!testRun: #MarsRoverTest #test04IncrementsYAfterMovingForwardWhenHeadingNorth stamp: 'FG 6/2/2022 12:05:31'!
+PASSED!
+
+!testRun: #MarsRoverTest #test06DecrementsYAfterMovingBackwardsWhenHeadingNorth stamp: 'FG 6/2/2022 12:05:31'!
+PASSED!
+
+!testRun: #MarsRoverTest #test07PointToEashAfterRotatingRightWhenHeadingNorth stamp: 'FG 6/2/2022 12:05:31'!
+PASSED!
+
+!testRun: #MarsRoverTest #test08PointsToWestAfterRotatingLeftWhenPointingNorth stamp: 'FG 6/2/2022 12:05:31'!
+PASSED!
+
+!testRun: #MarsRoverTest #test09DoesNotProcessInvalidCommand stamp: 'FG 6/2/2022 12:05:31'!
+PASSED!
+
+!testRun: #MarsRoverTest #test10CanProcessMoreThanOneCommand stamp: 'FG 6/2/2022 12:05:31'!
+PASSED!
+
+!testRun: #MarsRoverTest #test11IncrementsXAfterMovingForwareWhenHeadingEast stamp: 'FG 6/2/2022 12:05:31'!
+PASSED!
+
+!testRun: #MarsRoverTest #test12DecrementsXAfterMovingBackwardWhenHeadingEast stamp: 'FG 6/2/2022 12:05:31'!
+PASSED!
+
+!testRun: #MarsRoverTest #test13PointsToSouthAfterRotatingRightWhenHeadingEast stamp: 'FG 6/2/2022 12:05:31'!
+PASSED!
+
+!testRun: #MarsRoverTest #test14PointsToNorthAfterRotatingLeftWhenPointingEast stamp: 'FG 6/2/2022 12:05:31'!
+PASSED!
+
+!testRun: #MarsRoverTest #test15ForwardBackwardsAndRotateRightWorkAsExpectedWhenPointingSouth stamp: 'FG 6/2/2022 12:05:31'!
+PASSED!
+
+!testRun: #MarsRoverTest #test16ForwardBackwardsAndRotateRightWorkAsExpectedWhenPointingWest stamp: 'FG 6/2/2022 12:05:31'!
+PASSED!
+
+!testRun: #MarsRoverTrackerTest #test01SeveralTrackersOverPositionChangesShouldNotifyAllChanges stamp: 'FG 6/2/2022 12:05:31'!
+PASSED!
+
+!testRun: #MarsRoverTrackerTest #test02SeveralTrackersOverHeadingChangesShouldNotifyAllChanges stamp: 'FG 6/2/2022 12:05:31'!
+PASSED!
+
+!testRun: #MarsRoverWindowTest #test01WindowOverPositionChangesReturnsEmptyPositionAfterProcesingEmptyCommand stamp: 'FG 6/2/2022 12:05:31'!
+PASSED!
+
+!testRun: #MarsRoverWindowTest #test02WindowOverPositionChangesReturnsNewPositionAfterMovingToTheNorth stamp: 'FG 6/2/2022 12:05:31'!
+PASSED!
+
+!testRun: #MarsRoverWindowTest #test03WindowOverPositionChangesReturnsNewPositionAfterMovingToTheSouth stamp: 'FG 6/2/2022 12:05:31'!
+PASSED!
+
+!testRun: #MarsRoverWindowTest #test04WindowOverPositionChangesReturnsNewPositionAfterMovingToTheEastAndWest stamp: 'FG 6/2/2022 12:05:31'!
+PASSED!
+
+!testRun: #MarsRoverWindowTest #test05WindowOverHeadingChangesReturnsEmptyHeadingAfterProcesingEmptyCommand stamp: 'FG 6/2/2022 12:05:31'!
+PASSED!
+
+!testRun: #MarsRoverWindowTest #test06WindowOverHeadingChangesReturnsNewHeadingAfterRotateToTheEast stamp: 'FG 6/2/2022 12:05:31'!
+PASSED!
+
+!testRun: #MarsRoverWindowTest #test07WindowOverHeadingChangesReturnsNewHeadingAfterRotateToTheSouth stamp: 'FG 6/2/2022 12:05:31'!
+PASSED!
+
+!testRun: #MarsRoverWindowTest #test08WindowOverHeadingChangesReturnsNewHeadingAfterRotateToTheNorthAndWest stamp: 'FG 6/2/2022 12:05:31'!
+PASSED!
+
+!testRun: #MarsRoverWindowTest #test09WindowOverHeadingAndPositionChangesShouldChangeBothVariables stamp: 'FG 6/2/2022 12:05:31'!
+PASSED!
+
+Object subclass: #MarsRoverProxyNullObject
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'MarsRover-WithHeading'!
+
+!classDefinition: #MarsRoverProxyNullObject category: 'MarsRover-WithHeading' stamp: 'FG 6/2/2022 12:06:33'!
+Object subclass: #MarsRoverProxyNullObject
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'MarsRover-WithHeading'!
+!MarsRoverProxyNullObject methodsFor: 'no messages' stamp: 'FG 6/2/2022 12:07:16'!
+headingChangedTo: aHeading
+
+	^self! !
+!MarsRoverProxyNullObject methodsFor: 'as yet unclassified' stamp: 'FG 6/2/2022 12:07:29'!
+positionChangedTo: aPosition
+
+	^self! !
+!MarsRover methodsFor: 'initialization' stamp: 'FG 6/2/2022 12:08:04' prior: 50483674!
+initializeAt: aPosition heading: aHeadingType
+
+	position := aPosition.
+	head := aHeadingType for: self.
+	proxy := MarsRoverProxyNullObject new.! !
+!MarsRover methodsFor: 'moving' stamp: 'FG 6/2/2022 12:08:14' prior: 50484457!
+changePositionAndNotifyChanges: aPositionToBeAdded
+
+	position := position + aPositionToBeAdded.
+	proxy positionChangedTo: position.! !
+
+!testRun: #MarsRoverLoggerTest #test01LoggerOverPositionChangesShouldBeEmptyAfterProcesingEmptyCommand stamp: 'FG 6/2/2022 12:08:16'!
+PASSED!
+
+!testRun: #MarsRoverLoggerTest #test02LoggerOverPositionChangesShouldLogNewPositionAfterMovingToTheNorth stamp: 'FG 6/2/2022 12:08:16'!
+PASSED!
+
+!testRun: #MarsRoverLoggerTest #test03LoggerOverPositionChangesShouldLogNewPositionAfterMovingToTheShouth stamp: 'FG 6/2/2022 12:08:16'!
+PASSED!
+
+!testRun: #MarsRoverLoggerTest #test04LoggerOverPositionChangesShouldLogNewPositionAfterMovingToTheEastAndWest stamp: 'FG 6/2/2022 12:08:16'!
+PASSED!
+
+!testRun: #MarsRoverLoggerTest #test05LoggerOverHeadingChangesShouldLogNewHeadingAfterRotateToTheEast stamp: 'FG 6/2/2022 12:08:16'!
+PASSED!
+
+!testRun: #MarsRoverLoggerTest #test06LoggerOverHeadingChangesShouldLogNewHeadingAfterRotateToTheSouth stamp: 'FG 6/2/2022 12:08:16'!
+PASSED!
+
+!testRun: #MarsRoverLoggerTest #test07LoggerOverHeadingChangesShouldLogNewHeadingAfterFullRotation stamp: 'FG 6/2/2022 12:08:16'!
+PASSED!
+
+!testRun: #MarsRoverLoggerTest #test08LoggerOverHeadingAndPositionChangesShouldLogAllChanges stamp: 'FG 6/2/2022 12:08:16'!
+PASSED!
+
+!testRun: #MarsRoverTest #test01DoesNotMoveWhenNoCommand stamp: 'FG 6/2/2022 12:08:16'!
+PASSED!
+
+!testRun: #MarsRoverTest #test02IsAtFailsForDifferentPosition stamp: 'FG 6/2/2022 12:08:16'!
+PASSED!
+
+!testRun: #MarsRoverTest #test03IsAtFailsForDifferentHeading stamp: 'FG 6/2/2022 12:08:16'!
+PASSED!
+
+!testRun: #MarsRoverTest #test04IncrementsYAfterMovingForwardWhenHeadingNorth stamp: 'FG 6/2/2022 12:08:16'!
+PASSED!
+
+!testRun: #MarsRoverTest #test06DecrementsYAfterMovingBackwardsWhenHeadingNorth stamp: 'FG 6/2/2022 12:08:16'!
+PASSED!
+
+!testRun: #MarsRoverTest #test07PointToEashAfterRotatingRightWhenHeadingNorth stamp: 'FG 6/2/2022 12:08:16'!
+PASSED!
+
+!testRun: #MarsRoverTest #test08PointsToWestAfterRotatingLeftWhenPointingNorth stamp: 'FG 6/2/2022 12:08:16'!
+PASSED!
+
+!testRun: #MarsRoverTest #test09DoesNotProcessInvalidCommand stamp: 'FG 6/2/2022 12:08:16'!
+PASSED!
+
+!testRun: #MarsRoverTest #test10CanProcessMoreThanOneCommand stamp: 'FG 6/2/2022 12:08:16'!
+PASSED!
+
+!testRun: #MarsRoverTest #test11IncrementsXAfterMovingForwareWhenHeadingEast stamp: 'FG 6/2/2022 12:08:16'!
+PASSED!
+
+!testRun: #MarsRoverTest #test12DecrementsXAfterMovingBackwardWhenHeadingEast stamp: 'FG 6/2/2022 12:08:16'!
+PASSED!
+
+!testRun: #MarsRoverTest #test13PointsToSouthAfterRotatingRightWhenHeadingEast stamp: 'FG 6/2/2022 12:08:16'!
+PASSED!
+
+!testRun: #MarsRoverTest #test14PointsToNorthAfterRotatingLeftWhenPointingEast stamp: 'FG 6/2/2022 12:08:16'!
+PASSED!
+
+!testRun: #MarsRoverTest #test15ForwardBackwardsAndRotateRightWorkAsExpectedWhenPointingSouth stamp: 'FG 6/2/2022 12:08:16'!
+PASSED!
+
+!testRun: #MarsRoverTest #test16ForwardBackwardsAndRotateRightWorkAsExpectedWhenPointingWest stamp: 'FG 6/2/2022 12:08:16'!
+PASSED!
+
+!testRun: #MarsRoverTrackerTest #test01SeveralTrackersOverPositionChangesShouldNotifyAllChanges stamp: 'FG 6/2/2022 12:08:16'!
+PASSED!
+
+!testRun: #MarsRoverTrackerTest #test02SeveralTrackersOverHeadingChangesShouldNotifyAllChanges stamp: 'FG 6/2/2022 12:08:16'!
+PASSED!
+
+!testRun: #MarsRoverWindowTest #test01WindowOverPositionChangesReturnsEmptyPositionAfterProcesingEmptyCommand stamp: 'FG 6/2/2022 12:08:16'!
+PASSED!
+
+!testRun: #MarsRoverWindowTest #test02WindowOverPositionChangesReturnsNewPositionAfterMovingToTheNorth stamp: 'FG 6/2/2022 12:08:16'!
+PASSED!
+
+!testRun: #MarsRoverWindowTest #test03WindowOverPositionChangesReturnsNewPositionAfterMovingToTheSouth stamp: 'FG 6/2/2022 12:08:16'!
+PASSED!
+
+!testRun: #MarsRoverWindowTest #test04WindowOverPositionChangesReturnsNewPositionAfterMovingToTheEastAndWest stamp: 'FG 6/2/2022 12:08:16'!
+PASSED!
+
+!testRun: #MarsRoverWindowTest #test05WindowOverHeadingChangesReturnsEmptyHeadingAfterProcesingEmptyCommand stamp: 'FG 6/2/2022 12:08:16'!
+PASSED!
+
+!testRun: #MarsRoverWindowTest #test06WindowOverHeadingChangesReturnsNewHeadingAfterRotateToTheEast stamp: 'FG 6/2/2022 12:08:16'!
+PASSED!
+
+!testRun: #MarsRoverWindowTest #test07WindowOverHeadingChangesReturnsNewHeadingAfterRotateToTheSouth stamp: 'FG 6/2/2022 12:08:16'!
+PASSED!
+
+!testRun: #MarsRoverWindowTest #test08WindowOverHeadingChangesReturnsNewHeadingAfterRotateToTheNorthAndWest stamp: 'FG 6/2/2022 12:08:16'!
+PASSED!
+
+!testRun: #MarsRoverWindowTest #test09WindowOverHeadingAndPositionChangesShouldChangeBothVariables stamp: 'FG 6/2/2022 12:08:16'!
+PASSED!
+!MarsRover methodsFor: 'heading' stamp: 'FG 6/2/2022 12:08:58' prior: 50484465!
+changeHeadingAndNotifyChanges: AMarsRoverHeadingClassToUpdate
+
+	head := AMarsRoverHeadingClassToUpdate for: self.
+	proxy headingChangedTo: head.! !
+
+!testRun: #MarsRoverLoggerTest #test01LoggerOverPositionChangesShouldBeEmptyAfterProcesingEmptyCommand stamp: 'FG 6/2/2022 12:09:01'!
+PASSED!
+
+!testRun: #MarsRoverLoggerTest #test02LoggerOverPositionChangesShouldLogNewPositionAfterMovingToTheNorth stamp: 'FG 6/2/2022 12:09:01'!
+PASSED!
+
+!testRun: #MarsRoverLoggerTest #test03LoggerOverPositionChangesShouldLogNewPositionAfterMovingToTheShouth stamp: 'FG 6/2/2022 12:09:01'!
+PASSED!
+
+!testRun: #MarsRoverLoggerTest #test04LoggerOverPositionChangesShouldLogNewPositionAfterMovingToTheEastAndWest stamp: 'FG 6/2/2022 12:09:01'!
+PASSED!
+
+!testRun: #MarsRoverLoggerTest #test05LoggerOverHeadingChangesShouldLogNewHeadingAfterRotateToTheEast stamp: 'FG 6/2/2022 12:09:01'!
+PASSED!
+
+!testRun: #MarsRoverLoggerTest #test06LoggerOverHeadingChangesShouldLogNewHeadingAfterRotateToTheSouth stamp: 'FG 6/2/2022 12:09:01'!
+PASSED!
+
+!testRun: #MarsRoverLoggerTest #test07LoggerOverHeadingChangesShouldLogNewHeadingAfterFullRotation stamp: 'FG 6/2/2022 12:09:01'!
+PASSED!
+
+!testRun: #MarsRoverLoggerTest #test08LoggerOverHeadingAndPositionChangesShouldLogAllChanges stamp: 'FG 6/2/2022 12:09:01'!
+PASSED!
+
+!testRun: #MarsRoverTest #test01DoesNotMoveWhenNoCommand stamp: 'FG 6/2/2022 12:09:01'!
+PASSED!
+
+!testRun: #MarsRoverTest #test02IsAtFailsForDifferentPosition stamp: 'FG 6/2/2022 12:09:01'!
+PASSED!
+
+!testRun: #MarsRoverTest #test03IsAtFailsForDifferentHeading stamp: 'FG 6/2/2022 12:09:01'!
+PASSED!
+
+!testRun: #MarsRoverTest #test04IncrementsYAfterMovingForwardWhenHeadingNorth stamp: 'FG 6/2/2022 12:09:01'!
+PASSED!
+
+!testRun: #MarsRoverTest #test06DecrementsYAfterMovingBackwardsWhenHeadingNorth stamp: 'FG 6/2/2022 12:09:01'!
+PASSED!
+
+!testRun: #MarsRoverTest #test07PointToEashAfterRotatingRightWhenHeadingNorth stamp: 'FG 6/2/2022 12:09:01'!
+PASSED!
+
+!testRun: #MarsRoverTest #test08PointsToWestAfterRotatingLeftWhenPointingNorth stamp: 'FG 6/2/2022 12:09:01'!
+PASSED!
+
+!testRun: #MarsRoverTest #test09DoesNotProcessInvalidCommand stamp: 'FG 6/2/2022 12:09:01'!
+PASSED!
+
+!testRun: #MarsRoverTest #test10CanProcessMoreThanOneCommand stamp: 'FG 6/2/2022 12:09:01'!
+PASSED!
+
+!testRun: #MarsRoverTest #test11IncrementsXAfterMovingForwareWhenHeadingEast stamp: 'FG 6/2/2022 12:09:01'!
+PASSED!
+
+!testRun: #MarsRoverTest #test12DecrementsXAfterMovingBackwardWhenHeadingEast stamp: 'FG 6/2/2022 12:09:01'!
+PASSED!
+
+!testRun: #MarsRoverTest #test13PointsToSouthAfterRotatingRightWhenHeadingEast stamp: 'FG 6/2/2022 12:09:01'!
+PASSED!
+
+!testRun: #MarsRoverTest #test14PointsToNorthAfterRotatingLeftWhenPointingEast stamp: 'FG 6/2/2022 12:09:01'!
+PASSED!
+
+!testRun: #MarsRoverTest #test15ForwardBackwardsAndRotateRightWorkAsExpectedWhenPointingSouth stamp: 'FG 6/2/2022 12:09:01'!
+PASSED!
+
+!testRun: #MarsRoverTest #test16ForwardBackwardsAndRotateRightWorkAsExpectedWhenPointingWest stamp: 'FG 6/2/2022 12:09:01'!
+PASSED!
+
+!testRun: #MarsRoverTrackerTest #test01SeveralTrackersOverPositionChangesShouldNotifyAllChanges stamp: 'FG 6/2/2022 12:09:01'!
+PASSED!
+
+!testRun: #MarsRoverTrackerTest #test02SeveralTrackersOverHeadingChangesShouldNotifyAllChanges stamp: 'FG 6/2/2022 12:09:01'!
+PASSED!
+
+!testRun: #MarsRoverWindowTest #test01WindowOverPositionChangesReturnsEmptyPositionAfterProcesingEmptyCommand stamp: 'FG 6/2/2022 12:09:01'!
+PASSED!
+
+!testRun: #MarsRoverWindowTest #test02WindowOverPositionChangesReturnsNewPositionAfterMovingToTheNorth stamp: 'FG 6/2/2022 12:09:01'!
+PASSED!
+
+!testRun: #MarsRoverWindowTest #test03WindowOverPositionChangesReturnsNewPositionAfterMovingToTheSouth stamp: 'FG 6/2/2022 12:09:01'!
+PASSED!
+
+!testRun: #MarsRoverWindowTest #test04WindowOverPositionChangesReturnsNewPositionAfterMovingToTheEastAndWest stamp: 'FG 6/2/2022 12:09:01'!
+PASSED!
+
+!testRun: #MarsRoverWindowTest #test05WindowOverHeadingChangesReturnsEmptyHeadingAfterProcesingEmptyCommand stamp: 'FG 6/2/2022 12:09:01'!
+PASSED!
+
+!testRun: #MarsRoverWindowTest #test06WindowOverHeadingChangesReturnsNewHeadingAfterRotateToTheEast stamp: 'FG 6/2/2022 12:09:01'!
+PASSED!
+
+!testRun: #MarsRoverWindowTest #test07WindowOverHeadingChangesReturnsNewHeadingAfterRotateToTheSouth stamp: 'FG 6/2/2022 12:09:01'!
+PASSED!
+
+!testRun: #MarsRoverWindowTest #test08WindowOverHeadingChangesReturnsNewHeadingAfterRotateToTheNorthAndWest stamp: 'FG 6/2/2022 12:09:01'!
+PASSED!
+
+!testRun: #MarsRoverWindowTest #test09WindowOverHeadingAndPositionChangesShouldChangeBothVariables stamp: 'FG 6/2/2022 12:09:01'!
+PASSED!
+
+----SNAPSHOT----(2 June 2022 12:10:27) CuisUniversity-5093.image priorSource: 4778057!
+
+----SNAPSHOT----(2 June 2022 12:10:36) CuisUniversity-5093.image priorSource: 4912770!
