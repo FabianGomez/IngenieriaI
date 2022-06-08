@@ -1888,3 +1888,2114 @@ PASSED!
 PASSED!
 
 ----SNAPSHOT----(7 June 2022 18:55:05) CuisUniversity-5096.image priorSource: 4622090!
+
+----STARTUP---- (7 June 2022 20:20:27) as C:\Users\Fabian\Desktop\Ing1\Ejercicio 8\windows64\CuisUniversity-5096.image!
+
+
+----End fileIn of C:\Users\Fabian\Desktop\Ing1\Ejercicio 8\windows64\TusLibros.st----!
+
+!classDefinition: #CartTest category: 'TusLibros' stamp: 'FG 6/7/2022 20:21:48'!
+TestCase subclass: #CartTest
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'TusLibros'!
+
+!classDefinition: #CartTest category: 'TusLibros' stamp: 'FG 6/7/2022 20:21:48'!
+TestCase subclass: #CartTest
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'TusLibros'!
+
+!classDefinition: #Cart category: 'TusLibros' stamp: 'FG 6/7/2022 20:21:48'!
+Object subclass: #Cart
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'TusLibros'!
+!CartTest methodsFor: 'no messages' stamp: 'FF 6/3/2022 23:18:15' prior: 50475562!
+test01CartIsEmptyWhenCreated
+
+	| cart |
+	cart := Cart new.
+	
+	self assert: cart isEmpty.
+	! !
+!Cart methodsFor: 'testing' stamp: 'FF 6/3/2022 23:18:51' prior: 50475741!
+isEmpty
+	self shouldBeImplemented.! !
+!Cart methodsFor: 'testing' stamp: 'FF 6/3/2022 23:19:39' prior: 50475925!
+isEmpty
+	^true.! !
+!CartTest methodsFor: 'test' stamp: 'FF 6/3/2022 23:21:00' prior: 50475568!
+test02EmptyCartAfterAddingABookIsNotEmpty
+
+	| book cart |
+	cart := Cart new.
+	
+	cart add: 1 of: book.
+	
+	self deny: cart isEmpty.! !
+!Cart methodsFor: 'adding' stamp: 'FF 6/3/2022 23:21:45' prior: 50475744!
+add: aSmallInteger of: anUndefinedObject 
+	self shouldBeImplemented.! !
+
+!classDefinition: #Cart category: 'TusLibros' stamp: 'FG 6/7/2022 20:21:48'!
+Object subclass: #Cart
+	instanceVariableNames: 'books'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'TusLibros'!
+!Cart methodsFor: 'adding' stamp: 'FF 6/3/2022 23:23:12' prior: 50475939!
+add: aQuantity of: aBook 
+	books add: aBook withOccurrences: aQuantity .! !
+!Cart methodsFor: 'initialization' stamp: 'FF 6/3/2022 23:24:19' overrides: 16920235!
+initialize 
+
+	books := Bag new.! !
+!Cart methodsFor: 'testing' stamp: 'FF 6/3/2022 23:26:15' prior: 50475929!
+isEmpty
+	^books isEmpty.! !
+!CartTest methodsFor: 'test' stamp: 'FF 6/3/2022 23:27:03'!
+test03cannotAddBooksToCartWithNonPositiveQuantity
+
+	| book cart |
+	cart := Cart new.
+	
+	self should: [cart add: -1 of: book.] 
+	raise: Error - MessageNotUnderstood 
+	withExceptionDo: [:anError | self assert: Cart cannotAddBookWithNonPositiveQuantity equals: anError messageText .
+		self assert: cart isEmpty ].! !
+!Cart class methodsFor: 'error messages' stamp: 'FF 6/3/2022 23:29:58' prior: 50475775!
+cannotAddBookWithNonPositiveQuantity
+
+	^'Can not add books with zero or negative quantity'! !
+!Cart methodsFor: 'adding' stamp: 'FF 6/3/2022 23:34:09' prior: 50475950!
+add: aQuantity of: aBook 
+	aQuantity <=0 ifTrue: [^self error: self class cannotAddBookWithNonPositiveQuantity ].
+	books add: aBook withOccurrences: aQuantity .! !
+!CartTest methodsFor: 'test' stamp: 'FF 6/3/2022 23:35:27'!
+test04cannotAddAnUncataloguedBook
+
+	| book cart |
+	cart := Cart new.
+	
+	self should: [cart add: 1 of: book.] 
+	raise: Error - MessageNotUnderstood 
+	withExceptionDo: [:anError | self assert: Cart cannotAddAnUncataloguedBook equals: anError messageText .
+		self assert: cart isEmpty ].! !
+!Cart class methodsFor: 'error messages' stamp: 'FF 6/3/2022 23:36:07' prior: 50475770!
+cannotAddAnUncataloguedBook
+	^'The book is not in the catalog'.! !
+!Cart methodsFor: 'adding' stamp: 'FF 6/3/2022 23:37:34' prior: 50475982!
+add: aQuantity of: aBook 
+	aQuantity <=0 ifTrue: [^self error: self class cannotAddBookWithNonPositiveQuantity ].
+	"(catalog isBookCatalogued: aBook) ifFalse: [^ self error: self class cannotAddAnUncataloguedBook]."
+	books add: aBook withOccurrences: aQuantity .! !
+
+!classDefinition: #Cart category: 'TusLibros' stamp: 'FG 6/7/2022 20:21:48'!
+Object subclass: #Cart
+	instanceVariableNames: 'books catalog'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'TusLibros'!
+!Cart methodsFor: 'adding' stamp: 'FF 6/4/2022 10:13:47' prior: 50476007!
+add: aQuantity of: aBook 
+	aQuantity <=0 ifTrue: [^self error: self class cannotAddBookWithNonPositiveQuantity ].
+	(catalog includes: aBook) ifFalse: [^ self error: self class cannotAddAnUncataloguedBook].
+	books add: aBook withOccurrences: aQuantity .! !
+!CartTest methodsFor: 'test' stamp: 'FF 6/4/2022 10:14:30' prior: 50475990!
+test04cannotAddAnUncataloguedBook
+
+	| book cart catalog |
+	cart := Cart with: catalog.
+	
+	self should: [cart add: 1 of: book.] 
+	raise: Error - MessageNotUnderstood 
+	withExceptionDo: [:anError | self assert: Cart cannotAddAnUncataloguedBook equals: anError messageText .
+		self assert: cart isEmpty ].! !
+!CartTest methodsFor: 'test' stamp: 'FF 6/4/2022 10:15:05' prior: 50476036!
+test04cannotAddAnUncataloguedBook
+
+	| book cart catalog |
+	catalog := OrderedCollection new.
+	cart := Cart with: catalog.
+	
+	self should: [cart add: 1 of: book.] 
+	raise: Error - MessageNotUnderstood 
+	withExceptionDo: [:anError | self assert: Cart cannotAddAnUncataloguedBook equals: anError messageText .
+		self assert: cart isEmpty ].! !
+!Cart class methodsFor: 'instance creation' stamp: 'FF 6/4/2022 10:15:18' prior: 50475781!
+with: anOrderedCollection 
+	"DO NOT FORGET TO RENAME COLLABORATORS AND REMOVE THIS COMMENT!!!!"
+	self shouldBeImplemented.
+	^self new initializeWith: anOrderedCollection ! !
+!Cart class methodsFor: 'instance creation' stamp: 'FF 6/4/2022 10:16:23' prior: 50476063!
+with: aCatalog 
+	
+	^self new initializeWith: aCatalog.! !
+!Cart methodsFor: 'initialization' stamp: 'FF 6/4/2022 10:16:43' prior: 50475736!
+initializeWith: aCatalog 
+	self shouldBeImplemented.
+	catalog := aCatalog.! !
+!Cart methodsFor: 'initialization' stamp: 'FF 6/4/2022 10:17:06' prior: 50476077!
+initializeWith: aCatalog 
+	catalog := aCatalog.
+	books := Bag new.! !
+
+!methodRemoval: Cart #initialize stamp: 'FG 6/7/2022 20:21:48'!
+initialize 
+
+	books := Bag new.!
+!CartTest methodsFor: 'test' stamp: 'FF 6/4/2022 10:18:06' prior: 50475919!
+test01CartIsEmptyWhenCreated
+
+	| cart |
+
+	cart := Cart with: OrderedCollection new.
+	
+	self assert: cart isEmpty.
+	! !
+!CartTest methodsFor: 'test' stamp: 'FF 6/4/2022 10:19:01' prior: 50475932!
+test02EmptyCartAfterAddingABookIsNotEmpty
+
+	| book cart catalog |
+	catalog := OrderedCollection with: book. 
+	cart := Cart with: catalog.
+	
+	cart add: 1 of: book.
+	
+	self deny: cart isEmpty.! !
+!CartTest methodsFor: 'test' stamp: 'FF 6/4/2022 10:19:24' prior: 50475577!
+test03CannotAddBooksToCartWithNonPositiveQuantity
+
+	| book cart |
+	cart := Cart new.
+	
+	self should: [cart add: -1 of: book.] 
+	raise: Error - MessageNotUnderstood 
+	withExceptionDo: [:anError | self assert: Cart cannotAddBookWithNonPositiveQuantity equals: anError messageText .
+		self assert: cart isEmpty ].! !
+
+!methodRemoval: CartTest #test03cannotAddBooksToCartWithNonPositiveQuantity stamp: 'FG 6/7/2022 20:21:48'!
+test03cannotAddBooksToCartWithNonPositiveQuantity
+
+	| book cart |
+	cart := Cart new.
+	
+	self should: [cart add: -1 of: book.] 
+	raise: Error - MessageNotUnderstood 
+	withExceptionDo: [:anError | self assert: Cart cannotAddBookWithNonPositiveQuantity equals: anError messageText .
+		self assert: cart isEmpty ].!
+!CartTest methodsFor: 'test' stamp: 'FF 6/4/2022 10:19:32' prior: 50475592!
+test04CannotAddAnUncataloguedBook
+
+	| book cart catalog |
+	catalog := OrderedCollection new.
+	cart := Cart with: catalog.
+	
+	self should: [cart add: 1 of: book.] 
+	raise: Error - MessageNotUnderstood 
+	withExceptionDo: [:anError | self assert: Cart cannotAddAnUncataloguedBook equals: anError messageText .
+		self assert: cart isEmpty ].! !
+
+!methodRemoval: CartTest #test04cannotAddAnUncataloguedBook stamp: 'FG 6/7/2022 20:21:48'!
+test04cannotAddAnUncataloguedBook
+
+	| book cart catalog |
+	catalog := OrderedCollection new.
+	cart := Cart with: catalog.
+	
+	self should: [cart add: 1 of: book.] 
+	raise: Error - MessageNotUnderstood 
+	withExceptionDo: [:anError | self assert: Cart cannotAddAnUncataloguedBook equals: anError messageText .
+		self assert: cart isEmpty ].!
+!CartTest methodsFor: 'test' stamp: 'FF 6/4/2022 10:19:56' prior: 50476107!
+test03CannotAddBooksToCartWithNonPositiveQuantity
+
+	| book cart |
+	cart := Cart with: OrderedCollection with: book.
+	
+	self should: [cart add: -1 of: book.] 
+	raise: Error - MessageNotUnderstood 
+	withExceptionDo: [:anError | self assert: Cart cannotAddBookWithNonPositiveQuantity equals: anError messageText .
+		self assert: cart isEmpty ].! !
+!CartTest methodsFor: 'test' stamp: 'FF 6/4/2022 10:20:11' prior: 50476161!
+test03CannotAddBooksToCartWithNonPositiveQuantity
+
+	| book cart |
+	cart := Cart with: (OrderedCollection with: book).
+	
+	self should: [cart add: -1 of: book.] 
+	raise: Error - MessageNotUnderstood 
+	withExceptionDo: [:anError | self assert: Cart cannotAddBookWithNonPositiveQuantity equals: anError messageText .
+		self assert: cart isEmpty ].! !
+!CartTest methodsFor: 'test' stamp: 'FF 6/4/2022 10:20:55' prior: 50476133!
+test04CannotAddAnUncataloguedBook
+
+	| book cart catalog |
+	cart := Cart with: OrderedCollection new.
+	
+	self should: [cart add: 1 of: book.] 
+	raise: Error - MessageNotUnderstood 
+	withExceptionDo: [:anError | self assert: Cart cannotAddAnUncataloguedBook equals: anError messageText .
+		self assert: cart isEmpty ].! !
+!CartTest methodsFor: 'test' stamp: 'FF 6/4/2022 10:21:02' prior: 50476189!
+test04CannotAddAnUncataloguedBook
+
+	| book cart |
+	cart := Cart with: OrderedCollection new.
+	
+	self should: [cart add: 1 of: book.] 
+	raise: Error - MessageNotUnderstood 
+	withExceptionDo: [:anError | self assert: Cart cannotAddAnUncataloguedBook equals: anError messageText .
+		self assert: cart isEmpty ].! !
+!CartTest methodsFor: 'test' stamp: 'FF 6/4/2022 10:26:47' prior: 50475604!
+test05CartReturnsEmptyBookListWhenCreated
+
+	| cart |
+	cart := Cart with: OrderedCollection new.
+	
+	self assert: cart books isEmpty.! !
+!Cart methodsFor: 'accessing' stamp: 'FF 6/4/2022 10:26:58' prior: 50475755!
+books
+	self shouldBeImplemented.
+	^books! !
+!Cart methodsFor: 'accessing' stamp: 'FF 6/4/2022 10:27:03' prior: 50476222!
+books
+	^books! !
+!CartTest methodsFor: 'test' stamp: 'FF 6/4/2022 10:29:53' prior: 50475611!
+test06CartBookListIncludesBookAfterAdding
+
+	| cart book|
+	cart := Cart with: (OrderedCollection with: book).
+	cart add: 2 of: book.
+	
+	self deny: cart books isEmpty.
+	self assert: (cart books includes: book).! !
+!Cart methodsFor: 'adding' stamp: 'FF 6/4/2022 10:39:15' prior: 50476025!
+add: aQuantity of: aBook 
+	(aQuantity <=0) ifTrue: [^self error: self class cannotAddBookWithNonPositiveQuantity ].
+	(catalog includes: aBook) ifFalse: [^ self error: self class cannotAddAnUncataloguedBook].
+	books add: aBook withOccurrences: aQuantity .! !
+
+!classDefinition: #CashierTest category: 'TusLibros' stamp: 'FG 6/7/2022 20:21:48'!
+TestCase subclass: #CashierTest
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'TusLibros'!
+
+!classDefinition: #CashierTest category: 'TusLibros' stamp: 'FG 6/7/2022 20:21:48'!
+TestCase subclass: #CashierTest
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'TusLibros'!
+
+!classDefinition: #Cashier category: 'TusLibros' stamp: 'FG 6/7/2022 20:21:48'!
+Object subclass: #Cashier
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'TusLibros'!
+!CashierTest methodsFor: 'no messages' stamp: 'FF 6/6/2022 22:51:04' prior: 50475669!
+test01CannotCheckOutEmptyCart
+
+	| cart cashier |
+	cart := Cart with: OrderedCollection new.
+	cashier := Cashier new.
+	
+	self should: [cashier checkOut: cart] 
+	raise: Error - MessageNotUnderstood 
+	withExceptionDo: [:anError | self assert: Cashier cannotCheckOutAnEmptyCart equals: anError messageText .
+		].! !
+!Cashier methodsFor: 'checking out' stamp: 'FF 6/6/2022 22:52:35'!
+checkOut: aCart 
+	self shouldBeImplemented.! !
+!Cashier methodsFor: 'checking out' stamp: 'FF 6/6/2022 22:53:11' prior: 50476283!
+checkOut: aCart 
+	^self error: self class cannotCheckOutAnEmptyCart.! !
+!Cashier class methodsFor: 'error messages' stamp: 'FF 6/6/2022 22:53:31' prior: 50475831!
+cannotCheckOutAnEmptyCart
+	self shouldBeImplemented.! !
+!Cashier class methodsFor: 'error messages' stamp: 'FF 6/6/2022 22:53:52' prior: 50476294!
+cannotCheckOutAnEmptyCart
+	^'An empty cart can not be checked out'	! !
+
+!classDefinition: #CreditCard category: 'TusLibros' stamp: 'FG 6/7/2022 20:21:49'!
+Object subclass: #CreditCard
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'TusLibros'!
+!CashierTest methodsFor: 'test' stamp: 'FF 6/6/2022 22:55:42' prior: 50475684!
+test02CannotCheckOutCartProvidingAnExpiredCreditCard
+
+	| cart cashier creditCard item |
+	cart := Cart with: (OrderedCollection with: item).
+	cart add: 1 of: item. 
+	cashier := Cashier new.
+	creditCard := CreditCard validTo: (Month month: 5 year: 2022 ).
+	
+	self should: [cashier checkOut: cart payingWith: creditCard] 
+	raise: Error - MessageNotUnderstood 
+	withExceptionDo: [:anError | self assert: Cashier cannotPayWithExpiredCreditCard equals: anError messageText .
+		].! !
+!CreditCard class methodsFor: 'instance creation' stamp: 'FF 6/6/2022 22:56:09'!
+validTo: aMonth 
+	"DO NOT FORGET TO RENAME COLLABORATORS AND REMOVE THIS COMMENT!!!!"
+	self shouldBeImplemented.
+	^self new initializeValidTo: aMonth ! !
+!CreditCard class methodsFor: 'instance creation' stamp: 'FF 6/6/2022 22:56:32' prior: 50476329!
+validTo: anExpirationMonthOfYear
+	^self new initializeValidTo: anExpirationMonthOfYear.! !
+
+!classDefinition: #CreditCard category: 'TusLibros' stamp: 'FG 6/7/2022 20:21:49'!
+Object subclass: #CreditCard
+	instanceVariableNames: 'expirationMonthOfYear'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'TusLibros'!
+!CreditCard methodsFor: 'initialization' stamp: 'FF 6/6/2022 22:56:42'!
+initializeValidTo: anExpirationMonthOfYear 
+	self shouldBeImplemented.
+	expirationMonthOfYear := anExpirationMonthOfYear.! !
+!CreditCard methodsFor: 'initialization' stamp: 'FF 6/6/2022 22:56:54' prior: 50476350!
+initializeValidTo: anExpirationMonthOfYear 
+	expirationMonthOfYear := anExpirationMonthOfYear.! !
+!Cashier methodsFor: 'checking out' stamp: 'FF 6/6/2022 22:57:13'!
+checkOut: aCart payingWith: aCreditCard 
+	self shouldBeImplemented.! !
+!Cashier methodsFor: 'checking out' stamp: 'FF 6/6/2022 22:57:52' prior: 50476363!
+checkOut: aCart payingWith: aCreditCard 
+	aCart isEmpty ifTrue:[^self error: self class cannotCheckOutAnEmptyCart ].
+	^self error: self class cannotPayWithExpiredCreditCard.! !
+!Cashier class methodsFor: 'error messages' stamp: 'FF 6/6/2022 22:58:06' prior: 50475836!
+cannotPayWithExpiredCreditCard
+	self shouldBeImplemented.! !
+!Cashier class methodsFor: 'error messages' stamp: 'FF 6/6/2022 22:58:17' prior: 50476377!
+cannotPayWithExpiredCreditCard
+	^'The credit card is expired'! !
+
+!methodRemoval: Cashier #checkOut: stamp: 'FG 6/7/2022 20:21:49'!
+checkOut: aCart 
+	^self error: self class cannotCheckOutAnEmptyCart.!
+!CashierTest methodsFor: 'test' stamp: 'FF 6/6/2022 22:59:27' prior: 50476270!
+test01CannotCheckOutEmptyCart
+
+	| cart cashier |
+	cart := Cart with: OrderedCollection new.
+	cashier := Cashier new.
+	
+	self should: [ | creditCart |cashier checkOut: cart payingWith: creditCart] 
+	raise: Error - MessageNotUnderstood 
+	withExceptionDo: [:anError | self assert: Cashier cannotCheckOutAnEmptyCart equals: anError messageText .
+		].! !
+!CashierTest methodsFor: 'test' stamp: 'FF 6/6/2022 23:00:25' prior: 50476391!
+test01CannotCheckOutEmptyCart
+
+	| cart cashier creditCart |
+	cart := Cart with: OrderedCollection new.
+	cashier := Cashier new.
+	
+	self should: [cashier checkOut: cart payingWith: creditCart] 
+	raise: Error - MessageNotUnderstood 
+	withExceptionDo: [:anError | self assert: Cashier cannotCheckOutAnEmptyCart equals: anError messageText .
+		].! !
+!CashierTest methodsFor: 'test' stamp: 'FF 6/6/2022 23:02:17'!
+test03CheckOutCartWithItemsReturnsReceipt
+
+	| cart cashier creditCard item anotherItem recepit |
+	item := 'primer libro'.
+	anotherItem := 'segundo libro'.
+	cart := Cart with: (OrderedCollection with: item with: anotherItem).
+	cart add: 1 of: item.
+	cart add: 2 of: anotherItem.
+	cashier := Cashier new.
+	creditCard := CreditCard number: '4545454545454545' validTo: (Month month: 6 year: 2022 ).
+	
+	recepit := cashier checkOut: cart payingWith: creditCard.
+	
+	self deny: recepit isNil .! !
+!CashierTest methodsFor: 'test' stamp: 'FF 6/7/2022 17:10:01' prior: 50476405!
+test01CannotCheckOutEmptyCart
+
+	| cart cashier creditCart salesList |
+	cart := Cart with: OrderedCollection new.
+	salesList := OrderedCollection new.
+	cashier := Cashier using: salesList.
+	
+	self should: [cashier checkOut: cart payingWith: creditCart] 
+	raise: Error - MessageNotUnderstood 
+	withExceptionDo: [:anError | self assert: Cashier cannotCheckOutAnEmptyCart equals: anError messageText .
+			self assert: salesList isEmpty.
+		].! !
+!Cashier class methodsFor: 'instance creation' stamp: 'FF 6/7/2022 17:10:29' prior: 50475841!
+using: anOrderedCollection 
+	"DO NOT FORGET TO RENAME COLLABORATORS AND REMOVE THIS COMMENT!!!!"
+	self shouldBeImplemented.
+	^self new initializeUsing: anOrderedCollection ! !
+!Cashier class methodsFor: 'instance creation' stamp: 'FF 6/7/2022 17:10:54' prior: 50476456!
+using: aSalesList
+	^self new initializeUsing: aSalesList. ! !
+
+!classDefinition: #Cashier category: 'TusLibros' stamp: 'FG 6/7/2022 20:21:49'!
+Object subclass: #Cashier
+	instanceVariableNames: 'salesList'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'TusLibros'!
+!Cashier methodsFor: 'initialization' stamp: 'FF 6/7/2022 17:11:08' prior: 50475819!
+initializeUsing: aSalesList 
+	self shouldBeImplemented.
+	salesList := aSalesList.! !
+!Cashier methodsFor: 'initialization' stamp: 'FF 6/7/2022 17:11:13' prior: 50476477!
+initializeUsing: aSalesList 
+	salesList := aSalesList.! !
+!CashierTest methodsFor: 'test' stamp: 'FF 6/7/2022 17:13:10' prior: 50476311!
+test02CannotCheckOutCartProvidingAnExpiredCreditCard
+
+	| cart cashier creditCard item |
+	cart := Cart with: (OrderedCollection with: item).
+	cart add: 1 of: item. 
+	cashier := Cashier new.
+	creditCard := CreditCard validTo: (Month month: 5 year: 2022 ).
+	
+	self should: [cashier checkOut: cart payingWith: creditCard] 
+	raise: Error - MessageNotUnderstood 
+	withExceptionDo: [:anError | | salesList | self assert: Cashier cannotPayWithExpiredCreditCard equals: anError messageText .
+			self assert: salesList isEmpty .
+		].! !
+!CashierTest methodsFor: 'test' stamp: 'FF 6/7/2022 17:14:12' prior: 50476488!
+test02CannotCheckOutCartProvidingAnExpiredCreditCard
+
+	| cart cashier creditCard item salesList|
+	cart := Cart with: (OrderedCollection with: item).
+	cart add: 1 of: item. 
+	salesList := OrderedCollection new.
+	cashier := Cashier using: salesList.
+	creditCard := CreditCard validTo: (Month month: 5 year: 2022 ).
+	
+	self should: [cashier checkOut: cart payingWith: creditCard] 
+	raise: Error - MessageNotUnderstood 
+	withExceptionDo: [:anError |  self assert: Cashier cannotPayWithExpiredCreditCard equals: anError messageText .
+			self assert: salesList isEmpty .
+		].! !
+!CashierTest methodsFor: 'test' stamp: 'FF 6/7/2022 17:17:50' prior: 50476419!
+test03CheckOutCartWithItemsReturnsReceipt
+
+	| cart cashier creditCard item anotherItem recepit salesList |
+	item := 'primer libro'.
+	anotherItem := 'segundo libro'.
+	cart := Cart with: (OrderedCollection with: item with: anotherItem).
+	cart add: 1 of: item.
+	cart add: 2 of: anotherItem.
+	salesList := OrderedCollection new.
+	cashier := Cashier with: salesList.
+	creditCard := CreditCard number: '4545454545454545' validTo: (Month month: 6 year: 2022 ).
+	
+	recepit := cashier checkOut: cart payingWith: creditCard.
+	
+	self deny: recepit isNil .! !
+!CashierTest methodsFor: 'test' stamp: 'FF 6/7/2022 17:18:52' prior: 50476529!
+test03CheckOutCartWithItemsReturnsReceipt
+
+	| cart cashier creditCard item anotherItem salesList |
+	item := 'primer libro'.
+	anotherItem := 'segundo libro'.
+	cart := Cart with: (OrderedCollection with: item with: anotherItem).
+	cart add: 1 of: item.
+	cart add: 2 of: anotherItem.
+	salesList := OrderedCollection new.
+	cashier := Cashier with: salesList.
+	creditCard := CreditCard number: '4545454545454545' validTo: (Month month: 6 year: 2022 ).
+	
+	cashier checkOut: cart payingWith: creditCard.
+	
+	self deny: salesList isEmpty.! !
+!CashierTest methodsFor: 'test' stamp: 'FF 6/7/2022 17:20:49' prior: 50475700!
+test03CheckOutCartWithItemsAddElementToSalesList
+
+	| cart cashier creditCard item anotherItem salesList |
+	item := 'primer libro'.
+	anotherItem := 'segundo libro'.
+	cart := Cart with: (OrderedCollection with: item with: anotherItem).
+	cart add: 1 of: item.
+	cart add: 2 of: anotherItem.
+	salesList := OrderedCollection new.
+	cashier := Cashier with: salesList.
+	creditCard := CreditCard number: '4545454545454545' validTo: (Month month: 6 year: 2022 ).
+	
+	cashier checkOut: cart payingWith: creditCard.
+	
+	self deny: salesList isEmpty.! !
+
+!methodRemoval: CashierTest #test03CheckOutCartWithItemsReturnsReceipt stamp: 'FG 6/7/2022 20:21:49'!
+test03CheckOutCartWithItemsReturnsReceipt
+
+	| cart cashier creditCard item anotherItem salesList |
+	item := 'primer libro'.
+	anotherItem := 'segundo libro'.
+	cart := Cart with: (OrderedCollection with: item with: anotherItem).
+	cart add: 1 of: item.
+	cart add: 2 of: anotherItem.
+	salesList := OrderedCollection new.
+	cashier := Cashier with: salesList.
+	creditCard := CreditCard number: '4545454545454545' validTo: (Month month: 6 year: 2022 ).
+	
+	cashier checkOut: cart payingWith: creditCard.
+	
+	self deny: salesList isEmpty.!
+!Cashier class methodsFor: 'instance creation' stamp: 'FF 6/7/2022 17:21:05' prior: 50475846!
+with: anOrderedCollection 
+	"DO NOT FORGET TO RENAME COLLABORATORS AND REMOVE THIS COMMENT!!!!"
+	self shouldBeImplemented.
+	^self new initializeWith: anOrderedCollection ! !
+!CashierTest methodsFor: 'test' stamp: 'FF 6/7/2022 17:21:53' prior: 50476570!
+test03CheckOutCartWithItemsAddElementToSalesList
+
+	| cart cashier creditCard item anotherItem salesList |
+	item := 'primer libro'.
+	anotherItem := 'segundo libro'.
+	cart := Cart with: (OrderedCollection with: item with: anotherItem).
+	cart add: 1 of: item.
+	cart add: 2 of: anotherItem.
+	salesList := OrderedCollection new.
+	cashier := Cashier using: salesList.
+	creditCard := CreditCard number: '4545454545454545' validTo: (Month month: 6 year: 2022 ).
+	
+	cashier checkOut: cart payingWith: creditCard.
+	
+	self deny: salesList isEmpty.! !
+!CreditCard class methodsFor: 'instance creation' stamp: 'FF 6/7/2022 17:22:04' prior: 50475890!
+number: aString validTo: aMonth 
+	"DO NOT FORGET TO RENAME COLLABORATORS AND REMOVE THIS COMMENT!!!!"
+	self shouldBeImplemented.
+	^self new initializeNumber: aString validTo: aMonth ! !
+!CreditCard class methodsFor: 'instance creation' stamp: 'FF 6/7/2022 17:23:16' prior: 50476640!
+number: aCreditCardNumber validTo: anExpirationMonthOfYear 
+	^self new number: aCreditCardNumber validTo: anExpirationMonthOfYear ! !
+!CreditCard methodsFor: 'initialization' stamp: 'FF 6/7/2022 17:23:25' prior: 50475866!
+number: aString validTo: aMonth 
+	self shouldBeImplemented.! !
+
+!classDefinition: #CreditCard category: 'TusLibros' stamp: 'FG 6/7/2022 20:21:49'!
+Object subclass: #CreditCard
+	instanceVariableNames: 'expirationMonthOfYear number'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'TusLibros'!
+
+!classDefinition: #CreditCard category: 'TusLibros' stamp: 'FG 6/7/2022 20:21:49'!
+Object subclass: #CreditCard
+	instanceVariableNames: 'expirationMonthOfYear number expirationMonth'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'TusLibros'!
+!CreditCard methodsFor: 'initialization' stamp: 'FF 6/7/2022 17:25:17' prior: 50476656!
+number: aCreditCardNumber validTo: anExpirationMonthOfYear
+	number := aCreditCardNumber.
+	expirationMonth := anExpirationMonthOfYear
+	! !
+!CreditCard methodsFor: 'initialization' stamp: 'FF 6/7/2022 17:25:22' prior: 50476677!
+number: aCreditCardNumber validTo: anExpirationMonthOfYear
+	number := aCreditCardNumber.
+	expirationMonth := anExpirationMonthOfYear.
+	! !
+!Cashier methodsFor: 'checking out' stamp: 'FF 6/7/2022 17:27:58' prior: 50475810!
+checkOut: aCart payingWith: aCreditCard on: aDateOfSale
+	aCart isEmpty ifTrue:[^self error: self class cannotCheckOutAnEmptyCart ].
+	(aCreditCard isExpiredOn: aDateOfSale) ifTrue:[^self error: self class cannotPayWithExpiredCreditCard].! !
+!Cashier methodsFor: 'checking out' stamp: 'FF 6/7/2022 17:28:17' prior: 50476693!
+checkOut: aCart payingWith: aCreditCard on: aDateOfSale
+	aCart isEmpty ifTrue:[^self error: self class cannotCheckOutAnEmptyCart ].
+	(aCreditCard isExpiredOn: aDateOfSale) ifTrue:[^self error: self class cannotPayWithExpiredCreditCard].! !
+!CashierTest methodsFor: 'test' stamp: 'FF 6/7/2022 17:31:59' prior: 50476619!
+test03CheckOutCartWithItemsAddElementToSalesList
+
+	| cart cashier creditCard item anotherItem salesList |
+	item := 'primer libro'.
+	anotherItem := 'segundo libro'.
+	cart := Cart with: (OrderedCollection with: item with: anotherItem).
+	cart add: 1 of: item.
+	cart add: 2 of: anotherItem.
+	salesList := OrderedCollection new.
+	cashier := Cashier using: salesList.
+	creditCard := CreditCard number: '4545454545454545' validTo: Date today + 1.
+	
+	cashier checkOut: cart payingWith: creditCard on: Date today.
+	
+	self deny: salesList isEmpty.! !
+!CashierTest methodsFor: 'test' stamp: 'FF 6/7/2022 17:32:17' prior: 50476715!
+test03CheckOutCartWithItemsAddElementToSalesList
+
+	| cart cashier creditCard item anotherItem salesList |
+	item := 'primer libro'.
+	anotherItem := 'segundo libro'.
+	cart := Cart with: (OrderedCollection with: item with: anotherItem).
+	cart add: 1 of: item.
+	cart add: 2 of: anotherItem.
+	salesList := OrderedCollection new.
+	cashier := Cashier using: salesList.
+	creditCard := CreditCard number: '4545454545454545' validTo: (Date today + 1) month.
+	
+	cashier checkOut: cart payingWith: creditCard on: Date today.
+	
+	self deny: salesList isEmpty.! !
+
+!methodRemoval: Cashier #checkOut:payingWith: stamp: 'FG 6/7/2022 20:21:49'!
+checkOut: aCart payingWith: aCreditCard 
+	aCart isEmpty ifTrue:[^self error: self class cannotCheckOutAnEmptyCart ].
+	^self error: self class cannotPayWithExpiredCreditCard.!
+!CashierTest methodsFor: 'test' stamp: 'FF 6/7/2022 17:34:01' prior: 50476438!
+test01CannotCheckOutEmptyCart
+
+	| cart cashier creditCart salesList |
+	cart := Cart with: OrderedCollection new.
+	salesList := OrderedCollection new.
+	cashier := Cashier using: salesList.
+	
+	self should: [cashier checkOut: cart payingWith: creditCart on: Date today] 
+	raise: Error - MessageNotUnderstood 
+	withExceptionDo: [:anError | self assert: Cashier cannotCheckOutAnEmptyCart equals: anError messageText .
+			self assert: salesList isEmpty.
+		].! !
+!CashierTest methodsFor: 'test' stamp: 'FF 6/7/2022 17:35:22' prior: 50476508!
+test02CannotCheckOutCartProvidingAnExpiredCreditCard
+
+	| cart cashier creditCard item salesList|
+	cart := Cart with: (OrderedCollection with: item).
+	cart add: 1 of: item. 
+	salesList := OrderedCollection new.
+	cashier := Cashier using: salesList.
+	creditCard := CreditCard validTo: (Date today - 60) month.
+	
+	self should: [cashier checkOut: cart payingWith: creditCard on: Date today] 
+	raise: Error - MessageNotUnderstood 
+	withExceptionDo: [:anError |  self assert: Cashier cannotPayWithExpiredCreditCard equals: anError messageText .
+			self assert: salesList isEmpty .
+		].! !
+!CashierTest methodsFor: 'test' stamp: 'FF 6/7/2022 17:40:54' prior: 50476782!
+test02CannotCheckOutCartProvidingAnExpiredCreditCard
+
+	| cart cashier creditCard item salesList|
+	cart := Cart with: (OrderedCollection with: item).
+	cart add: 1 of: item. 
+	salesList := OrderedCollection new.
+	cashier := Cashier using: salesList.
+	creditCard := CreditCard validTo: Date today month previous.
+	
+	self should: [cashier checkOut: cart payingWith: creditCard on: Date today] 
+	raise: Error - MessageNotUnderstood 
+	withExceptionDo: [:anError |  self assert: Cashier cannotPayWithExpiredCreditCard equals: anError messageText .
+			self assert: salesList isEmpty .
+		].! !
+!CreditCard methodsFor: 'testing' stamp: 'FF 6/7/2022 17:41:23' prior: 50475873!
+isExpiredOn: aDate 
+	self shouldBeImplemented.! !
+!CreditCard methodsFor: 'testing' stamp: 'FF 6/7/2022 17:48:48' prior: 50476826!
+isExpiredOn: aDate 
+	| expirationDate |
+	expirationDate := Date year: expirationMonth yearNumber month: expirationMonth day: expirationMonth daysInMonth.
+	^aDate > expirationDate.! !
+
+!methodRemoval: CreditCard #initializeValidTo: stamp: 'FG 6/7/2022 20:21:49'!
+initializeValidTo: anExpirationMonthOfYear 
+	expirationMonthOfYear := anExpirationMonthOfYear.!
+
+!methodRemoval: CreditCard class #validTo: stamp: 'FG 6/7/2022 20:21:49'!
+validTo: anExpirationMonthOfYear
+	^self new initializeValidTo: anExpirationMonthOfYear.!
+!CashierTest methodsFor: 'test' stamp: 'FF 6/7/2022 17:50:08' prior: 50476804!
+test02CannotCheckOutCartProvidingAnExpiredCreditCard
+
+	| cart cashier creditCard item salesList|
+	cart := Cart with: (OrderedCollection with: item).
+	cart add: 1 of: item. 
+	salesList := OrderedCollection new.
+	cashier := Cashier using: salesList.
+	creditCard := CreditCard number: '4545454545454545' validTo: Date today month previous.
+	
+	self should: [cashier checkOut: cart payingWith: creditCard on: Date today] 
+	raise: Error - MessageNotUnderstood 
+	withExceptionDo: [:anError |  self assert: Cashier cannotPayWithExpiredCreditCard equals: anError messageText .
+			self assert: salesList isEmpty .
+		].! !
+
+!classDefinition: #CreditCard category: 'TusLibros' stamp: 'FG 6/7/2022 20:21:49'!
+Object subclass: #CreditCard
+	instanceVariableNames: 'number expirationMonth'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'TusLibros'!
+
+!classDefinition: #CreditCard category: 'TusLibros' stamp: 'FG 6/7/2022 20:21:49'!
+Object subclass: #CreditCard
+	instanceVariableNames: 'number expirationMonth'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'TusLibros'!
+!Cashier methodsFor: 'checking out' stamp: 'FF 6/7/2022 17:54:27' prior: 50476704!
+checkOut: aCart payingWith: aCreditCard on: aDateOfSale
+	aCart isEmpty ifTrue:[^self error: self class cannotCheckOutAnEmptyCart ].
+	(aCreditCard isExpiredOn: aDateOfSale) ifTrue:[^self error: self class cannotPayWithExpiredCreditCard].! !
+!Cashier methodsFor: 'checking out' stamp: 'FF 6/7/2022 17:54:47' prior: 50476887!
+checkOut: aCart payingWith: aCreditCard on: aDateOfSale
+	aCart isEmpty ifTrue:[^self error: self class cannotCheckOutAnEmptyCart ].
+	(aCreditCard isExpiredOn: aDateOfSale) ifTrue:[^self error: self class cannotPayWithExpiredCreditCard].
+	^salesList add: 'pepe'.! !
+!Cashier methodsFor: 'checking out' stamp: 'FF 6/7/2022 17:54:50' prior: 50476898!
+checkOut: aCart payingWith: aCreditCard on: aDateOfSale
+	aCart isEmpty ifTrue:[^self error: self class cannotCheckOutAnEmptyCart ].
+	(aCreditCard isExpiredOn: aDateOfSale) ifTrue:[^self error: self class cannotPayWithExpiredCreditCard].
+	salesList add: 'pepe'.! !
+!CreditCard methodsFor: 'testing' stamp: 'FF 6/7/2022 17:58:31' prior: 50476831!
+isExpiredOn: aDate 
+	| expirationDate |
+	expirationDate := Date year: expirationMonth yearNumber month: expirationMonth monthName day: expirationMonth daysInMonth.
+	^aDate > expirationDate.! !
+!CashierTest methodsFor: 'test' stamp: 'FF 6/7/2022 17:59:45' prior: 50476735!
+test03CheckOutCartWithItemsAddElementToSalesList
+
+	| cart cashier creditCard item anotherItem salesList |
+	item := 'primer libro'.
+	anotherItem := 'segundo libro'.
+	cart := Cart with: (OrderedCollection with: item with: anotherItem).
+	cart add: 1 of: item.
+	cart add: 2 of: anotherItem.
+	salesList := OrderedCollection new.
+	cashier := Cashier using: salesList.
+	creditCard := CreditCard number: '4545454545454545' validTo: Date today month next.
+	
+	cashier checkOut: cart payingWith: creditCard on: Date today.
+	
+	self deny: salesList isEmpty.! !
+!CashierTest methodsFor: 'test' stamp: 'FF 6/7/2022 18:03:11' prior: 50475654 overrides: 16961394!
+setUp
+
+	| cart cashier creditCard item anotherItem salesList |
+	item := 'primer libro'.
+	anotherItem := 'segundo libro'.
+	cart := Cart with: (OrderedCollection with: item with: anotherItem).
+	cart add: 1 of: item.
+	cart add: 2 of: anotherItem.
+	salesList := OrderedCollection new.
+	cashier := Cashier using: salesList.
+	creditCard := CreditCard number: '4545454545454545' validTo: Date today month next.
+	
+	cashier checkOut: cart payingWith: creditCard on: Date today.
+	
+	self deny: salesList isEmpty.! !
+
+!classDefinition: #CashierTest category: 'TusLibros' stamp: 'FG 6/7/2022 20:21:49'!
+TestCase subclass: #CashierTest
+	instanceVariableNames: 'libro1'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'TusLibros'!
+
+!classDefinition: #CashierTest category: 'TusLibros' stamp: 'FG 6/7/2022 20:21:49'!
+TestCase subclass: #CashierTest
+	instanceVariableNames: 'libro1 libro2'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'TusLibros'!
+
+!classDefinition: #CashierTest category: 'TusLibros' stamp: 'FG 6/7/2022 20:21:49'!
+TestCase subclass: #CashierTest
+	instanceVariableNames: 'libro1 libro2 catalog'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'TusLibros'!
+
+!classDefinition: #CashierTest category: 'TusLibros' stamp: 'FG 6/7/2022 20:21:49'!
+TestCase subclass: #CashierTest
+	instanceVariableNames: 'libro1 libro2 catalog sales'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'TusLibros'!
+
+!classDefinition: #CashierTest category: 'TusLibros' stamp: 'FG 6/7/2022 20:21:49'!
+TestCase subclass: #CashierTest
+	instanceVariableNames: 'libro1 libro2 catalog sales validCreditCard'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'TusLibros'!
+
+!classDefinition: #CashierTest category: 'TusLibros' stamp: 'FG 6/7/2022 20:21:49'!
+TestCase subclass: #CashierTest
+	instanceVariableNames: 'libro1 libro2 catalog sales validCreditCard expiredCreditCard'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'TusLibros'!
+!CashierTest methodsFor: 'test' stamp: 'FF 6/7/2022 18:07:02' prior: 50476950 overrides: 16961394!
+setUp
+
+	libro1 := 'primer libro'.
+	libro2 := 'segundo libro'.
+	catalog := OrderedCollection with: libro1 with: libro2.
+	sales := OrderedCollection new.
+	
+	validCreditCard := CreditCard number: '4545454545454545' validTo: Date today month next.
+	expiredCreditCard := CreditCard number: '4545454545454545' validTo: Date today month previous.! !
+!CashierTest methodsFor: 'test' stamp: 'FF 6/7/2022 18:08:16' prior: 50476764!
+test01CannotCheckOutEmptyCart
+
+	| cart cashier |
+	cart := Cart with: OrderedCollection new.
+	cashier := Cashier using: sales.
+	
+	self should: [cashier checkOut: cart payingWith: validCreditCard on: Date today] 
+	raise: Error - MessageNotUnderstood 
+	withExceptionDo: [:anError | self assert: Cashier cannotCheckOutAnEmptyCart equals: anError messageText .
+			self assert: sales isEmpty.
+		].! !
+
+!classDefinition: #CashierTest category: 'TusLibros' stamp: 'FG 6/7/2022 20:21:49'!
+TestCase subclass: #CashierTest
+	instanceVariableNames: 'libro1 libro2 catalog sales validCreditCard expiredCreditCard today'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'TusLibros'!
+!CashierTest methodsFor: 'test' stamp: 'FF 6/7/2022 18:10:22' prior: 50477015 overrides: 16961394!
+setUp
+
+	today := Date today.
+	libro1 := 'primer libro'.
+	libro2 := 'segundo libro'.
+	catalog := OrderedCollection with: libro1 with: libro2.
+	sales := OrderedCollection new.
+	
+	validCreditCard := CreditCard number: '4545454545454545' validTo: today month next.
+	expiredCreditCard := CreditCard number: '4545454545454545' validTo: today month previous.
+	! !
+!CashierTest methodsFor: 'test' stamp: 'FF 6/7/2022 18:10:30' prior: 50477029!
+test01CannotCheckOutEmptyCart
+
+	| cart cashier |
+	cart := Cart with: OrderedCollection new.
+	cashier := Cashier using: sales.
+	
+	self should: [cashier checkOut: cart payingWith: validCreditCard on: today] 
+	raise: Error - MessageNotUnderstood 
+	withExceptionDo: [:anError | self assert: Cashier cannotCheckOutAnEmptyCart equals: anError messageText .
+			self assert: sales isEmpty.
+		].! !
+!CashierTest methodsFor: 'test' stamp: 'FF 6/7/2022 18:11:36' prior: 50476850!
+test02CannotCheckOutCartProvidingAnExpiredCreditCard
+
+	| cart cashier |
+	cart := Cart with: catalog .
+	cart add: 1 of: libro1. 
+	cashier := Cashier using: sales.
+	
+	self should: [cashier checkOut: cart payingWith: expiredCreditCard on: today] 
+	raise: Error - MessageNotUnderstood 
+	withExceptionDo: [:anError |  self assert: Cashier cannotPayWithExpiredCreditCard equals: anError messageText .
+			self assert: sales isEmpty .
+		].! !
+!CashierTest methodsFor: 'test' stamp: 'FF 6/7/2022 18:12:50' prior: 50476929!
+test03CheckOutCartWithItemsAddElementToSalesList
+
+	| cart cashier |
+	
+	cart := Cart with: catalog.
+	cart add: 1 of: libro1.
+	cart add: 2 of: libro2.
+	cashier := Cashier using: sales.
+	 	
+	cashier checkOut: cart payingWith: validCreditCard on: today.
+	
+	self deny: sales isEmpty.! !
+!Cashier methodsFor: 'checking out' stamp: 'FF 6/7/2022 18:15:25' prior: 50475796!
+assertCartIsNotEmpty: aCart
+	aCart isEmpty ifTrue:[^self error: self class cannotCheckOutAnEmptyCart ].
+	! !
+!Cashier methodsFor: 'checking out' stamp: 'FF 6/7/2022 18:16:38' prior: 50476909!
+checkOut: aCart payingWith: aCreditCard on: aDateOfSale
+	self assertCartIsNotEmpty: aCart.
+	self assertCreditCardIsNotExpired: aCreditCard on: aDateOfSale .
+	salesList add: 'pepe'.! !
+!Cashier methodsFor: 'checking out' stamp: 'FF 6/7/2022 18:17:22' prior: 50475802!
+assertCreditCardIsNotExpired: aCreditCard on: anExpirationDate
+	
+	(aCreditCard isExpiredOn: anExpirationDate) ifTrue:[^self error: self class cannotPayWithExpiredCreditCard].
+! !
+!Cashier methodsFor: 'checking out' stamp: 'FF 6/7/2022 18:19:22' prior: 50477119!
+checkOut: aCart payingWith: aCreditCard on: aDateOfSale
+	self assertCartIsNotEmpty: aCart.
+	self assertCreditCardIsNotExpired: aCreditCard on: aDateOfSale .
+	salesList add: aCart.! !
+!CashierTest methodsFor: 'test' stamp: 'FF 6/7/2022 18:26:33' prior: 50475712!
+test04CheckOutCartWithItemsReturnsATicketWithTotal
+
+	| cart cashier ticket |
+	
+	cart := Cart with: catalog.
+	cart add: 1 of: libro1.
+	cart add: 2 of: libro2.
+	cashier := Cashier using: sales.
+	 	
+	ticket := cashier checkOut: cart payingWith: validCreditCard on: today.
+	
+	self assert: cart total equals: ticket total.! !
+!CartTest methodsFor: 'test' stamp: 'FF 6/7/2022 18:28:51' prior: 50475622!
+test07EmptyCartTotalIsZero
+
+	| cart book|
+	cart := Cart with: (OrderedCollection with: book).
+	
+	self assert: 0 equals: cart total.! !
+!Cart methodsFor: 'total' stamp: 'FF 6/7/2022 18:29:13' prior: 50475758!
+total
+	self shouldBeImplemented.! !
+!Cart methodsFor: 'total' stamp: 'FF 6/7/2022 18:29:19' prior: 50477166!
+total
+	^0.! !
+!CartTest methodsFor: 'test' stamp: 'FF 6/7/2022 18:34:25' prior: 50475628!
+test08CartWithItemsTotalIsTheSumOfItemPrices
+
+	| cart book pricesList |
+	pricesList := Dictionary new.
+	pricesList at: book put: 10 .
+	cart := Cart with: pricesList.
+	cart add: 2 of: book.
+	
+	self deny: cart books isEmpty.
+	self assert: (cart books includes: book).! !
+!Cart class methodsFor: 'instance creation' stamp: 'FF 6/7/2022 18:35:12' prior: 50476072!
+with: aPricesList 
+	
+	^self new initializeWith: aPricesList.! !
+!Cart class methodsFor: 'instance creation' stamp: 'FF 6/7/2022 18:35:32' prior: 50477185!
+with: aPriceList 
+	
+	^self new initializeWith: aPriceList.! !
+!Cart methodsFor: 'initialization' stamp: 'FF 6/7/2022 18:35:56' prior: 50476083!
+initializeWith: aPriceList 
+	catalog := aPriceList.
+	books := Bag new.! !
+
+!classDefinition: #Cart category: 'TusLibros' stamp: 'FG 6/7/2022 20:21:49'!
+Object subclass: #Cart
+	instanceVariableNames: 'books priceList'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'TusLibros'!
+!Cart methodsFor: 'as yet unclassified' stamp: 'FF 6/7/2022 18:36:03' prior: 50477195!
+initializeWith: aPriceList 
+	priceList := aPriceList.
+	books := Bag new.! !
+!Cart methodsFor: 'as yet unclassified' stamp: 'FF 6/7/2022 18:36:03' prior: 50476239!
+add: aQuantity of: aBook 
+	(aQuantity <=0) ifTrue: [^self error: self class cannotAddBookWithNonPositiveQuantity ].
+	(priceList includes: aBook) ifFalse: [^ self error: self class cannotAddAnUncataloguedBook].
+	books add: aBook withOccurrences: aQuantity .! !
+!Cart methodsFor: 'adding' stamp: 'FF 6/7/2022 18:37:01' prior: 50477213!
+add: aQuantity of: aBook 
+	(aQuantity <=0) ifTrue: [^self error: self class cannotAddBookWithNonPositiveQuantity ].
+	(priceList includesKey: aBook) ifFalse: [^ self error: self class cannotAddAnUncataloguedBook].
+	books add: aBook withOccurrences: aQuantity .! !
+!CartTest methodsFor: 'test' stamp: 'FF 6/7/2022 18:37:46' prior: 50476098!
+test02EmptyCartAfterAddingABookIsNotEmpty
+
+	| book cart pricesList |
+	pricesList := Dictionary new.
+	pricesList at: book put: 10 .
+	cart := Cart with: pricesList.
+	
+	cart add: 1 of: book.
+	
+	self deny: cart isEmpty.! !
+!CartTest methodsFor: 'test' stamp: 'FF 6/7/2022 18:38:28' prior: 50476202!
+test04CannotAddAnUncataloguedBook
+
+	| book cart |
+	cart := Cart with: Dictionary new.
+	
+	self should: [cart add: 1 of: book.] 
+	raise: Error - MessageNotUnderstood 
+	withExceptionDo: [:anError | self assert: Cart cannotAddAnUncataloguedBook equals: anError messageText .
+		self assert: cart isEmpty ].! !
+!CartTest methodsFor: 'test' stamp: 'FF 6/7/2022 18:39:07' prior: 50476229!
+test06CartBookListIncludesBookAfterAdding
+
+	| cart book pricesList |
+	pricesList := Dictionary new.
+	pricesList at: book put: 10 .
+	cart := Cart with: pricesList.
+	cart add: 2 of: book.
+	
+	self deny: cart books isEmpty.
+	self assert: (cart books includes: book).! !
+!CartTest methodsFor: 'test' stamp: 'FF 6/7/2022 18:39:35' prior: 50476091!
+test01CartIsEmptyWhenCreated
+
+	| cart |
+
+	cart := Cart with: Dictionary new.
+	
+	self assert: cart isEmpty.
+	! !
+!CartTest methodsFor: 'test' stamp: 'FF 6/7/2022 18:39:54' prior: 50476175!
+test03CannotAddBooksToCartWithNonPositiveQuantity
+
+	| book cart pricesList |
+	pricesList := Dictionary new.
+	pricesList at: book put: 10 .
+	cart := Cart with: pricesList.
+	
+	self should: [cart add: -1 of: book.] 
+	raise: Error - MessageNotUnderstood 
+	withExceptionDo: [:anError | self assert: Cart cannotAddBookWithNonPositiveQuantity equals: anError messageText .
+		self assert: cart isEmpty ].! !
+!CartTest methodsFor: 'test' stamp: 'FF 6/7/2022 18:40:13' prior: 50476215!
+test05CartReturnsEmptyBookListWhenCreated
+
+	| cart |
+	cart := Cart with: Dictionary new.
+	
+	self assert: cart books isEmpty.! !
+!CartTest methodsFor: 'test' stamp: 'FF 6/7/2022 18:40:41' prior: 50477159!
+test07EmptyCartTotalIsZero
+
+	| cart |
+	cart := Cart with: (Dictionary new).
+	
+	self assert: 0 equals: cart total.! !
+!CartTest methodsFor: 'test' stamp: 'FF 6/7/2022 18:42:39' prior: 50477173!
+test08CartWithItemsTotalIsTheSumOfItemPrices
+
+	| cart book pricesList |
+	pricesList := Dictionary new.
+	pricesList at: book put: 10 .
+	cart := Cart with: pricesList.
+	cart add: 2 of: book.
+	
+	self deny: cart books isEmpty.
+	self assert: 20 equals: cart total.! !
+!CartTest methodsFor: 'test' stamp: 'FF 6/7/2022 18:42:47' prior: 50477306!
+test08CartWithItemsTotalIsTheSumOfItemPrices
+
+	| cart book pricesList |
+	pricesList := Dictionary new.
+	pricesList at: book put: 10 .
+	cart := Cart with: pricesList.
+	cart add: 2 of: book.
+	
+	self assert: 20 equals: cart total.! !
+!Cart methodsFor: 'total' stamp: 'FF 6/7/2022 18:43:38' prior: 50477170!
+total
+	! !
+!Cart methodsFor: 'total' stamp: 'FF 6/7/2022 18:49:55' prior: 50477327!
+total
+	^ books sum: [:aBook | priceList at: aBook] .
+	! !
+!Cart methodsFor: 'total' stamp: 'FF 6/7/2022 18:50:11' prior: 50477330!
+total
+	^ books sum: [:aBook | priceList at: aBook] ifEmpty: [^0].
+	! !
+!CashierTest methodsFor: 'test' stamp: 'FF 6/7/2022 18:51:34' prior: 50477054 overrides: 16961394!
+setUp
+
+	today := Date today.
+	libro1 := 'primer libro'.
+	libro2 := 'segundo libro'.
+
+	catalog := OrderedCollection with: libro1 with: libro2.
+	sales := OrderedCollection new.
+	
+	validCreditCard := CreditCard number: '4545454545454545' validTo: today month next.
+	expiredCreditCard := CreditCard number: '4545454545454545' validTo: today month previous.
+	! !
+
+!classDefinition: #CashierTest category: 'TusLibros' stamp: 'FG 6/7/2022 20:21:50'!
+TestCase subclass: #CashierTest
+	instanceVariableNames: 'libro1 libro2 priceList sales validCreditCard expiredCreditCard today'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'TusLibros'!
+!CashierTest methodsFor: 'as yet unclassified' stamp: 'FF 6/7/2022 18:51:41' prior: 50477083!
+test02CannotCheckOutCartProvidingAnExpiredCreditCard
+
+	| cart cashier |
+	cart := Cart with: priceList .
+	cart add: 1 of: libro1. 
+	cashier := Cashier using: sales.
+	
+	self should: [cashier checkOut: cart payingWith: expiredCreditCard on: today] 
+	raise: Error - MessageNotUnderstood 
+	withExceptionDo: [:anError |  self assert: Cashier cannotPayWithExpiredCreditCard equals: anError messageText .
+			self assert: sales isEmpty .
+		].! !
+!CashierTest methodsFor: 'as yet unclassified' stamp: 'FF 6/7/2022 18:51:41' prior: 50477146!
+test04CheckOutCartWithItemsReturnsATicketWithTotal
+
+	| cart cashier ticket |
+	
+	cart := Cart with: priceList.
+	cart add: 1 of: libro1.
+	cart add: 2 of: libro2.
+	cashier := Cashier using: sales.
+	 	
+	ticket := cashier checkOut: cart payingWith: validCreditCard on: today.
+	
+	self assert: cart total equals: ticket total.! !
+!CashierTest methodsFor: 'as yet unclassified' stamp: 'FF 6/7/2022 18:51:41' prior: 50477341 overrides: 16961394!
+setUp
+
+	today := Date today.
+	libro1 := 'primer libro'.
+	libro2 := 'segundo libro'.
+
+	priceList := OrderedCollection with: libro1 with: libro2.
+	sales := OrderedCollection new.
+	
+	validCreditCard := CreditCard number: '4545454545454545' validTo: today month next.
+	expiredCreditCard := CreditCard number: '4545454545454545' validTo: today month previous.
+	! !
+!CashierTest methodsFor: 'as yet unclassified' stamp: 'FF 6/7/2022 18:51:41' prior: 50477100!
+test03CheckOutCartWithItemsAddElementToSalesList
+
+	| cart cashier |
+	
+	cart := Cart with: priceList.
+	cart add: 1 of: libro1.
+	cart add: 2 of: libro2.
+	cashier := Cashier using: sales.
+	 	
+	cashier checkOut: cart payingWith: validCreditCard on: today.
+	
+	self deny: sales isEmpty.! !
+!CashierTest methodsFor: 'test' stamp: 'FF 6/7/2022 18:52:26' prior: 50477396 overrides: 16961394!
+setUp
+
+	today := Date today.
+	libro1 := 'primer libro'.
+	libro2 := 'segundo libro'.
+
+	priceList := Dictionary new.
+	priceList at: libro1 put: 10.
+	priceList at: libro2 put: 20.
+
+	sales := OrderedCollection new.
+	
+	validCreditCard := CreditCard number: '4545454545454545' validTo: today month next.
+	expiredCreditCard := CreditCard number: '4545454545454545' validTo: today month previous.
+	! !
+!Cashier methodsFor: 'checking out' stamp: 'FF 6/7/2022 18:54:19' prior: 50477137!
+checkOut: aCart payingWith: aCreditCard on: aDateOfSale
+	self assertCartIsNotEmpty: aCart.
+	self assertCreditCardIsNotExpired: aCreditCard on: aDateOfSale .
+	salesList add: aCart.
+	^aCart total.! !
+!CashierTest methodsFor: 'test' stamp: 'FF 6/7/2022 18:54:51' prior: 50477382!
+test04CheckOutCartWithItemsReturnsATicketWithTotal
+
+	| cart cashier total |
+	
+	cart := Cart with: priceList.
+	cart add: 1 of: libro1.
+	cart add: 2 of: libro2.
+	cashier := Cashier using: sales.
+	 	
+	total := cashier checkOut: cart payingWith: validCreditCard on: today.
+	
+	self assert: cart total equals: total.! !
+!Cart methodsFor: 'adding' stamp: 'FG 6/7/2022 20:24:42'!
+assertQuantityIsPositive: quantityOfBookToBeAdded 
+	(quantityOfBookToBeAdded <=0) ifTrue: [^self error: self class cannotAddBookWithNonPositiveQuantity ].! !
+!Cart methodsFor: 'adding' stamp: 'FG 6/7/2022 20:25:00' prior: 50477224!
+add: aQuantity of: aBook 
+	self assertQuantityIsPositive: aQuantity .
+	(priceList includesKey: aBook) ifFalse: [^ self error: self class cannotAddAnUncataloguedBook].
+	books add: aBook withOccurrences: aQuantity .! !
+
+!testRun: #CartTest #test01CartIsEmptyWhenCreated stamp: 'FG 6/7/2022 20:25:04'!
+PASSED!
+
+!testRun: #CartTest #test02EmptyCartAfterAddingABookIsNotEmpty stamp: 'FG 6/7/2022 20:25:04'!
+PASSED!
+
+!testRun: #CartTest #test03CannotAddBooksToCartWithNonPositiveQuantity stamp: 'FG 6/7/2022 20:25:04'!
+PASSED!
+
+!testRun: #CartTest #test04CannotAddAnUncataloguedBook stamp: 'FG 6/7/2022 20:25:04'!
+PASSED!
+
+!testRun: #CartTest #test05CartReturnsEmptyBookListWhenCreated stamp: 'FG 6/7/2022 20:25:04'!
+PASSED!
+
+!testRun: #CartTest #test06CartBookListIncludesBookAfterAdding stamp: 'FG 6/7/2022 20:25:04'!
+PASSED!
+
+!testRun: #CartTest #test07EmptyCartTotalIsZero stamp: 'FG 6/7/2022 20:25:04'!
+PASSED!
+
+!testRun: #CartTest #test08CartWithItemsTotalIsTheSumOfItemPrices stamp: 'FG 6/7/2022 20:25:04'!
+PASSED!
+!Cart methodsFor: 'adding' stamp: 'FG 6/7/2022 20:25:52'!
+assertProductExistOnPriceList: aProductToBeAdded 
+	(priceList includesKey: aProductToBeAdded) ifFalse: [^ self error: self class cannotAddAnUncataloguedBook].! !
+!Cart methodsFor: 'adding' stamp: 'FG 6/7/2022 20:26:05' prior: 50477469!
+add: aQuantity of: aBook 
+	self assertQuantityIsPositive: aQuantity .
+	self assertProductExistOnPriceList: aBook.
+	books add: aBook withOccurrences: aQuantity .! !
+!CartTest methodsFor: 'setUp' stamp: 'FG 6/7/2022 20:27:57' overrides: 16961394!
+setUp! !
+
+!classDefinition: #CartTest category: 'TusLibros' stamp: 'FG 6/7/2022 20:28:39'!
+TestCase subclass: #CartTest
+	instanceVariableNames: 'priceList'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'TusLibros'!
+
+!classDefinition: #CartTest category: 'TusLibros' stamp: 'FG 6/7/2022 20:28:50'!
+TestCase subclass: #CartTest
+	instanceVariableNames: 'priceList book1'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'TusLibros'!
+!CartTest methodsFor: 'setUp' stamp: 'FG 6/7/2022 20:28:47' prior: 50477519 overrides: 16961394!
+setUp
+
+	priceList := Dictionary new.
+	priceList at: book1 put: 10 .! !
+!CartTest methodsFor: 'setUp' stamp: 'FG 6/7/2022 20:29:14' prior: 50477537 overrides: 16961394!
+setUp
+
+	book1 := 'libro 1'.
+	
+	priceList := Dictionary new.
+	priceList at: book1 put: 10 .! !
+!CartTest methodsFor: 'test' stamp: 'FG 6/7/2022 20:29:38' prior: 50477269!
+test01CartIsEmptyWhenCreated
+
+	| cart |
+
+	cart := Cart with: priceList .
+	
+	self assert: cart isEmpty.
+	! !
+
+!testRun: #CartTest #test01CartIsEmptyWhenCreated stamp: 'FG 6/7/2022 20:29:39'!
+PASSED!
+
+!testRun: #CartTest #test01CartIsEmptyWhenCreated stamp: 'FG 6/7/2022 20:29:39'!
+PASSED!
+
+!testRun: #CartTest #test02EmptyCartAfterAddingABookIsNotEmpty stamp: 'FG 6/7/2022 20:29:39'!
+PASSED!
+
+!testRun: #CartTest #test03CannotAddBooksToCartWithNonPositiveQuantity stamp: 'FG 6/7/2022 20:29:39'!
+PASSED!
+
+!testRun: #CartTest #test04CannotAddAnUncataloguedBook stamp: 'FG 6/7/2022 20:29:39'!
+PASSED!
+
+!testRun: #CartTest #test05CartReturnsEmptyBookListWhenCreated stamp: 'FG 6/7/2022 20:29:39'!
+PASSED!
+
+!testRun: #CartTest #test06CartBookListIncludesBookAfterAdding stamp: 'FG 6/7/2022 20:29:39'!
+PASSED!
+
+!testRun: #CartTest #test07EmptyCartTotalIsZero stamp: 'FG 6/7/2022 20:29:39'!
+PASSED!
+
+!testRun: #CartTest #test08CartWithItemsTotalIsTheSumOfItemPrices stamp: 'FG 6/7/2022 20:29:39'!
+PASSED!
+!CartTest methodsFor: 'test' stamp: 'FG 6/7/2022 20:30:25' prior: 50477235!
+test02EmptyCartAfterAddingABookIsNotEmpty
+
+	|  cart |
+	cart := Cart with: priceList.
+	
+	cart add: 1 of: book1 .
+	
+	self deny: cart isEmpty.! !
+
+!testRun: #CartTest #test02EmptyCartAfterAddingABookIsNotEmpty stamp: 'FG 6/7/2022 20:30:26'!
+PASSED!
+
+!testRun: #CartTest #test01CartIsEmptyWhenCreated stamp: 'FG 6/7/2022 20:30:26'!
+PASSED!
+
+!testRun: #CartTest #test02EmptyCartAfterAddingABookIsNotEmpty stamp: 'FG 6/7/2022 20:30:26'!
+PASSED!
+
+!testRun: #CartTest #test03CannotAddBooksToCartWithNonPositiveQuantity stamp: 'FG 6/7/2022 20:30:26'!
+PASSED!
+
+!testRun: #CartTest #test04CannotAddAnUncataloguedBook stamp: 'FG 6/7/2022 20:30:26'!
+PASSED!
+
+!testRun: #CartTest #test05CartReturnsEmptyBookListWhenCreated stamp: 'FG 6/7/2022 20:30:26'!
+PASSED!
+
+!testRun: #CartTest #test06CartBookListIncludesBookAfterAdding stamp: 'FG 6/7/2022 20:30:26'!
+PASSED!
+
+!testRun: #CartTest #test07EmptyCartTotalIsZero stamp: 'FG 6/7/2022 20:30:26'!
+PASSED!
+
+!testRun: #CartTest #test08CartWithItemsTotalIsTheSumOfItemPrices stamp: 'FG 6/7/2022 20:30:26'!
+PASSED!
+!CartTest methodsFor: 'test' stamp: 'FG 6/7/2022 20:30:48' prior: 50477276!
+test03CannotAddBooksToCartWithNonPositiveQuantity
+
+	| cart |
+	cart := Cart with: priceList.
+	
+	self should: [cart add: -1 of: book1.] 
+	raise: Error - MessageNotUnderstood 
+	withExceptionDo: [:anError | self assert: Cart cannotAddBookWithNonPositiveQuantity equals: anError messageText .
+		self assert: cart isEmpty ].! !
+
+!testRun: #CartTest #test03CannotAddBooksToCartWithNonPositiveQuantity stamp: 'FG 6/7/2022 20:30:52'!
+PASSED!
+
+!testRun: #CartTest #test01CartIsEmptyWhenCreated stamp: 'FG 6/7/2022 20:30:52'!
+PASSED!
+
+!testRun: #CartTest #test02EmptyCartAfterAddingABookIsNotEmpty stamp: 'FG 6/7/2022 20:30:52'!
+PASSED!
+
+!testRun: #CartTest #test03CannotAddBooksToCartWithNonPositiveQuantity stamp: 'FG 6/7/2022 20:30:52'!
+PASSED!
+
+!testRun: #CartTest #test04CannotAddAnUncataloguedBook stamp: 'FG 6/7/2022 20:30:52'!
+PASSED!
+
+!testRun: #CartTest #test05CartReturnsEmptyBookListWhenCreated stamp: 'FG 6/7/2022 20:30:52'!
+PASSED!
+
+!testRun: #CartTest #test06CartBookListIncludesBookAfterAdding stamp: 'FG 6/7/2022 20:30:52'!
+PASSED!
+
+!testRun: #CartTest #test07EmptyCartTotalIsZero stamp: 'FG 6/7/2022 20:30:52'!
+PASSED!
+
+!testRun: #CartTest #test08CartWithItemsTotalIsTheSumOfItemPrices stamp: 'FG 6/7/2022 20:30:52'!
+PASSED!
+!CartTest methodsFor: 'test' stamp: 'FG 6/7/2022 20:31:22' prior: 50477245!
+test04CannotAddAnUncataloguedBook
+
+	| book cart |	
+	book := 'uncatolog book'.
+	cart := Cart with: priceList .
+	
+	self should: [cart add: 1 of: book.] 
+	raise: Error - MessageNotUnderstood 
+	withExceptionDo: [:anError | self assert: Cart cannotAddAnUncataloguedBook equals: anError messageText .
+		self assert: cart isEmpty ].! !
+
+!testRun: #CartTest #test04CannotAddAnUncataloguedBook stamp: 'FG 6/7/2022 20:31:23'!
+PASSED!
+
+!testRun: #CartTest #test01CartIsEmptyWhenCreated stamp: 'FG 6/7/2022 20:31:23'!
+PASSED!
+
+!testRun: #CartTest #test02EmptyCartAfterAddingABookIsNotEmpty stamp: 'FG 6/7/2022 20:31:23'!
+PASSED!
+
+!testRun: #CartTest #test03CannotAddBooksToCartWithNonPositiveQuantity stamp: 'FG 6/7/2022 20:31:23'!
+PASSED!
+
+!testRun: #CartTest #test04CannotAddAnUncataloguedBook stamp: 'FG 6/7/2022 20:31:23'!
+PASSED!
+
+!testRun: #CartTest #test05CartReturnsEmptyBookListWhenCreated stamp: 'FG 6/7/2022 20:31:23'!
+PASSED!
+
+!testRun: #CartTest #test06CartBookListIncludesBookAfterAdding stamp: 'FG 6/7/2022 20:31:23'!
+PASSED!
+
+!testRun: #CartTest #test07EmptyCartTotalIsZero stamp: 'FG 6/7/2022 20:31:23'!
+PASSED!
+
+!testRun: #CartTest #test08CartWithItemsTotalIsTheSumOfItemPrices stamp: 'FG 6/7/2022 20:31:23'!
+PASSED!
+!CartTest methodsFor: 'test' stamp: 'FG 6/7/2022 20:31:33' prior: 50477292!
+test05CartReturnsEmptyBookListWhenCreated
+
+	| cart |
+	cart := Cart with: priceList .
+	
+	self assert: cart books isEmpty.! !
+
+!testRun: #CartTest #test05CartReturnsEmptyBookListWhenCreated stamp: 'FG 6/7/2022 20:31:35'!
+PASSED!
+
+!testRun: #CartTest #test01CartIsEmptyWhenCreated stamp: 'FG 6/7/2022 20:31:35'!
+PASSED!
+
+!testRun: #CartTest #test02EmptyCartAfterAddingABookIsNotEmpty stamp: 'FG 6/7/2022 20:31:35'!
+PASSED!
+
+!testRun: #CartTest #test03CannotAddBooksToCartWithNonPositiveQuantity stamp: 'FG 6/7/2022 20:31:35'!
+PASSED!
+
+!testRun: #CartTest #test04CannotAddAnUncataloguedBook stamp: 'FG 6/7/2022 20:31:35'!
+PASSED!
+
+!testRun: #CartTest #test05CartReturnsEmptyBookListWhenCreated stamp: 'FG 6/7/2022 20:31:35'!
+PASSED!
+
+!testRun: #CartTest #test06CartBookListIncludesBookAfterAdding stamp: 'FG 6/7/2022 20:31:35'!
+PASSED!
+
+!testRun: #CartTest #test07EmptyCartTotalIsZero stamp: 'FG 6/7/2022 20:31:35'!
+PASSED!
+
+!testRun: #CartTest #test08CartWithItemsTotalIsTheSumOfItemPrices stamp: 'FG 6/7/2022 20:31:35'!
+PASSED!
+!CartTest methodsFor: 'test' stamp: 'FG 6/7/2022 20:31:54' prior: 50477258!
+test06CartBookListIncludesBookAfterAdding
+
+	| cart  |
+	cart := Cart with: priceList.
+	cart add: 2 of: book1 .
+	
+	self deny: cart books isEmpty.
+	self assert: (cart books includes: book1).! !
+
+!testRun: #CartTest #test06CartBookListIncludesBookAfterAdding stamp: 'FG 6/7/2022 20:32:00'!
+PASSED!
+
+!testRun: #CartTest #test01CartIsEmptyWhenCreated stamp: 'FG 6/7/2022 20:32:00'!
+PASSED!
+
+!testRun: #CartTest #test02EmptyCartAfterAddingABookIsNotEmpty stamp: 'FG 6/7/2022 20:32:00'!
+PASSED!
+
+!testRun: #CartTest #test03CannotAddBooksToCartWithNonPositiveQuantity stamp: 'FG 6/7/2022 20:32:00'!
+PASSED!
+
+!testRun: #CartTest #test04CannotAddAnUncataloguedBook stamp: 'FG 6/7/2022 20:32:00'!
+PASSED!
+
+!testRun: #CartTest #test05CartReturnsEmptyBookListWhenCreated stamp: 'FG 6/7/2022 20:32:00'!
+PASSED!
+
+!testRun: #CartTest #test06CartBookListIncludesBookAfterAdding stamp: 'FG 6/7/2022 20:32:00'!
+PASSED!
+
+!testRun: #CartTest #test07EmptyCartTotalIsZero stamp: 'FG 6/7/2022 20:32:00'!
+PASSED!
+
+!testRun: #CartTest #test08CartWithItemsTotalIsTheSumOfItemPrices stamp: 'FG 6/7/2022 20:32:00'!
+PASSED!
+!CartTest methodsFor: 'test' stamp: 'FG 6/7/2022 20:32:09' prior: 50477299!
+test07EmptyCartTotalIsZero
+
+	| cart |
+	cart := Cart with: priceList .
+	
+	self assert: 0 equals: cart total.! !
+
+!testRun: #CartTest #test07EmptyCartTotalIsZero stamp: 'FG 6/7/2022 20:32:10'!
+PASSED!
+
+!testRun: #CartTest #test01CartIsEmptyWhenCreated stamp: 'FG 6/7/2022 20:32:10'!
+PASSED!
+
+!testRun: #CartTest #test02EmptyCartAfterAddingABookIsNotEmpty stamp: 'FG 6/7/2022 20:32:10'!
+PASSED!
+
+!testRun: #CartTest #test03CannotAddBooksToCartWithNonPositiveQuantity stamp: 'FG 6/7/2022 20:32:10'!
+PASSED!
+
+!testRun: #CartTest #test04CannotAddAnUncataloguedBook stamp: 'FG 6/7/2022 20:32:10'!
+PASSED!
+
+!testRun: #CartTest #test05CartReturnsEmptyBookListWhenCreated stamp: 'FG 6/7/2022 20:32:10'!
+PASSED!
+
+!testRun: #CartTest #test06CartBookListIncludesBookAfterAdding stamp: 'FG 6/7/2022 20:32:10'!
+PASSED!
+
+!testRun: #CartTest #test07EmptyCartTotalIsZero stamp: 'FG 6/7/2022 20:32:10'!
+PASSED!
+
+!testRun: #CartTest #test08CartWithItemsTotalIsTheSumOfItemPrices stamp: 'FG 6/7/2022 20:32:10'!
+PASSED!
+!CartTest methodsFor: 'test' stamp: 'FG 6/7/2022 20:32:26' prior: 50477317!
+test08CartWithItemsTotalIsTheSumOfItemPrices
+
+	| cart |
+
+	cart := Cart with: priceList.
+	cart add: 2 of: book1.
+	
+	self assert: 20 equals: cart total.! !
+
+!testRun: #CartTest #test08CartWithItemsTotalIsTheSumOfItemPrices stamp: 'FG 6/7/2022 20:32:28'!
+PASSED!
+
+!testRun: #CartTest #test01CartIsEmptyWhenCreated stamp: 'FG 6/7/2022 20:32:28'!
+PASSED!
+
+!testRun: #CartTest #test02EmptyCartAfterAddingABookIsNotEmpty stamp: 'FG 6/7/2022 20:32:28'!
+PASSED!
+
+!testRun: #CartTest #test03CannotAddBooksToCartWithNonPositiveQuantity stamp: 'FG 6/7/2022 20:32:28'!
+PASSED!
+
+!testRun: #CartTest #test04CannotAddAnUncataloguedBook stamp: 'FG 6/7/2022 20:32:28'!
+PASSED!
+
+!testRun: #CartTest #test05CartReturnsEmptyBookListWhenCreated stamp: 'FG 6/7/2022 20:32:28'!
+PASSED!
+
+!testRun: #CartTest #test06CartBookListIncludesBookAfterAdding stamp: 'FG 6/7/2022 20:32:28'!
+PASSED!
+
+!testRun: #CartTest #test07EmptyCartTotalIsZero stamp: 'FG 6/7/2022 20:32:28'!
+PASSED!
+
+!testRun: #CartTest #test08CartWithItemsTotalIsTheSumOfItemPrices stamp: 'FG 6/7/2022 20:32:28'!
+PASSED!
+
+TestCase subclass: #CreditCardTest
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'TusLibros'!
+
+!classDefinition: #CreditCardTest category: 'TusLibros' stamp: 'FG 6/7/2022 20:35:59'!
+TestCase subclass: #CreditCardTest
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'TusLibros'!
+
+!classDefinition: #CreditCardTest category: 'TusLibros' stamp: 'FG 6/7/2022 20:39:38'!
+TestCase subclass: #CreditCardTest
+	instanceVariableNames: 'today'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'TusLibros'!
+!CreditCardTest methodsFor: 'test' stamp: 'FG 6/7/2022 20:39:34'!
+test01CardCannotBeCreatedWithInvalidNumberLenght
+	|card|
+
+	self should: [card := CreditCard number: '2323' validTo: today Month]
+	raise: Error - MessageNotUnderstood 
+	withExceptionDo: [:anError | 
+		self assert: CreditCard invalidCreditCardNumber equals: anError errorMessage.
+		self assert: card isNil.
+		]! !
+!CreditCardTest methodsFor: 'setUp' stamp: 'FG 6/7/2022 20:40:01' overrides: 16961394!
+setUp
+
+	today := Date today.! !
+!CreditCardTest methodsFor: 'test' stamp: 'FG 6/7/2022 20:40:08' prior: 50477862!
+test01CardCannotBeCreatedWithInvalidNumberLenght
+	|card|
+
+	self should: [card := CreditCard number: '2323' validTo: today month]
+	raise: Error - MessageNotUnderstood 
+	withExceptionDo: [:anError | 
+		self assert: CreditCard invalidCreditCardNumber equals: anError errorMessage.
+		self assert: card isNil.
+		]! !
+
+!testRun: #CreditCardTest #test01CardCannotBeCreatedWithInvalidNumberLenght stamp: 'FG 6/7/2022 20:40:11'!
+FAILURE!
+!CreditCard methodsFor: 'initialization' stamp: 'FG 6/7/2022 20:41:56' prior: 50476685!
+number: aCreditCardNumber validTo: anExpirationMonthOfYear
+	number size < 16 ifTrue: [self error: self class invalidCreditCardNumber].
+	number := aCreditCardNumber.
+	expirationMonth := anExpirationMonthOfYear.
+	! !
+
+!testRun: #CreditCardTest #test01CardCannotBeCreatedWithInvalidNumberLenght stamp: 'FG 6/7/2022 20:41:57'!
+ERROR!
+
+!testRun: #CreditCardTest #test01CardCannotBeCreatedWithInvalidNumberLenght stamp: 'FG 6/7/2022 20:41:57'!
+ERROR!
+!CreditCard class methodsFor: 'error messages' stamp: 'FG 6/7/2022 20:42:15'!
+invalidCreditCardNumber
+	self shouldBeImplemented.! !
+!CreditCard class methodsFor: 'error messages' stamp: 'FG 6/7/2022 20:42:41' prior: 50477913!
+invalidCreditCardNumber
+	
+	^'The credit card number is invalid. The number should be 16 digits'! !
+
+!testRun: #CreditCardTest #test01CardCannotBeCreatedWithInvalidNumberLenght stamp: 'FG 6/7/2022 20:42:42'!
+ERROR!
+
+!testRun: #CreditCardTest #test01CardCannotBeCreatedWithInvalidNumberLenght stamp: 'FG 6/7/2022 20:42:50'!
+ERROR!
+
+!testRun: #CreditCardTest #test01CardCannotBeCreatedWithInvalidNumberLenght stamp: 'FG 6/7/2022 20:42:50'!
+ERROR!
+!CreditCardTest methodsFor: 'test' stamp: 'FG 6/7/2022 20:43:06' prior: 50477879!
+test01CardCannotBeCreatedWithInvalidNumberLenght
+	|card|
+
+	self should: [card := CreditCard number: '2323' validTo: today month]
+	raise: Error - MessageNotUnderstood 
+	withExceptionDo: [:anError | 
+		self assert: CreditCard invalidCreditCardNumber equals: anError errorMessage.
+		self assert: card isNil.
+		]! !
+!CreditCardTest methodsFor: 'test' stamp: 'FG 6/7/2022 20:43:22' prior: 50477935!
+test01CardCannotBeCreatedWithInvalidNumberLenght
+	|card|
+
+	self should: [card := CreditCard number: '2323' validTo: today month]
+	raise: Error - MessageNotUnderstood 
+	withExceptionDo: [:anError | 
+		self assert: CreditCard invalidCreditCardNumber equals: anError messageText .
+		self assert: card isNil.
+		]! !
+
+!testRun: #CreditCardTest #test01CardCannotBeCreatedWithInvalidNumberLenght stamp: 'FG 6/7/2022 20:43:38'!
+FAILURE!
+
+!testRun: #CreditCardTest #test01CardCannotBeCreatedWithInvalidNumberLenght stamp: 'FG 6/7/2022 20:44:37'!
+FAILURE!
+!CreditCard methodsFor: 'initialization' stamp: 'FG 6/7/2022 20:49:57' prior: 50477896!
+number: aCreditCardNumber validTo: anExpirationMonthOfYear
+	(number size < 16) ifTrue: [^self error: self class invalidCreditCardNumber].
+	number := aCreditCardNumber.
+	expirationMonth := anExpirationMonthOfYear.
+	! !
+
+!testRun: #CreditCardTest #test01CardCannotBeCreatedWithInvalidNumberLenght stamp: 'FG 6/7/2022 20:50:01'!
+FAILURE!
+!CreditCard methodsFor: 'initialization' stamp: 'FG 6/7/2022 20:50:52' prior: 50477968!
+number: aCreditCardNumber validTo: anExpirationMonthOfYear
+	number := aCreditCardNumber.
+	expirationMonth := anExpirationMonthOfYear.
+	! !
+!CreditCard class methodsFor: 'instance creation' stamp: 'FG 6/7/2022 20:51:11' prior: 50476649!
+number: aCreditCardNumber validTo: anExpirationMonthOfYear 	(aCreditCardNumber size < 16) ifTrue: [^self error: self invalidCreditCardNumber].
+	
+	^self new number: aCreditCardNumber validTo: anExpirationMonthOfYear ! !
+!CreditCard class methodsFor: 'instance creation' stamp: 'FG 6/7/2022 20:51:14' prior: 50477990!
+number: aCreditCardNumber validTo: anExpirationMonthOfYear 	
+	(aCreditCardNumber size < 16) ifTrue: [^self error: self invalidCreditCardNumber].
+	^self new number: aCreditCardNumber validTo: anExpirationMonthOfYear ! !
+
+!testRun: #CreditCardTest #test01CardCannotBeCreatedWithInvalidNumberLenght stamp: 'FG 6/7/2022 20:51:21'!
+PASSED!
+
+!testRun: #CreditCardTest #test01CardCannotBeCreatedWithInvalidNumberLenght stamp: 'FG 6/7/2022 20:51:21'!
+PASSED!
+!CreditCardTest methodsFor: 'test' stamp: 'FG 6/7/2022 20:52:40'!
+test01CardCannotBeCreatedWithInvalidNumberCharacters
+	|card|
+
+	self should: [card := CreditCard number: 'aaaaaaaaaaaaaaaa' validTo: today month]
+	raise: Error - MessageNotUnderstood 
+	withExceptionDo: [:anError | 
+		self assert: CreditCard invalidCreditCardNumber equals: anError messageText .
+		self assert: card isNil.
+		]! !
+
+!testRun: #CreditCardTest #test01CardCannotBeCreatedWithInvalidNumberCharacters stamp: 'FG 6/7/2022 20:52:42'!
+FAILURE!
+!CreditCardTest methodsFor: 'test' stamp: 'FG 6/7/2022 20:53:00'!
+test02CardCannotBeCreatedWithInvalidNumberCharacters
+	|card|
+
+	self should: [card := CreditCard number: 'aaaaaaaaaaaaaaaa' validTo: today month]
+	raise: Error - MessageNotUnderstood 
+	withExceptionDo: [:anError | 
+		self assert: CreditCard invalidCreditCardNumber equals: anError messageText .
+		self assert: card isNil.
+		]! !
+
+!methodRemoval: CreditCardTest #test01CardCannotBeCreatedWithInvalidNumberCharacters stamp: 'FG 6/7/2022 20:53:00'!
+test01CardCannotBeCreatedWithInvalidNumberCharacters
+	|card|
+
+	self should: [card := CreditCard number: 'aaaaaaaaaaaaaaaa' validTo: today month]
+	raise: Error - MessageNotUnderstood 
+	withExceptionDo: [:anError | 
+		self assert: CreditCard invalidCreditCardNumber equals: anError messageText .
+		self assert: card isNil.
+		]!
+!CreditCard class methodsFor: 'instance creation' stamp: 'FG 6/7/2022 20:56:08' prior: 50478000!
+number: aCreditCardNumber validTo: anExpirationMonthOfYear 	
+	(aCreditCardNumber size < 16) ifTrue: [^self error: self invalidCreditCardNumber].
+	(aCreditCardNumber noneSatisfy: [:aCharacter | aCharacter isDigit ]) ifTrue: [^self error: self invalidCreditCardNumber].
+	^self new number: aCreditCardNumber validTo: anExpirationMonthOfYear ! !
+
+!testRun: #CreditCardTest #test02CardCannotBeCreatedWithInvalidNumberCharacters stamp: 'FG 6/7/2022 20:56:14'!
+PASSED!
+
+!testRun: #CreditCardTest #test01CardCannotBeCreatedWithInvalidNumberLenght stamp: 'FG 6/7/2022 20:56:14'!
+PASSED!
+
+!testRun: #CreditCardTest #test02CardCannotBeCreatedWithInvalidNumberCharacters stamp: 'FG 6/7/2022 20:56:14'!
+PASSED!
+!CreditCardTest methodsFor: 'test' stamp: 'FG 6/7/2022 20:57:31'!
+test03CardCannotBeCreatedWithValidToIsNotAMonth
+	|card|
+
+	self should: [card := CreditCard number: '4251236587945120' validTo: '']
+	raise: Error - MessageNotUnderstood 
+	withExceptionDo: [:anError | 
+		self assert: CreditCard invalidExpirationDate equals: anError messageText .
+		self assert: card isNil.
+		]! !
+
+!testRun: #CreditCardTest #test03CardCannotBeCreatedWithValidToIsNotAMonth stamp: 'FG 6/7/2022 20:57:34'!
+FAILURE!
+!CreditCard class methodsFor: 'instance creation' stamp: 'FG 6/7/2022 20:59:43' prior: 50478062!
+number: aCreditCardNumber validTo: anExpirationMonthOfYear 	
+	(aCreditCardNumber size < 16) ifTrue: [^self error: self invalidCreditCardNumber].
+	(aCreditCardNumber noneSatisfy: [:aCharacter | aCharacter isDigit ]) ifTrue: [^self error: self invalidCreditCardNumber].
+	(anExpirationMonthOfYear isKindOf: Month) ifFalse: [^self error: self invalidExpirationDate].
+	^self new number: aCreditCardNumber validTo: anExpirationMonthOfYear ! !
+!CreditCard class methodsFor: 'error messages' stamp: 'FG 6/7/2022 21:00:18'!
+invalidExpirationDate
+	
+	^'The credit card expiration date is invalid. Ypu have to provide a Month of the Year'! !
+!CreditCard class methodsFor: 'error messages' stamp: 'FG 6/7/2022 21:00:20' prior: 50478120!
+invalidExpirationDate
+	
+	^'The credit card expiration date is invalid. You have to provide a Month of the Year'! !
+
+!testRun: #CreditCardTest #test03CardCannotBeCreatedWithValidToIsNotAMonth stamp: 'FG 6/7/2022 21:00:32'!
+PASSED!
+
+!testRun: #CreditCardTest #test01CardCannotBeCreatedWithInvalidNumberLenght stamp: 'FG 6/7/2022 21:00:32'!
+PASSED!
+
+!testRun: #CreditCardTest #test02CardCannotBeCreatedWithInvalidNumberCharacters stamp: 'FG 6/7/2022 21:00:32'!
+PASSED!
+
+!testRun: #CreditCardTest #test03CardCannotBeCreatedWithValidToIsNotAMonth stamp: 'FG 6/7/2022 21:00:32'!
+PASSED!
+!CreditCardTest methodsFor: 'test' stamp: 'FG 6/7/2022 21:01:26'!
+test04ValidCreditCardCanBeCreated
+	|card|
+
+	card := CreditCard number: '4251236587945120' validTo: today month.
+	
+	self deny: card isNil.
+		! !
+
+!testRun: #CreditCardTest #test04ValidCreditCardCanBeCreated stamp: 'FG 6/7/2022 21:01:28'!
+PASSED!
+
+!testRun: #CreditCardTest #test01CardCannotBeCreatedWithInvalidNumberLenght stamp: 'FG 6/7/2022 21:01:28'!
+PASSED!
+
+!testRun: #CreditCardTest #test02CardCannotBeCreatedWithInvalidNumberCharacters stamp: 'FG 6/7/2022 21:01:28'!
+PASSED!
+
+!testRun: #CreditCardTest #test03CardCannotBeCreatedWithValidToIsNotAMonth stamp: 'FG 6/7/2022 21:01:28'!
+PASSED!
+
+!testRun: #CreditCardTest #test04ValidCreditCardCanBeCreated stamp: 'FG 6/7/2022 21:01:28'!
+PASSED!
+!CreditCardTest methodsFor: 'test' stamp: 'FG 6/7/2022 21:02:43'!
+test04CreditCardWithExpirationDatePreviousOfTodayShouldBeExpired
+
+	
+		! !
+
+!methodRemoval: CreditCardTest #test04ValidCreditCardCanBeCreated stamp: 'FG 6/7/2022 21:02:58'!
+test04ValidCreditCardCanBeCreated
+	|card|
+
+	card := CreditCard number: '4251236587945120' validTo: today month.
+	
+	self deny: card isNil.
+		!
+!CreditCardTest methodsFor: 'test' stamp: 'FG 6/7/2022 21:03:44' prior: 50478172!
+test04CreditCardWithExpirationDatePreviousOfTodayShouldBeExpired
+
+	|card|
+	
+	card := CreditCard number: '4251236587945120' validTo: today month previous .
+	
+	self assert: (card isExpiredOn: today).
+
+		! !
+
+!testRun: #CreditCardTest #test04CreditCardWithExpirationDatePreviousOfTodayShouldBeExpired stamp: 'FG 6/7/2022 21:03:47'!
+PASSED!
+
+!testRun: #CreditCardTest #test01CardCannotBeCreatedWithInvalidNumberLenght stamp: 'FG 6/7/2022 21:03:47'!
+PASSED!
+
+!testRun: #CreditCardTest #test02CardCannotBeCreatedWithInvalidNumberCharacters stamp: 'FG 6/7/2022 21:03:47'!
+PASSED!
+
+!testRun: #CreditCardTest #test03CardCannotBeCreatedWithValidToIsNotAMonth stamp: 'FG 6/7/2022 21:03:47'!
+PASSED!
+
+!testRun: #CreditCardTest #test04CreditCardWithExpirationDatePreviousOfTodayShouldBeExpired stamp: 'FG 6/7/2022 21:03:47'!
+PASSED!
+!CreditCardTest methodsFor: 'test' stamp: 'FG 6/7/2022 21:04:20'!
+test04CreditCardWithExpirationDateAfterTodayShouldNotBeExpired
+
+	|card|
+	
+	card := CreditCard number: '4251236587945120' validTo: today month next .
+	
+	self deny: (card isExpiredOn: today).
+
+		! !
+
+!testRun: #CreditCardTest #test04CreditCardWithExpirationDateAfterTodayShouldNotBeExpired stamp: 'FG 6/7/2022 21:04:21'!
+PASSED!
+
+!testRun: #CreditCardTest #test01CardCannotBeCreatedWithInvalidNumberLenght stamp: 'FG 6/7/2022 21:04:21'!
+PASSED!
+
+!testRun: #CreditCardTest #test02CardCannotBeCreatedWithInvalidNumberCharacters stamp: 'FG 6/7/2022 21:04:21'!
+PASSED!
+
+!testRun: #CreditCardTest #test03CardCannotBeCreatedWithValidToIsNotAMonth stamp: 'FG 6/7/2022 21:04:21'!
+PASSED!
+
+!testRun: #CreditCardTest #test04CreditCardWithExpirationDateAfterTodayShouldNotBeExpired stamp: 'FG 6/7/2022 21:04:21'!
+PASSED!
+
+!testRun: #CreditCardTest #test04CreditCardWithExpirationDatePreviousOfTodayShouldBeExpired stamp: 'FG 6/7/2022 21:04:21'!
+PASSED!
+!CreditCardTest methodsFor: 'test' stamp: 'FG 6/7/2022 21:04:33'!
+test04CreditCardWithExpirationDateBeforeTodayShouldBeExpired
+
+	|card|
+	
+	card := CreditCard number: '4251236587945120' validTo: today month previous .
+	
+	self assert: (card isExpiredOn: today).
+
+		! !
+
+!methodRemoval: CreditCardTest #test04CreditCardWithExpirationDatePreviousOfTodayShouldBeExpired stamp: 'FG 6/7/2022 21:04:33'!
+test04CreditCardWithExpirationDatePreviousOfTodayShouldBeExpired
+
+	|card|
+	
+	card := CreditCard number: '4251236587945120' validTo: today month previous .
+	
+	self assert: (card isExpiredOn: today).
+
+		!
+!CreditCardTest methodsFor: 'test' stamp: 'FG 6/7/2022 21:04:40'!
+test05CreditCardWithExpirationDateAfterTodayShouldNotBeExpired
+
+	|card|
+	
+	card := CreditCard number: '4251236587945120' validTo: today month next .
+	
+	self deny: (card isExpiredOn: today).
+
+		! !
+
+!methodRemoval: CreditCardTest #test04CreditCardWithExpirationDateAfterTodayShouldNotBeExpired stamp: 'FG 6/7/2022 21:04:40'!
+test04CreditCardWithExpirationDateAfterTodayShouldNotBeExpired
+
+	|card|
+	
+	card := CreditCard number: '4251236587945120' validTo: today month next .
+	
+	self deny: (card isExpiredOn: today).
+
+		!
+!CreditCardTest methodsFor: 'test' stamp: 'FG 6/7/2022 21:05:40'!
+test05CreditCardExpirationMonthIsIncludedOnTheExpirationPeriod
+
+	|card|
+	
+	card := CreditCard number: '4251236587945120' validTo: today month.
+	
+	self deny: (card isExpiredOn: today).
+
+		! !
+
+!testRun: #CreditCardTest #test05CreditCardExpirationMonthIsIncludedOnTheExpirationPeriod stamp: 'FG 6/7/2022 21:05:42'!
+PASSED!
+
+!testRun: #CreditCardTest #test01CardCannotBeCreatedWithInvalidNumberLenght stamp: 'FG 6/7/2022 21:05:42'!
+PASSED!
+
+!testRun: #CreditCardTest #test02CardCannotBeCreatedWithInvalidNumberCharacters stamp: 'FG 6/7/2022 21:05:42'!
+PASSED!
+
+!testRun: #CreditCardTest #test03CardCannotBeCreatedWithValidToIsNotAMonth stamp: 'FG 6/7/2022 21:05:42'!
+PASSED!
+
+!testRun: #CreditCardTest #test04CreditCardWithExpirationDateBeforeTodayShouldBeExpired stamp: 'FG 6/7/2022 21:05:42'!
+PASSED!
+
+!testRun: #CreditCardTest #test05CreditCardExpirationMonthIsIncludedOnTheExpirationPeriod stamp: 'FG 6/7/2022 21:05:42'!
+PASSED!
+
+!testRun: #CreditCardTest #test05CreditCardWithExpirationDateAfterTodayShouldNotBeExpired stamp: 'FG 6/7/2022 21:05:42'!
+PASSED!
+!CreditCardTest methodsFor: 'test' stamp: 'FG 6/7/2022 21:06:10'!
+test06CreditCardExpirationMonthIsIncludedOnTheExpirationPeriod
+
+	|card|
+	
+	card := CreditCard number: '4251236587945120' validTo: today month.
+	
+	self deny: (card isExpiredOn: today).
+
+		! !
+
+!methodRemoval: CreditCardTest #test05CreditCardExpirationMonthIsIncludedOnTheExpirationPeriod stamp: 'FG 6/7/2022 21:06:10'!
+test05CreditCardExpirationMonthIsIncludedOnTheExpirationPeriod
+
+	|card|
+	
+	card := CreditCard number: '4251236587945120' validTo: today month.
+	
+	self deny: (card isExpiredOn: today).
+
+		!
+
+!classDefinition: #CashierTest category: 'TusLibros' stamp: 'FG 6/7/2022 21:07:36'!
+TestCase subclass: #CashierTest
+	instanceVariableNames: 'book1 libro2 priceList sales validCreditCard expiredCreditCard today'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'TusLibros'!
+!CashierTest methodsFor: 'as yet unclassified' stamp: 'FG 6/7/2022 21:07:36' prior: 50477365!
+test02CannotCheckOutCartProvidingAnExpiredCreditCard
+
+	| cart cashier |
+	cart := Cart with: priceList .
+	cart add: 1 of: book1. 
+	cashier := Cashier using: sales.
+	
+	self should: [cashier checkOut: cart payingWith: expiredCreditCard on: today] 
+	raise: Error - MessageNotUnderstood 
+	withExceptionDo: [:anError |  self assert: Cashier cannotPayWithExpiredCreditCard equals: anError messageText .
+			self assert: sales isEmpty .
+		].! !
+!CashierTest methodsFor: 'as yet unclassified' stamp: 'FG 6/7/2022 21:07:36' prior: 50477449!
+test04CheckOutCartWithItemsReturnsATicketWithTotal
+
+	| cart cashier total |
+	
+	cart := Cart with: priceList.
+	cart add: 1 of: book1.
+	cart add: 2 of: libro2.
+	cashier := Cashier using: sales.
+	 	
+	total := cashier checkOut: cart payingWith: validCreditCard on: today.
+	
+	self assert: cart total equals: total.! !
+!CashierTest methodsFor: 'as yet unclassified' stamp: 'FG 6/7/2022 21:07:36' prior: 50477424 overrides: 16961394!
+setUp
+
+	today := Date today.
+	book1 := 'primer libro'.
+	libro2 := 'segundo libro'.
+
+	priceList := Dictionary new.
+	priceList at: book1 put: 10.
+	priceList at: libro2 put: 20.
+
+	sales := OrderedCollection new.
+	
+	validCreditCard := CreditCard number: '4545454545454545' validTo: today month next.
+	expiredCreditCard := CreditCard number: '4545454545454545' validTo: today month previous.
+	! !
+!CashierTest methodsFor: 'as yet unclassified' stamp: 'FG 6/7/2022 21:07:36' prior: 50477411!
+test03CheckOutCartWithItemsAddElementToSalesList
+
+	| cart cashier |
+	
+	cart := Cart with: priceList.
+	cart add: 1 of: book1.
+	cart add: 2 of: libro2.
+	cashier := Cashier using: sales.
+	 	
+	cashier checkOut: cart payingWith: validCreditCard on: today.
+	
+	self deny: sales isEmpty.! !
+
+!classDefinition: #CashierTest category: 'TusLibros' stamp: 'FG 6/7/2022 21:07:45'!
+TestCase subclass: #CashierTest
+	instanceVariableNames: 'book1 book2 priceList sales validCreditCard expiredCreditCard today'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'TusLibros'!
+!CashierTest methodsFor: 'as yet unclassified' stamp: 'FG 6/7/2022 21:07:45' prior: 50478378 overrides: 16961394!
+setUp
+
+	today := Date today.
+	book1 := 'primer libro'.
+	book2 := 'segundo libro'.
+
+	priceList := Dictionary new.
+	priceList at: book1 put: 10.
+	priceList at: book2 put: 20.
+
+	sales := OrderedCollection new.
+	
+	validCreditCard := CreditCard number: '4545454545454545' validTo: today month next.
+	expiredCreditCard := CreditCard number: '4545454545454545' validTo: today month previous.
+	! !
+!CashierTest methodsFor: 'as yet unclassified' stamp: 'FG 6/7/2022 21:07:45' prior: 50478364!
+test04CheckOutCartWithItemsReturnsATicketWithTotal
+
+	| cart cashier total |
+	
+	cart := Cart with: priceList.
+	cart add: 1 of: book1.
+	cart add: 2 of: book2.
+	cashier := Cashier using: sales.
+	 	
+	total := cashier checkOut: cart payingWith: validCreditCard on: today.
+	
+	self assert: cart total equals: total.! !
+!CashierTest methodsFor: 'as yet unclassified' stamp: 'FG 6/7/2022 21:07:45' prior: 50478394!
+test03CheckOutCartWithItemsAddElementToSalesList
+
+	| cart cashier |
+	
+	cart := Cart with: priceList.
+	cart add: 1 of: book1.
+	cart add: 2 of: book2.
+	cashier := Cashier using: sales.
+	 	
+	cashier checkOut: cart payingWith: validCreditCard on: today.
+	
+	self deny: sales isEmpty.! !
+!CashierTest methodsFor: 'test' stamp: 'FG 6/7/2022 21:08:09'!
+test04CheckOutCartWithItemsReturnsTotal
+
+	| cart cashier total |
+	
+	cart := Cart with: priceList.
+	cart add: 1 of: book1.
+	cart add: 2 of: book2.
+	cashier := Cashier using: sales.
+	 	
+	total := cashier checkOut: cart payingWith: validCreditCard on: today.
+	
+	self assert: cart total equals: total.! !
+
+!methodRemoval: CashierTest #test04CheckOutCartWithItemsReturnsATicketWithTotal stamp: 'FG 6/7/2022 21:08:09'!
+test04CheckOutCartWithItemsReturnsATicketWithTotal
+
+	| cart cashier total |
+	
+	cart := Cart with: priceList.
+	cart add: 1 of: book1.
+	cart add: 2 of: book2.
+	cashier := Cashier using: sales.
+	 	
+	total := cashier checkOut: cart payingWith: validCreditCard on: today.
+	
+	self assert: cart total equals: total.!
+
+----SNAPSHOT----(7 June 2022 22:46:03) CuisUniversity-5096.image priorSource: 4557982!
