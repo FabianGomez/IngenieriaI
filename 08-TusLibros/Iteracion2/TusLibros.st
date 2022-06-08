@@ -96,39 +96,41 @@ setUp
 
 !classDefinition: #CashierTest category: 'TusLibros'!
 TestCase subclass: #CashierTest
-	instanceVariableNames: 'book1 book2 priceList sales validCreditCard expiredCreditCard today'
+	instanceVariableNames: 'book1 book2 priceList sales validCreditCard expiredCreditCard today merchantProcessor'
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'TusLibros'!
 
-!CashierTest methodsFor: 'test' stamp: 'FF 6/7/2022 18:10:30'!
+!CashierTest methodsFor: 'test' stamp: 'FF 6/8/2022 18:45:52'!
 test01CannotCheckOutEmptyCart
 
 	| cart cashier |
-	cart := Cart with: OrderedCollection new.
-	cashier := Cashier using: sales.
+	cart := Cart with: priceList .
+	cashier := Cashier using: sales debitProcessor: merchantProcessor .
 	
 	self should: [cashier checkOut: cart payingWith: validCreditCard on: today] 
 	raise: Error - MessageNotUnderstood 
 	withExceptionDo: [:anError | self assert: Cashier cannotCheckOutAnEmptyCart equals: anError messageText .
 			self assert: sales isEmpty.
+			self assert: 0 equals: merchantProcessor answeredCalls.
 		].! !
 
-!CashierTest methodsFor: 'test' stamp: 'FG 6/7/2022 21:07:36'!
+!CashierTest methodsFor: 'test' stamp: 'FF 6/8/2022 18:42:17'!
 test02CannotCheckOutCartProvidingAnExpiredCreditCard
-
 	| cart cashier |
+	
 	cart := Cart with: priceList .
 	cart add: 1 of: book1. 
-	cashier := Cashier using: sales.
+	cashier := Cashier using: sales debitProcessor: merchantProcessor .
 	
 	self should: [cashier checkOut: cart payingWith: expiredCreditCard on: today] 
 	raise: Error - MessageNotUnderstood 
 	withExceptionDo: [:anError |  self assert: Cashier cannotPayWithExpiredCreditCard equals: anError messageText .
 			self assert: sales isEmpty .
+			self assert: 0 equals: merchantProcessor answeredCalls.
 		].! !
 
-!CashierTest methodsFor: 'test' stamp: 'FG 6/7/2022 21:07:45'!
+!CashierTest methodsFor: 'test' stamp: 'FF 6/8/2022 18:47:13'!
 test03CheckOutCartWithItemsAddElementToSalesList
 
 	| cart cashier |
@@ -136,13 +138,13 @@ test03CheckOutCartWithItemsAddElementToSalesList
 	cart := Cart with: priceList.
 	cart add: 1 of: book1.
 	cart add: 2 of: book2.
-	cashier := Cashier using: sales.
+	cashier := Cashier using: sales debitProcessor: merchantProcessor .
 	 	
 	cashier checkOut: cart payingWith: validCreditCard on: today.
-	
+		self assert: 1 equals: merchantProcessor answeredCalls.
 	self deny: sales isEmpty.! !
 
-!CashierTest methodsFor: 'test' stamp: 'FG 6/7/2022 21:08:09'!
+!CashierTest methodsFor: 'test' stamp: 'FF 6/8/2022 18:43:38'!
 test04CheckOutCartWithItemsReturnsTotal
 
 	| cart cashier total |
@@ -150,14 +152,51 @@ test04CheckOutCartWithItemsReturnsTotal
 	cart := Cart with: priceList.
 	cart add: 1 of: book1.
 	cart add: 2 of: book2.
-	cashier := Cashier using: sales.
-	 	
+	cashier := Cashier using: sales debitProcessor: merchantProcessor .
+	
 	total := cashier checkOut: cart payingWith: validCreditCard on: today.
 	
-	self assert: cart total equals: total.! !
+	self assert: cart total equals: total.
+	self assert: 1 equals: merchantProcessor answeredCalls.! !
+
+!CashierTest methodsFor: 'test' stamp: 'FF 6/8/2022 18:47:24'!
+test05CannotCheckOutCartProvidingStolenCreditCard
+
+	| cart cashier |
+	
+	cart := Cart with: priceList.
+	cart add: 1 of: book1.
+	cart add: 2 of: book2.
+	merchantProcessor simulateStolenCreditCard.
+	cashier := Cashier using: sales debitProcessor: merchantProcessor.
+	
+	self should: [cashier checkOut: cart payingWith: validCreditCard on: today] 
+	raise: Error - MessageNotUnderstood 
+	withExceptionDo: [:anError |  self assert: MerchantProcessorSimulator cannotPayWithStolenCreditCard equals: anError messageText .
+			self assert: sales isEmpty .
+			self assert: 1 equals: merchantProcessor answeredCalls.
+		].! !
+
+!CashierTest methodsFor: 'test' stamp: 'FF 6/8/2022 18:47:34'!
+test06CannotCheckOutCartProvidingCreditCardWithoutEnoughLimit
+
+	| cart cashier |
+	
+	cart := Cart with: priceList.
+	cart add: 1 of: book1.
+	cart add: 2 of: book2.
+	merchantProcessor simulateCreditCardWithoutEnoughLimit.
+	cashier := Cashier using: sales debitProcessor: merchantProcessor.
+	
+	self should: [cashier checkOut: cart payingWith: validCreditCard on: today] 
+	raise: Error - MessageNotUnderstood 
+	withExceptionDo: [:anError |  self assert: MerchantProcessorSimulator cannotPayWithCreditCardWithoutEnoughLimit equals: anError messageText .
+			self assert: sales isEmpty .
+			self assert: 1 equals: merchantProcessor answeredCalls.
+		].! !
 
 
-!CashierTest methodsFor: 'setUp' stamp: 'FG 6/7/2022 21:07:45'!
+!CashierTest methodsFor: 'setUp' stamp: 'FF 6/8/2022 18:05:38'!
 setUp
 
 	today := Date today.
@@ -172,7 +211,7 @@ setUp
 	
 	validCreditCard := CreditCard number: '4545454545454545' validTo: today month next.
 	expiredCreditCard := CreditCard number: '4545454545454545' validTo: today month previous.
-	! !
+	merchantProcessor := MerchantProcessorSimulator new.! !
 
 
 !classDefinition: #CreditCardTest category: 'TusLibros'!
@@ -210,8 +249,8 @@ test02CardCannotBeCreatedWithInvalidNumberCharacters
 		self assert: card isNil.
 		]! !
 
-!CreditCardTest methodsFor: 'test' stamp: 'FG 6/7/2022 20:57:31'!
-test03CardCannotBeCreatedWithValidToIsNotAMonth
+!CreditCardTest methodsFor: 'test' stamp: 'FF 6/8/2022 17:40:16'!
+test03CardCannotBeCreatedWhenValidToIsNotAMonth
 	|card|
 
 	self should: [card := CreditCard number: '4251236587945120' validTo: '']
@@ -279,6 +318,14 @@ add: aQuantity of: aBook
 	self assertProductExistOnPriceList: aBook.
 	books add: aBook withOccurrences: aQuantity .! !
 
+!Cart methodsFor: 'adding' stamp: 'FG 6/7/2022 20:25:52'!
+assertProductExistOnPriceList: aProductToBeAdded 
+	(priceList includesKey: aProductToBeAdded) ifFalse: [^ self error: self class cannotAddAnUncataloguedBook].! !
+
+!Cart methodsFor: 'adding' stamp: 'FG 6/7/2022 20:24:42'!
+assertQuantityIsPositive: quantityOfBookToBeAdded 
+	(quantityOfBookToBeAdded <=0) ifTrue: [^self error: self class cannotAddBookWithNonPositiveQuantity ].! !
+
 
 !Cart methodsFor: 'accessing' stamp: 'FF 6/4/2022 10:27:03'!
 books
@@ -290,14 +337,6 @@ total
 	^ books sum: [:aBook | priceList at: aBook] ifEmpty: [^0].
 	! !
 
-
-!Cart methodsFor: 'assertions' stamp: 'FG 6/7/2022 20:25:52'!
-assertProductExistOnPriceList: aProductToBeAdded 
-	(priceList includesKey: aProductToBeAdded) ifFalse: [^ self error: self class cannotAddAnUncataloguedBook].! !
-
-!Cart methodsFor: 'assertions' stamp: 'FG 6/7/2022 20:24:42'!
-assertQuantityIsPositive: quantityOfBookToBeAdded 
-	(quantityOfBookToBeAdded <=0) ifTrue: [^self error: self class cannotAddBookWithNonPositiveQuantity ].! !
 
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
@@ -323,11 +362,10 @@ with: aPriceList
 
 !classDefinition: #Cashier category: 'TusLibros'!
 Object subclass: #Cashier
-	instanceVariableNames: 'salesList'
+	instanceVariableNames: 'salesList merchantProcessor'
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'TusLibros'!
-
 
 !Cashier methodsFor: 'checking out' stamp: 'FF 6/7/2022 18:15:25'!
 assertCartIsNotEmpty: aCart
@@ -340,17 +378,25 @@ assertCreditCardIsNotExpired: aCreditCard on: anExpirationDate
 	(aCreditCard isExpiredOn: anExpirationDate) ifTrue:[^self error: self class cannotPayWithExpiredCreditCard].
 ! !
 
-!Cashier methodsFor: 'checking out' stamp: 'FF 6/7/2022 18:54:19'!
+!Cashier methodsFor: 'checking out' stamp: 'FF 6/8/2022 18:20:54'!
 checkOut: aCart payingWith: aCreditCard on: aDateOfSale
+
+	| totalToDebit |
 	self assertCartIsNotEmpty: aCart.
 	self assertCreditCardIsNotExpired: aCreditCard on: aDateOfSale .
+	
+	totalToDebit := aCart total.
+	merchantProcessor debit: totalToDebit from: aCreditCard .
+	
 	salesList add: aCart.
-	^aCart total.! !
+	
+	^totalToDebit.! !
 
 
-!Cashier methodsFor: 'initialization' stamp: 'FF 6/7/2022 17:11:13'!
-initializeUsing: aSalesList 
-	salesList := aSalesList.! !
+!Cashier methodsFor: 'initialization' stamp: 'FF 6/8/2022 18:02:09'!
+using: aSalesList debitProcessor: aMerchantProcessor
+	salesList := aSalesList .
+	merchantProcessor := aMerchantProcessor.! !
 
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
@@ -370,6 +416,10 @@ cannotPayWithExpiredCreditCard
 !Cashier class methodsFor: 'instance creation' stamp: 'FF 6/7/2022 17:10:54'!
 using: aSalesList
 	^self new initializeUsing: aSalesList. ! !
+
+!Cashier class methodsFor: 'instance creation' stamp: 'FF 6/8/2022 18:01:18'!
+using: aSalesList debitProcessor: aMerchantProcessor
+	^self new using: aSalesList debitProcessor: aMerchantProcessor ! !
 
 !Cashier class methodsFor: 'instance creation' stamp: 'FF 6/7/2022 17:21:05'!
 with: anOrderedCollection 
@@ -421,3 +471,49 @@ invalidCreditCardNumber
 invalidExpirationDate
 	
 	^'The credit card expiration date is invalid. You have to provide a Month of the Year'! !
+
+
+!classDefinition: #MerchantProcessorSimulator category: 'TusLibros'!
+Object subclass: #MerchantProcessorSimulator
+	instanceVariableNames: 'actionToSimulate answeredCalls'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'TusLibros'!
+
+!MerchantProcessorSimulator methodsFor: 'simulation' stamp: 'FF 6/8/2022 18:35:08'!
+simulateCreditCardWithoutEnoughLimit
+	actionToSimulate := [self error: self class cannotPayWithCreditCardWithoutEnoughLimit].! !
+
+!MerchantProcessorSimulator methodsFor: 'simulation' stamp: 'FF 6/8/2022 18:17:25'!
+simulateStolenCreditCard
+	actionToSimulate := [self error: self class cannotPayWithStolenCreditCard].! !
+
+
+!MerchantProcessorSimulator methodsFor: 'action' stamp: 'FF 6/8/2022 18:45:00'!
+debit: anAmount from: aCreditCard 
+	answeredCalls := answeredCalls + 1.
+	actionToSimulate value.! !
+
+
+!MerchantProcessorSimulator methodsFor: 'testing' stamp: 'FF 6/8/2022 18:44:17'!
+answeredCalls
+	^answeredCalls.! !
+
+
+!MerchantProcessorSimulator methodsFor: 'initialization' stamp: 'FF 6/8/2022 18:46:35'!
+initialize
+	answeredCalls := 0.! !
+
+"-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
+
+!classDefinition: 'MerchantProcessorSimulator class' category: 'TusLibros'!
+MerchantProcessorSimulator class
+	instanceVariableNames: ''!
+
+!MerchantProcessorSimulator class methodsFor: 'error messages' stamp: 'FF 6/8/2022 18:36:48'!
+cannotPayWithCreditCardWithoutEnoughLimit
+	^'The credit card limit is not enough'.! !
+
+!MerchantProcessorSimulator class methodsFor: 'error messages' stamp: 'FF 6/8/2022 18:24:07'!
+cannotPayWithStolenCreditCard
+	^'The credit card has been notified as stolen'.! !
