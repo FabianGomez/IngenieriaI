@@ -14463,3 +14463,1680 @@ PASSED!
 ----SNAPSHOT----(12 June 2022 12:50:42) CuisUniversity-5096.image priorSource: 5128974!
 
 ----SNAPSHOT----(12 June 2022 12:51:16) CuisUniversity-5096.image priorSource: 5150412!
+!Cashier methodsFor: 'checking out' stamp: 'FF 6/12/2022 13:55:22' prior: 50488932!
+assertCreditCardIsNotExpired: aCreditCard on: anExpirationDate
+	(aCreditCard isExpiredOn: anExpirationDate) ifTrue:[^self error: self class cannotPayWithExpiredCreditCard].
+! !
+!InterfaceFacade methodsFor: 'cart' stamp: 'FF 6/12/2022 13:57:27' prior: 50492511!
+addToCart: aCartId book: aBookISBN quantity: aQuantityToAdd
+	| cartFound |
+	cartFound := self findCart: aCartId.
+	self assertCartIsNotExpired: aCartId.
+	self updateLastTimeUsed: aCartId.
+	cartFound add: aQuantityToAdd of: aBookISBN.
+	! !
+
+!testRun: #CartTest #test01CartIsEmptyWhenCreated stamp: 'FF 6/12/2022 14:01:38'!
+PASSED!
+
+!testRun: #CartTest #test02EmptyCartAfterAddingABookIsNotEmpty stamp: 'FF 6/12/2022 14:01:38'!
+PASSED!
+
+!testRun: #CartTest #test03CannotAddBooksToCartWithNonPositiveQuantity stamp: 'FF 6/12/2022 14:01:38'!
+PASSED!
+
+!testRun: #CartTest #test04CannotAddAnUncataloguedBook stamp: 'FF 6/12/2022 14:01:38'!
+PASSED!
+
+!testRun: #CartTest #test05CartReturnsEmptyBookListWhenCreated stamp: 'FF 6/12/2022 14:01:38'!
+PASSED!
+
+!testRun: #CartTest #test06CartBookListIncludesBookAfterAdding stamp: 'FF 6/12/2022 14:01:38'!
+PASSED!
+
+!testRun: #CartTest #test07EmptyCartTotalIsZero stamp: 'FF 6/12/2022 14:01:38'!
+PASSED!
+
+!testRun: #CartTest #test08CartWithItemsTotalIsTheSumOfItemPrices stamp: 'FF 6/12/2022 14:01:38'!
+PASSED!
+
+!testRun: #CashierTest #test01CannotCheckOutEmptyCart stamp: 'FF 6/12/2022 14:01:38'!
+PASSED!
+
+!testRun: #CashierTest #test02CannotCheckOutCartProvidingAnExpiredCreditCard stamp: 'FF 6/12/2022 14:01:38'!
+PASSED!
+
+!testRun: #CashierTest #test03CheckOutCartWithItemsAddElementToSalesList stamp: 'FF 6/12/2022 14:01:38'!
+PASSED!
+
+!testRun: #CashierTest #test04CheckOutCartWithItemsReturnsTotal stamp: 'FF 6/12/2022 14:01:38'!
+PASSED!
+
+!testRun: #CashierTest #test05CannotCheckOutCartProvidingStolenCreditCard stamp: 'FF 6/12/2022 14:01:38'!
+PASSED!
+
+!testRun: #CashierTest #test06CannotCheckOutCartProvidingCreditCardWithoutEnoughLimit stamp: 'FF 6/12/2022 14:01:38'!
+PASSED!
+
+!testRun: #CreditCardTest #test01CardCannotBeCreatedWithInvalidNumberLenght stamp: 'FF 6/12/2022 14:01:38'!
+PASSED!
+
+!testRun: #CreditCardTest #test02CardCannotBeCreatedWithInvalidNumberCharacters stamp: 'FF 6/12/2022 14:01:38'!
+PASSED!
+
+!testRun: #CreditCardTest #test03CardCannotBeCreatedWhenValidToIsNotAMonth stamp: 'FF 6/12/2022 14:01:38'!
+PASSED!
+
+!testRun: #CreditCardTest #test04CreditCardWithExpirationDateBeforeTodayShouldBeExpired stamp: 'FF 6/12/2022 14:01:38'!
+PASSED!
+
+!testRun: #CreditCardTest #test05CreditCardWithExpirationDateAfterTodayShouldNotBeExpired stamp: 'FF 6/12/2022 14:01:38'!
+PASSED!
+
+!testRun: #CreditCardTest #test06CreditCardExpirationMonthIsIncludedOnTheExpirationPeriod stamp: 'FF 6/12/2022 14:01:38'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test01ValidClientCanCreateACart stamp: 'FF 6/12/2022 14:01:38'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test02InvalidClientCannotCreateACart stamp: 'FF 6/12/2022 14:01:38'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test03CreateCartReturnsUniqueCartId stamp: 'FF 6/12/2022 14:01:38'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test04ListCartOfInvalidCartIdThrowsError stamp: 'FF 6/12/2022 14:01:38'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test05ListCartIncludesAddedItemsAndItsQuantity stamp: 'FF 6/12/2022 14:01:38'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test06AddToCartWithInvalidCartIdThrowsError stamp: 'FF 6/12/2022 14:01:38'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test07CheckOutCartReturnsTransactionId stamp: 'FF 6/12/2022 14:01:38'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test08CheckOutCartOfInvalidCartIdThrowsError stamp: 'FF 6/12/2022 14:01:38'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test09CheckOutCartWithInvalidCreditCardThrowsError stamp: 'FF 6/12/2022 14:01:38'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test10ListPurchasesReturnsClientTransactions stamp: 'FF 6/12/2022 14:01:38'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test11InvalidClientCannotListAnyPurchases stamp: 'FF 6/12/2022 14:01:38'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test12CheckOutReturnsUniqueTransactionId stamp: 'FF 6/12/2022 14:01:38'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test13CartIdIsInvalidAfterCheckOut stamp: 'FF 6/12/2022 14:01:38'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test14ListPurchasesAreDifferentBetweenTwoDifferentClients stamp: 'FF 6/12/2022 14:01:38'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test15CannotCheckOutACartAfterTimeExceeded stamp: 'FF 6/12/2022 14:01:38'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test16CannotAddToCartAfterTimeExceeded stamp: 'FF 6/12/2022 14:01:38'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test17CannotListACartAfterTimeExceeded stamp: 'FF 6/12/2022 14:01:38'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test18AddToCartRestartLastTimeUsed stamp: 'FF 6/12/2022 14:01:38'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test19ListCartRestartLastTimeUsed stamp: 'FF 6/12/2022 14:01:38'!
+PASSED!
+!InterfaceFacade methodsFor: 'cart' stamp: 'FF 6/12/2022 14:01:45' prior: 50492197!
+assertCartIsNotExpired: aCartId
+	|  lastTimeUsed now |
+	now := timer now.
+	lastTimeUsed := cartsLastTimeUsed at: aCartId.
+	((now - lastTimeUsed) >= (Duration minutes: 30) ) 
+	ifTrue: [
+		self deleteCart: aCartId .
+		self error: self class cartIsExpired.
+	 ].
+	! !
+
+!testRun: #InterfaceFacadeTest #test01ValidClientCanCreateACart stamp: 'FF 6/12/2022 14:01:46'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test02InvalidClientCannotCreateACart stamp: 'FF 6/12/2022 14:01:46'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test03CreateCartReturnsUniqueCartId stamp: 'FF 6/12/2022 14:01:46'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test04ListCartOfInvalidCartIdThrowsError stamp: 'FF 6/12/2022 14:01:46'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test05ListCartIncludesAddedItemsAndItsQuantity stamp: 'FF 6/12/2022 14:01:46'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test06AddToCartWithInvalidCartIdThrowsError stamp: 'FF 6/12/2022 14:01:46'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test07CheckOutCartReturnsTransactionId stamp: 'FF 6/12/2022 14:01:46'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test08CheckOutCartOfInvalidCartIdThrowsError stamp: 'FF 6/12/2022 14:01:46'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test09CheckOutCartWithInvalidCreditCardThrowsError stamp: 'FF 6/12/2022 14:01:46'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test10ListPurchasesReturnsClientTransactions stamp: 'FF 6/12/2022 14:01:46'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test11InvalidClientCannotListAnyPurchases stamp: 'FF 6/12/2022 14:01:46'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test12CheckOutReturnsUniqueTransactionId stamp: 'FF 6/12/2022 14:01:46'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test13CartIdIsInvalidAfterCheckOut stamp: 'FF 6/12/2022 14:01:46'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test14ListPurchasesAreDifferentBetweenTwoDifferentClients stamp: 'FF 6/12/2022 14:01:46'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test15CannotCheckOutACartAfterTimeExceeded stamp: 'FF 6/12/2022 14:01:46'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test16CannotAddToCartAfterTimeExceeded stamp: 'FF 6/12/2022 14:01:46'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test17CannotListACartAfterTimeExceeded stamp: 'FF 6/12/2022 14:01:46'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test18AddToCartRestartLastTimeUsed stamp: 'FF 6/12/2022 14:01:46'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test19ListCartRestartLastTimeUsed stamp: 'FF 6/12/2022 14:01:46'!
+PASSED!
+!InterfaceFacade methodsFor: 'cart' stamp: 'FF 6/12/2022 14:01:57' prior: 50492764!
+assertCartIsNotExpired: aCartId
+	|  lastTimeUsed now |
+	now := timer now.
+	lastTimeUsed := cartsLastTimeUsed at: aCartId.
+	now - lastTimeUsed >= (Duration minutes: 30)  
+	ifTrue: [
+		self deleteCart: aCartId .
+		self error: self class cartIsExpired.
+	 ].
+	! !
+
+!testRun: #InterfaceFacadeTest #test01ValidClientCanCreateACart stamp: 'FF 6/12/2022 14:01:58'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test02InvalidClientCannotCreateACart stamp: 'FF 6/12/2022 14:01:58'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test03CreateCartReturnsUniqueCartId stamp: 'FF 6/12/2022 14:01:58'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test04ListCartOfInvalidCartIdThrowsError stamp: 'FF 6/12/2022 14:01:58'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test05ListCartIncludesAddedItemsAndItsQuantity stamp: 'FF 6/12/2022 14:01:58'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test06AddToCartWithInvalidCartIdThrowsError stamp: 'FF 6/12/2022 14:01:58'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test07CheckOutCartReturnsTransactionId stamp: 'FF 6/12/2022 14:01:58'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test08CheckOutCartOfInvalidCartIdThrowsError stamp: 'FF 6/12/2022 14:01:59'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test09CheckOutCartWithInvalidCreditCardThrowsError stamp: 'FF 6/12/2022 14:01:59'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test10ListPurchasesReturnsClientTransactions stamp: 'FF 6/12/2022 14:01:59'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test11InvalidClientCannotListAnyPurchases stamp: 'FF 6/12/2022 14:01:59'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test12CheckOutReturnsUniqueTransactionId stamp: 'FF 6/12/2022 14:01:59'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test13CartIdIsInvalidAfterCheckOut stamp: 'FF 6/12/2022 14:01:59'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test14ListPurchasesAreDifferentBetweenTwoDifferentClients stamp: 'FF 6/12/2022 14:01:59'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test15CannotCheckOutACartAfterTimeExceeded stamp: 'FF 6/12/2022 14:01:59'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test16CannotAddToCartAfterTimeExceeded stamp: 'FF 6/12/2022 14:01:59'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test17CannotListACartAfterTimeExceeded stamp: 'FF 6/12/2022 14:01:59'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test18AddToCartRestartLastTimeUsed stamp: 'FF 6/12/2022 14:01:59'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test19ListCartRestartLastTimeUsed stamp: 'FF 6/12/2022 14:01:59'!
+PASSED!
+
+!testRun: #CartTest #test01CartIsEmptyWhenCreated stamp: 'FF 6/12/2022 14:02:03'!
+PASSED!
+
+!testRun: #CartTest #test02EmptyCartAfterAddingABookIsNotEmpty stamp: 'FF 6/12/2022 14:02:03'!
+PASSED!
+
+!testRun: #CartTest #test03CannotAddBooksToCartWithNonPositiveQuantity stamp: 'FF 6/12/2022 14:02:03'!
+PASSED!
+
+!testRun: #CartTest #test04CannotAddAnUncataloguedBook stamp: 'FF 6/12/2022 14:02:03'!
+PASSED!
+
+!testRun: #CartTest #test05CartReturnsEmptyBookListWhenCreated stamp: 'FF 6/12/2022 14:02:03'!
+PASSED!
+
+!testRun: #CartTest #test06CartBookListIncludesBookAfterAdding stamp: 'FF 6/12/2022 14:02:03'!
+PASSED!
+
+!testRun: #CartTest #test07EmptyCartTotalIsZero stamp: 'FF 6/12/2022 14:02:03'!
+PASSED!
+
+!testRun: #CartTest #test08CartWithItemsTotalIsTheSumOfItemPrices stamp: 'FF 6/12/2022 14:02:03'!
+PASSED!
+
+!testRun: #CashierTest #test01CannotCheckOutEmptyCart stamp: 'FF 6/12/2022 14:02:03'!
+PASSED!
+
+!testRun: #CashierTest #test02CannotCheckOutCartProvidingAnExpiredCreditCard stamp: 'FF 6/12/2022 14:02:03'!
+PASSED!
+
+!testRun: #CashierTest #test03CheckOutCartWithItemsAddElementToSalesList stamp: 'FF 6/12/2022 14:02:03'!
+PASSED!
+
+!testRun: #CashierTest #test04CheckOutCartWithItemsReturnsTotal stamp: 'FF 6/12/2022 14:02:03'!
+PASSED!
+
+!testRun: #CashierTest #test05CannotCheckOutCartProvidingStolenCreditCard stamp: 'FF 6/12/2022 14:02:03'!
+PASSED!
+
+!testRun: #CashierTest #test06CannotCheckOutCartProvidingCreditCardWithoutEnoughLimit stamp: 'FF 6/12/2022 14:02:03'!
+PASSED!
+
+!testRun: #CreditCardTest #test01CardCannotBeCreatedWithInvalidNumberLenght stamp: 'FF 6/12/2022 14:02:03'!
+PASSED!
+
+!testRun: #CreditCardTest #test02CardCannotBeCreatedWithInvalidNumberCharacters stamp: 'FF 6/12/2022 14:02:03'!
+PASSED!
+
+!testRun: #CreditCardTest #test03CardCannotBeCreatedWhenValidToIsNotAMonth stamp: 'FF 6/12/2022 14:02:03'!
+PASSED!
+
+!testRun: #CreditCardTest #test04CreditCardWithExpirationDateBeforeTodayShouldBeExpired stamp: 'FF 6/12/2022 14:02:03'!
+PASSED!
+
+!testRun: #CreditCardTest #test05CreditCardWithExpirationDateAfterTodayShouldNotBeExpired stamp: 'FF 6/12/2022 14:02:03'!
+PASSED!
+
+!testRun: #CreditCardTest #test06CreditCardExpirationMonthIsIncludedOnTheExpirationPeriod stamp: 'FF 6/12/2022 14:02:03'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test01ValidClientCanCreateACart stamp: 'FF 6/12/2022 14:02:03'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test02InvalidClientCannotCreateACart stamp: 'FF 6/12/2022 14:02:03'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test03CreateCartReturnsUniqueCartId stamp: 'FF 6/12/2022 14:02:03'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test04ListCartOfInvalidCartIdThrowsError stamp: 'FF 6/12/2022 14:02:03'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test05ListCartIncludesAddedItemsAndItsQuantity stamp: 'FF 6/12/2022 14:02:03'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test06AddToCartWithInvalidCartIdThrowsError stamp: 'FF 6/12/2022 14:02:03'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test07CheckOutCartReturnsTransactionId stamp: 'FF 6/12/2022 14:02:03'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test08CheckOutCartOfInvalidCartIdThrowsError stamp: 'FF 6/12/2022 14:02:03'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test09CheckOutCartWithInvalidCreditCardThrowsError stamp: 'FF 6/12/2022 14:02:03'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test10ListPurchasesReturnsClientTransactions stamp: 'FF 6/12/2022 14:02:03'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test11InvalidClientCannotListAnyPurchases stamp: 'FF 6/12/2022 14:02:03'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test12CheckOutReturnsUniqueTransactionId stamp: 'FF 6/12/2022 14:02:03'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test13CartIdIsInvalidAfterCheckOut stamp: 'FF 6/12/2022 14:02:03'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test14ListPurchasesAreDifferentBetweenTwoDifferentClients stamp: 'FF 6/12/2022 14:02:03'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test15CannotCheckOutACartAfterTimeExceeded stamp: 'FF 6/12/2022 14:02:03'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test16CannotAddToCartAfterTimeExceeded stamp: 'FF 6/12/2022 14:02:03'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test17CannotListACartAfterTimeExceeded stamp: 'FF 6/12/2022 14:02:03'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test18AddToCartRestartLastTimeUsed stamp: 'FF 6/12/2022 14:02:03'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test19ListCartRestartLastTimeUsed stamp: 'FF 6/12/2022 14:02:03'!
+PASSED!
+!InterfaceFacade methodsFor: 'cart' stamp: 'FF 6/12/2022 14:02:22' prior: 50492843!
+assertCartIsNotExpired: aCartId
+	|  lastTimeUsed now |
+	now := timer now.
+	lastTimeUsed := cartsLastTimeUsed at: aCartId.
+	now - lastTimeUsed >= (Duration minutes: 30) ifTrue: [
+		self deleteCart: aCartId .
+		self error: self class cartIsExpired.
+	 ].
+	! !
+!InterfaceFacade methodsFor: 'cart' stamp: 'FF 6/12/2022 14:05:35' prior: 50491467!
+createCartFor: aClientId signInWith: aPassword 
+	| newCart |
+	
+	self assertClient: aClientId canAuthenticateUsing: aPassword.
+	
+	newCart := Cart from: aClientId with: priceList.
+	lastCartId := lastCartId + 1.
+	cartsLastTimeUsed at: lastCartId put: timer now.
+	carts at: lastCartId put: newCart. 
+	^lastCartId.! !
+
+!testRun: #CartTest #test01CartIsEmptyWhenCreated stamp: 'FF 6/12/2022 14:05:38'!
+PASSED!
+
+!testRun: #CartTest #test02EmptyCartAfterAddingABookIsNotEmpty stamp: 'FF 6/12/2022 14:05:38'!
+PASSED!
+
+!testRun: #CartTest #test03CannotAddBooksToCartWithNonPositiveQuantity stamp: 'FF 6/12/2022 14:05:38'!
+PASSED!
+
+!testRun: #CartTest #test04CannotAddAnUncataloguedBook stamp: 'FF 6/12/2022 14:05:38'!
+PASSED!
+
+!testRun: #CartTest #test05CartReturnsEmptyBookListWhenCreated stamp: 'FF 6/12/2022 14:05:38'!
+PASSED!
+
+!testRun: #CartTest #test06CartBookListIncludesBookAfterAdding stamp: 'FF 6/12/2022 14:05:38'!
+PASSED!
+
+!testRun: #CartTest #test07EmptyCartTotalIsZero stamp: 'FF 6/12/2022 14:05:38'!
+PASSED!
+
+!testRun: #CartTest #test08CartWithItemsTotalIsTheSumOfItemPrices stamp: 'FF 6/12/2022 14:05:38'!
+PASSED!
+
+!testRun: #CashierTest #test01CannotCheckOutEmptyCart stamp: 'FF 6/12/2022 14:05:38'!
+PASSED!
+
+!testRun: #CashierTest #test02CannotCheckOutCartProvidingAnExpiredCreditCard stamp: 'FF 6/12/2022 14:05:38'!
+PASSED!
+
+!testRun: #CashierTest #test03CheckOutCartWithItemsAddElementToSalesList stamp: 'FF 6/12/2022 14:05:38'!
+PASSED!
+
+!testRun: #CashierTest #test04CheckOutCartWithItemsReturnsTotal stamp: 'FF 6/12/2022 14:05:38'!
+PASSED!
+
+!testRun: #CashierTest #test05CannotCheckOutCartProvidingStolenCreditCard stamp: 'FF 6/12/2022 14:05:38'!
+PASSED!
+
+!testRun: #CashierTest #test06CannotCheckOutCartProvidingCreditCardWithoutEnoughLimit stamp: 'FF 6/12/2022 14:05:38'!
+PASSED!
+
+!testRun: #CreditCardTest #test01CardCannotBeCreatedWithInvalidNumberLenght stamp: 'FF 6/12/2022 14:05:38'!
+PASSED!
+
+!testRun: #CreditCardTest #test02CardCannotBeCreatedWithInvalidNumberCharacters stamp: 'FF 6/12/2022 14:05:38'!
+PASSED!
+
+!testRun: #CreditCardTest #test03CardCannotBeCreatedWhenValidToIsNotAMonth stamp: 'FF 6/12/2022 14:05:38'!
+PASSED!
+
+!testRun: #CreditCardTest #test04CreditCardWithExpirationDateBeforeTodayShouldBeExpired stamp: 'FF 6/12/2022 14:05:38'!
+PASSED!
+
+!testRun: #CreditCardTest #test05CreditCardWithExpirationDateAfterTodayShouldNotBeExpired stamp: 'FF 6/12/2022 14:05:38'!
+PASSED!
+
+!testRun: #CreditCardTest #test06CreditCardExpirationMonthIsIncludedOnTheExpirationPeriod stamp: 'FF 6/12/2022 14:05:38'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test01ValidClientCanCreateACart stamp: 'FF 6/12/2022 14:05:38'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test02InvalidClientCannotCreateACart stamp: 'FF 6/12/2022 14:05:38'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test03CreateCartReturnsUniqueCartId stamp: 'FF 6/12/2022 14:05:38'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test04ListCartOfInvalidCartIdThrowsError stamp: 'FF 6/12/2022 14:05:38'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test05ListCartIncludesAddedItemsAndItsQuantity stamp: 'FF 6/12/2022 14:05:38'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test06AddToCartWithInvalidCartIdThrowsError stamp: 'FF 6/12/2022 14:05:38'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test07CheckOutCartReturnsTransactionId stamp: 'FF 6/12/2022 14:05:38'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test08CheckOutCartOfInvalidCartIdThrowsError stamp: 'FF 6/12/2022 14:05:38'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test09CheckOutCartWithInvalidCreditCardThrowsError stamp: 'FF 6/12/2022 14:05:38'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test10ListPurchasesReturnsClientTransactions stamp: 'FF 6/12/2022 14:05:38'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test11InvalidClientCannotListAnyPurchases stamp: 'FF 6/12/2022 14:05:38'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test12CheckOutReturnsUniqueTransactionId stamp: 'FF 6/12/2022 14:05:38'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test13CartIdIsInvalidAfterCheckOut stamp: 'FF 6/12/2022 14:05:38'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test14ListPurchasesAreDifferentBetweenTwoDifferentClients stamp: 'FF 6/12/2022 14:05:38'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test15CannotCheckOutACartAfterTimeExceeded stamp: 'FF 6/12/2022 14:05:38'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test16CannotAddToCartAfterTimeExceeded stamp: 'FF 6/12/2022 14:05:38'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test17CannotListACartAfterTimeExceeded stamp: 'FF 6/12/2022 14:05:38'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test18AddToCartRestartLastTimeUsed stamp: 'FF 6/12/2022 14:05:38'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test19ListCartRestartLastTimeUsed stamp: 'FF 6/12/2022 14:05:38'!
+PASSED!
+!InterfaceFacade methodsFor: 'cart' stamp: 'FF 6/12/2022 14:05:56' prior: 50493070!
+createCartFor: aClientId signInWith: aPassword 
+	| newCart |
+	
+	self assertClient: aClientId canAuthenticateUsing: aPassword.
+	
+	newCart := Cart from: aClientId with: priceList.
+	lastCartId := lastCartId + 1.
+	self updateLastTimeUsed: lastCartId .
+	carts at: lastCartId put: newCart. 
+	^lastCartId.! !
+
+!testRun: #CartTest #test01CartIsEmptyWhenCreated stamp: 'FF 6/12/2022 14:06:06'!
+PASSED!
+
+!testRun: #CartTest #test02EmptyCartAfterAddingABookIsNotEmpty stamp: 'FF 6/12/2022 14:06:06'!
+PASSED!
+
+!testRun: #CartTest #test03CannotAddBooksToCartWithNonPositiveQuantity stamp: 'FF 6/12/2022 14:06:06'!
+PASSED!
+
+!testRun: #CartTest #test04CannotAddAnUncataloguedBook stamp: 'FF 6/12/2022 14:06:07'!
+PASSED!
+
+!testRun: #CartTest #test05CartReturnsEmptyBookListWhenCreated stamp: 'FF 6/12/2022 14:06:07'!
+PASSED!
+
+!testRun: #CartTest #test06CartBookListIncludesBookAfterAdding stamp: 'FF 6/12/2022 14:06:07'!
+PASSED!
+
+!testRun: #CartTest #test07EmptyCartTotalIsZero stamp: 'FF 6/12/2022 14:06:07'!
+PASSED!
+
+!testRun: #CartTest #test08CartWithItemsTotalIsTheSumOfItemPrices stamp: 'FF 6/12/2022 14:06:07'!
+PASSED!
+
+!testRun: #CashierTest #test01CannotCheckOutEmptyCart stamp: 'FF 6/12/2022 14:06:07'!
+PASSED!
+
+!testRun: #CashierTest #test02CannotCheckOutCartProvidingAnExpiredCreditCard stamp: 'FF 6/12/2022 14:06:07'!
+PASSED!
+
+!testRun: #CashierTest #test03CheckOutCartWithItemsAddElementToSalesList stamp: 'FF 6/12/2022 14:06:07'!
+PASSED!
+
+!testRun: #CashierTest #test04CheckOutCartWithItemsReturnsTotal stamp: 'FF 6/12/2022 14:06:07'!
+PASSED!
+
+!testRun: #CashierTest #test05CannotCheckOutCartProvidingStolenCreditCard stamp: 'FF 6/12/2022 14:06:07'!
+PASSED!
+
+!testRun: #CashierTest #test06CannotCheckOutCartProvidingCreditCardWithoutEnoughLimit stamp: 'FF 6/12/2022 14:06:07'!
+PASSED!
+
+!testRun: #CreditCardTest #test01CardCannotBeCreatedWithInvalidNumberLenght stamp: 'FF 6/12/2022 14:06:07'!
+PASSED!
+
+!testRun: #CreditCardTest #test02CardCannotBeCreatedWithInvalidNumberCharacters stamp: 'FF 6/12/2022 14:06:07'!
+PASSED!
+
+!testRun: #CreditCardTest #test03CardCannotBeCreatedWhenValidToIsNotAMonth stamp: 'FF 6/12/2022 14:06:07'!
+PASSED!
+
+!testRun: #CreditCardTest #test04CreditCardWithExpirationDateBeforeTodayShouldBeExpired stamp: 'FF 6/12/2022 14:06:07'!
+PASSED!
+
+!testRun: #CreditCardTest #test05CreditCardWithExpirationDateAfterTodayShouldNotBeExpired stamp: 'FF 6/12/2022 14:06:07'!
+PASSED!
+
+!testRun: #CreditCardTest #test06CreditCardExpirationMonthIsIncludedOnTheExpirationPeriod stamp: 'FF 6/12/2022 14:06:07'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test01ValidClientCanCreateACart stamp: 'FF 6/12/2022 14:06:07'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test02InvalidClientCannotCreateACart stamp: 'FF 6/12/2022 14:06:07'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test03CreateCartReturnsUniqueCartId stamp: 'FF 6/12/2022 14:06:07'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test04ListCartOfInvalidCartIdThrowsError stamp: 'FF 6/12/2022 14:06:07'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test05ListCartIncludesAddedItemsAndItsQuantity stamp: 'FF 6/12/2022 14:06:07'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test06AddToCartWithInvalidCartIdThrowsError stamp: 'FF 6/12/2022 14:06:07'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test07CheckOutCartReturnsTransactionId stamp: 'FF 6/12/2022 14:06:07'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test08CheckOutCartOfInvalidCartIdThrowsError stamp: 'FF 6/12/2022 14:06:07'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test09CheckOutCartWithInvalidCreditCardThrowsError stamp: 'FF 6/12/2022 14:06:07'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test10ListPurchasesReturnsClientTransactions stamp: 'FF 6/12/2022 14:06:07'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test11InvalidClientCannotListAnyPurchases stamp: 'FF 6/12/2022 14:06:07'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test12CheckOutReturnsUniqueTransactionId stamp: 'FF 6/12/2022 14:06:07'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test13CartIdIsInvalidAfterCheckOut stamp: 'FF 6/12/2022 14:06:07'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test14ListPurchasesAreDifferentBetweenTwoDifferentClients stamp: 'FF 6/12/2022 14:06:07'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test15CannotCheckOutACartAfterTimeExceeded stamp: 'FF 6/12/2022 14:06:07'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test16CannotAddToCartAfterTimeExceeded stamp: 'FF 6/12/2022 14:06:07'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test17CannotListACartAfterTimeExceeded stamp: 'FF 6/12/2022 14:06:07'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test18AddToCartRestartLastTimeUsed stamp: 'FF 6/12/2022 14:06:07'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test19ListCartRestartLastTimeUsed stamp: 'FF 6/12/2022 14:06:07'!
+PASSED!
+!Cart methodsFor: 'accessing' stamp: 'FF 6/12/2022 14:18:26' prior: 50486962!
+books
+	^books copy.! !
+!Cashier methodsFor: 'checking out' stamp: 'FF 6/12/2022 14:20:19' prior: 50490794!
+checkOut: aCart payingWith: aCreditCard on: aDateOfSale
+
+	| ticket |
+	self assertCartIsNotEmpty: aCart.
+	self assertCreditCardIsNotExpired: aCreditCard on: aDateOfSale .
+	
+	merchantProcessor debit: aCart total from: aCreditCard .
+	ticket := aCart generateTicket.
+	salesList add: ticket.
+	
+	^ticket.! !
+!CreditCard methodsFor: 'testing' stamp: 'FF 6/12/2022 14:21:25'!
+expirationDate
+
+	^ Date year: expirationMonth yearNumber month: expirationMonth monthName day: expirationMonth daysInMonth! !
+!CreditCard methodsFor: 'testing' stamp: 'FF 6/12/2022 14:21:25' prior: 50488952!
+isExpiredOn: aDate 
+	| expirationDate |
+	expirationDate := self expirationDate.
+	^aDate > expirationDate.! !
+!CreditCard methodsFor: 'testing' stamp: 'FF 6/12/2022 14:21:41' prior: 50493393!
+isExpiredOn: aDate 
+	^aDate > self expirationDate.! !
+!CreditCard methodsFor: 'testing' stamp: 'FF 6/12/2022 14:21:53' prior: 50493399!
+isExpiredOn: aDate 
+	^ aDate > self expirationDate.! !
+!CreditCard class methodsFor: 'instance creation' stamp: 'FF 6/12/2022 14:22:21' prior: 50488095!
+number: aCreditCardNumber validTo: anExpirationMonthOfYear from: aCardOwnerName  	
+
+	(aCreditCardNumber size < 16) ifTrue: [self error: self invalidCreditCardNumber].
+	(aCreditCardNumber noneSatisfy: [:aCharacter | aCharacter isDigit ]) ifTrue: [self error: self invalidCreditCardNumber].
+	(anExpirationMonthOfYear isKindOf: Month) ifFalse: [self error: self invalidExpirationDate].
+	^self new number: aCreditCardNumber validTo: anExpirationMonthOfYear from: aCardOwnerName ! !
+!CreditCard class methodsFor: 'instance creation' stamp: 'FF 6/12/2022 14:23:03'!
+assertCreditCardValidLenght: aCreditCardNumber
+
+	^ (aCreditCardNumber size < 16) ifTrue: [self error: self invalidCreditCardNumber]! !
+!CreditCard class methodsFor: 'instance creation' stamp: 'FF 6/12/2022 14:23:03' prior: 50493409!
+number: aCreditCardNumber validTo: anExpirationMonthOfYear from: aCardOwnerName  	
+
+	self assertCreditCardValidLenght: aCreditCardNumber.
+	(aCreditCardNumber noneSatisfy: [:aCharacter | aCharacter isDigit ]) ifTrue: [self error: self invalidCreditCardNumber].
+	(anExpirationMonthOfYear isKindOf: Month) ifFalse: [self error: self invalidExpirationDate].
+	^self new number: aCreditCardNumber validTo: anExpirationMonthOfYear from: aCardOwnerName ! !
+!CreditCard class methodsFor: 'instance creation' stamp: 'FF 6/12/2022 14:23:32'!
+assertCreditCardValidFormat: aCreditCardNumber
+
+	^ (aCreditCardNumber noneSatisfy: [:aCharacter | aCharacter isDigit ]) ifTrue: [self error: self invalidCreditCardNumber]! !
+!CreditCard class methodsFor: 'instance creation' stamp: 'FF 6/12/2022 14:23:32' prior: 50493435!
+number: aCreditCardNumber validTo: anExpirationMonthOfYear from: aCardOwnerName  	
+
+	self assertCreditCardValidLenght: aCreditCardNumber.
+	self assertCreditCardValidFormat: aCreditCardNumber.
+	(anExpirationMonthOfYear isKindOf: Month) ifFalse: [self error: self invalidExpirationDate].
+	^self new number: aCreditCardNumber validTo: anExpirationMonthOfYear from: aCardOwnerName ! !
+!CreditCard class methodsFor: 'instance creation' stamp: 'FF 6/12/2022 14:24:02'!
+assertCreditCardValidExpirationMonth: anExpirationMonthOfYear
+
+	^ (anExpirationMonthOfYear isKindOf: Month) ifFalse: [self error: self invalidExpirationDate]! !
+!CreditCard class methodsFor: 'instance creation' stamp: 'FF 6/12/2022 14:24:02' prior: 50493461!
+number: aCreditCardNumber validTo: anExpirationMonthOfYear from: aCardOwnerName  	
+
+	self assertCreditCardValidLenght: aCreditCardNumber.
+	self assertCreditCardValidFormat: aCreditCardNumber.
+	self assertCreditCardValidExpirationMonth: anExpirationMonthOfYear.
+	^self new number: aCreditCardNumber validTo: anExpirationMonthOfYear from: aCardOwnerName ! !
+!CreditCard class methodsFor: 'instance creation' stamp: 'FF 6/12/2022 14:25:19'!
+assertCreditCardIsValid: anExpirationMonthOfYear expiringOn: aCreditCardNumber
+
+	self assertCreditCardValidLenght: aCreditCardNumber.
+	self assertCreditCardValidFormat: aCreditCardNumber.
+	self assertCreditCardValidExpirationMonth: anExpirationMonthOfYear! !
+!CreditCard class methodsFor: 'instance creation' stamp: 'FF 6/12/2022 14:25:19' prior: 50493485!
+number: aCreditCardNumber validTo: anExpirationMonthOfYear from: aCardOwnerName  	
+
+	self assertCreditCardIsValid: anExpirationMonthOfYear expiringOn: aCreditCardNumber.
+	^self new number: aCreditCardNumber validTo: anExpirationMonthOfYear from: aCardOwnerName ! !
+!CreditCard class methodsFor: 'instance creation' stamp: 'FF 6/12/2022 14:25:37' prior: 50493511!
+number: aCreditCardNumber validTo: anExpirationMonthOfYear from: aCardOwnerName  	
+
+	self assertCreditCardIsValid: aCreditCardNumber expiringOn: anExpirationMonthOfYear.
+	^self new number: aCreditCardNumber validTo: anExpirationMonthOfYear from: aCardOwnerName ! !
+!CreditCardTest methodsFor: 'test' stamp: 'FF 6/12/2022 14:27:33'!
+test07CardCannotBeCreatedWithEmptyOwnerName
+	|card|
+
+	self should: [card := CreditCard number: '2323' validTo: today month from: ownerName ]
+	raise: Error - MessageNotUnderstood 
+	withExceptionDo: [:anError | 
+		self assert: CreditCard invalidCreditCardNumber equals: anError messageText .
+		self assert: card isNil.
+		]! !
+
+!classDefinition: #CreditCardTest category: 'TusLibros' stamp: 'FF 6/12/2022 14:28:37'!
+TestCase subclass: #CreditCardTest
+	instanceVariableNames: 'today ownerName validNumber'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'TusLibros'!
+!CreditCardTest methodsFor: 'setUp' stamp: 'FF 6/12/2022 14:28:35' prior: 50488168 overrides: 16961394!
+setUp
+
+	today := Date today.
+	ownerName := 'owner'.
+	validNumber := '4251236587945120'.! !
+!CreditCardTest methodsFor: 'test' stamp: 'FF 6/12/2022 14:29:00' prior: 50488262!
+test03CardCannotBeCreatedWhenValidToIsNotAMonth
+	|card|
+
+	self should: [card := CreditCard number: validNumber validTo: '' from: ownerName ]
+	raise: Error - MessageNotUnderstood 
+	withExceptionDo: [:anError | 
+		self assert: CreditCard invalidExpirationDate equals: anError messageText .
+		self assert: card isNil.
+		]! !
+!CreditCardTest methodsFor: 'test' stamp: 'FF 6/12/2022 14:29:07' prior: 50488275!
+test04CreditCardWithExpirationDateBeforeTodayShouldBeExpired
+
+	|card|
+	
+	card := CreditCard number: validNumber validTo: today month previous from: ownerName .
+	
+	self assert: (card isExpiredOn: today).
+
+		! !
+!CreditCardTest methodsFor: 'test' stamp: 'FF 6/12/2022 14:29:14' prior: 50488285!
+test05CreditCardWithExpirationDateAfterTodayShouldNotBeExpired
+
+	|card|
+	
+	card := CreditCard number: validNumber validTo: today month next from: ownerName .
+	
+	self deny: (card isExpiredOn: today).
+
+		! !
+!CreditCardTest methodsFor: 'test' stamp: 'FF 6/12/2022 14:29:20' prior: 50488173!
+test06CreditCardExpirationMonthIsIncludedOnTheExpirationPeriod
+
+	|card|
+	
+	card := CreditCard number: validNumber validTo: today month from: ownerName .
+	
+	self deny: (card isExpiredOn: today).
+
+		! !
+!CreditCardTest methodsFor: 'test' stamp: 'FF 6/12/2022 14:29:28' prior: 50493534!
+test07CardCannotBeCreatedWithEmptyOwnerName
+	|card|
+
+	self should: [card := CreditCard number: validNumber validTo: today month from: ownerName ]
+	raise: Error - MessageNotUnderstood 
+	withExceptionDo: [:anError | 
+		self assert: CreditCard invalidCreditCardNumber equals: anError messageText .
+		self assert: card isNil.
+		]! !
+!CreditCardTest methodsFor: 'test' stamp: 'FF 6/12/2022 14:29:31' prior: 50493604!
+test07CardCannotBeCreatedWithEmptyOwnerName
+	|card|
+
+	self should: [card := CreditCard number: validNumber validTo: today month from: '' ]
+	raise: Error - MessageNotUnderstood 
+	withExceptionDo: [:anError | 
+		self assert: CreditCard invalidCreditCardNumber equals: anError messageText .
+		self assert: card isNil.
+		]! !
+!CreditCardTest methodsFor: 'test' stamp: 'FF 6/12/2022 14:29:53' prior: 50493617!
+test07CardCannotBeCreatedWithEmptyOwnerName
+	|card|
+
+	self should: [card := CreditCard number: validNumber validTo: today month from: '' ]
+	raise: Error - MessageNotUnderstood 
+	withExceptionDo: [:anError | 
+		self assert: CreditCard invalidCreditCardOwner equals: anError messageText .
+		self assert: card isNil.
+		]! !
+
+!testRun: #CreditCardTest #test07CardCannotBeCreatedWithEmptyOwnerName stamp: 'FF 6/12/2022 14:29:56'!
+ERROR!
+!CreditCard class methodsFor: 'error messages' stamp: 'FF 6/12/2022 14:30:05'!
+invalidCreditCardOwner
+	self shouldBeImplemented.! !
+!CreditCard class methodsFor: 'error messages' stamp: 'FF 6/12/2022 14:30:25' prior: 50493646!
+invalidCreditCardOwner
+	^'The card owner is not valid'.! !
+
+!testRun: #CreditCardTest #test07CardCannotBeCreatedWithEmptyOwnerName stamp: 'FF 6/12/2022 14:30:27'!
+FAILURE!
+
+!testRun: #CreditCardTest #test07CardCannotBeCreatedWithEmptyOwnerName stamp: 'FF 6/12/2022 14:30:30'!
+PASSED!
+
+!testRun: #CreditCardTest #test01CardCannotBeCreatedWithInvalidNumberLenght stamp: 'FF 6/12/2022 14:30:30'!
+FAILURE!
+
+!testRun: #CreditCardTest #test02CardCannotBeCreatedWithInvalidNumberCharacters stamp: 'FF 6/12/2022 14:30:30'!
+FAILURE!
+
+!testRun: #CreditCardTest #test03CardCannotBeCreatedWhenValidToIsNotAMonth stamp: 'FF 6/12/2022 14:30:30'!
+FAILURE!
+
+!testRun: #CreditCardTest #test04CreditCardWithExpirationDateBeforeTodayShouldBeExpired stamp: 'FF 6/12/2022 14:30:30'!
+ERROR!
+
+!testRun: #CreditCardTest #test05CreditCardWithExpirationDateAfterTodayShouldNotBeExpired stamp: 'FF 6/12/2022 14:30:30'!
+ERROR!
+
+!testRun: #CreditCardTest #test06CreditCardExpirationMonthIsIncludedOnTheExpirationPeriod stamp: 'FF 6/12/2022 14:30:30'!
+ERROR!
+
+!testRun: #CreditCardTest #test07CardCannotBeCreatedWithEmptyOwnerName stamp: 'FF 6/12/2022 14:30:30'!
+FAILURE!
+
+!testRun: #CreditCardTest #test07CardCannotBeCreatedWithEmptyOwnerName stamp: 'FF 6/12/2022 14:30:47'!
+FAILURE!
+
+!testRun: #CreditCardTest #test07CardCannotBeCreatedWithEmptyOwnerName stamp: 'FF 6/12/2022 14:30:47'!
+FAILURE!
+
+!testRun: #CreditCardTest #test05CreditCardWithExpirationDateAfterTodayShouldNotBeExpired stamp: 'FF 6/12/2022 14:31:24'!
+ERROR!
+
+!testRun: #CreditCardTest #test05CreditCardWithExpirationDateAfterTodayShouldNotBeExpired stamp: 'FF 6/12/2022 14:31:24'!
+ERROR!
+
+!testRun: #CreditCardTest #test05CreditCardWithExpirationDateAfterTodayShouldNotBeExpired stamp: 'FF 6/12/2022 14:31:30'!
+ERROR!
+
+!testRun: #CreditCardTest #test05CreditCardWithExpirationDateAfterTodayShouldNotBeExpired stamp: 'FF 6/12/2022 14:31:31'!
+ERROR!
+
+!testRun: #CreditCardTest #test05CreditCardWithExpirationDateAfterTodayShouldNotBeExpired stamp: 'FF 6/12/2022 14:31:35'!
+ERROR!
+
+!testRun: #CreditCardTest #test06CreditCardExpirationMonthIsIncludedOnTheExpirationPeriod stamp: 'FF 6/12/2022 14:31:50'!
+ERROR!
+
+!testRun: #CreditCardTest #test01CardCannotBeCreatedWithInvalidNumberLenght stamp: 'FF 6/12/2022 14:31:58'!
+FAILURE!
+
+!testRun: #CreditCardTest #test02CardCannotBeCreatedWithInvalidNumberCharacters stamp: 'FF 6/12/2022 14:31:58'!
+FAILURE!
+
+!testRun: #CreditCardTest #test03CardCannotBeCreatedWhenValidToIsNotAMonth stamp: 'FF 6/12/2022 14:31:58'!
+FAILURE!
+
+!testRun: #CreditCardTest #test04CreditCardWithExpirationDateBeforeTodayShouldBeExpired stamp: 'FF 6/12/2022 14:31:58'!
+ERROR!
+
+!testRun: #CreditCardTest #test05CreditCardWithExpirationDateAfterTodayShouldNotBeExpired stamp: 'FF 6/12/2022 14:31:58'!
+ERROR!
+
+!testRun: #CreditCardTest #test06CreditCardExpirationMonthIsIncludedOnTheExpirationPeriod stamp: 'FF 6/12/2022 14:31:58'!
+ERROR!
+
+!testRun: #CreditCardTest #test07CardCannotBeCreatedWithEmptyOwnerName stamp: 'FF 6/12/2022 14:31:58'!
+FAILURE!
+!CreditCard class methodsFor: 'assertions' stamp: 'FF 6/12/2022 14:33:08' prior: 50493499!
+assertCreditCardIsValid: aCreditCardNumber expiringOn: anExpirationMonthOfYear
+
+	self assertCreditCardValidLenght: aCreditCardNumber.
+	self assertCreditCardValidFormat: aCreditCardNumber.
+	self assertCreditCardValidExpirationMonth: anExpirationMonthOfYear! !
+
+!testRun: #CashierTest #test01CannotCheckOutEmptyCart stamp: 'FF 6/12/2022 14:33:14'!
+PASSED!
+
+!testRun: #CashierTest #test02CannotCheckOutCartProvidingAnExpiredCreditCard stamp: 'FF 6/12/2022 14:33:14'!
+PASSED!
+
+!testRun: #CashierTest #test03CheckOutCartWithItemsAddElementToSalesList stamp: 'FF 6/12/2022 14:33:14'!
+PASSED!
+
+!testRun: #CashierTest #test04CheckOutCartWithItemsReturnsTotal stamp: 'FF 6/12/2022 14:33:14'!
+PASSED!
+
+!testRun: #CashierTest #test05CannotCheckOutCartProvidingStolenCreditCard stamp: 'FF 6/12/2022 14:33:14'!
+PASSED!
+
+!testRun: #CashierTest #test06CannotCheckOutCartProvidingCreditCardWithoutEnoughLimit stamp: 'FF 6/12/2022 14:33:14'!
+PASSED!
+
+!testRun: #CreditCardTest #test01CardCannotBeCreatedWithInvalidNumberLenght stamp: 'FF 6/12/2022 14:33:21'!
+PASSED!
+
+!testRun: #CreditCardTest #test02CardCannotBeCreatedWithInvalidNumberCharacters stamp: 'FF 6/12/2022 14:33:21'!
+PASSED!
+
+!testRun: #CreditCardTest #test03CardCannotBeCreatedWhenValidToIsNotAMonth stamp: 'FF 6/12/2022 14:33:21'!
+PASSED!
+
+!testRun: #CreditCardTest #test04CreditCardWithExpirationDateBeforeTodayShouldBeExpired stamp: 'FF 6/12/2022 14:33:21'!
+PASSED!
+
+!testRun: #CreditCardTest #test05CreditCardWithExpirationDateAfterTodayShouldNotBeExpired stamp: 'FF 6/12/2022 14:33:21'!
+PASSED!
+
+!testRun: #CreditCardTest #test06CreditCardExpirationMonthIsIncludedOnTheExpirationPeriod stamp: 'FF 6/12/2022 14:33:21'!
+PASSED!
+
+!testRun: #CreditCardTest #test07CardCannotBeCreatedWithEmptyOwnerName stamp: 'FF 6/12/2022 14:33:21'!
+FAILURE!
+
+!testRun: #CreditCardTest #test07CardCannotBeCreatedWithEmptyOwnerName stamp: 'FF 6/12/2022 14:33:21'!
+FAILURE!
+!CreditCard class methodsFor: 'instance creation' stamp: 'FF 6/12/2022 14:34:44' prior: 50493523!
+number: aCreditCardNumber validTo: anExpirationMonthOfYear from: aCardOwnerName  	
+
+	self assertCreditCardIsValid: aCreditCardNumber expiringOn: anExpirationMonthOfYear.
+	self assertOwnerNameIsNotEmpty: aCardOwnerName .
+	^self new number: aCreditCardNumber validTo: anExpirationMonthOfYear from: aCardOwnerName ! !
+!CreditCard class methodsFor: 'assertions' stamp: 'FF 6/12/2022 14:35:48'!
+assertOwnerNameIsNotEmpty: aCreditCardOwnerName
+
+	aCreditCardOwnerName isEmpty ifTrue:[self error: self invalidCreditCardOwner ].! !
+
+!testRun: #CreditCardTest #test07CardCannotBeCreatedWithEmptyOwnerName stamp: 'FF 6/12/2022 14:35:57'!
+PASSED!
+
+!testRun: #CreditCardTest #test01CardCannotBeCreatedWithInvalidNumberLenght stamp: 'FF 6/12/2022 14:35:57'!
+PASSED!
+
+!testRun: #CreditCardTest #test02CardCannotBeCreatedWithInvalidNumberCharacters stamp: 'FF 6/12/2022 14:35:57'!
+PASSED!
+
+!testRun: #CreditCardTest #test03CardCannotBeCreatedWhenValidToIsNotAMonth stamp: 'FF 6/12/2022 14:35:57'!
+PASSED!
+
+!testRun: #CreditCardTest #test04CreditCardWithExpirationDateBeforeTodayShouldBeExpired stamp: 'FF 6/12/2022 14:35:57'!
+PASSED!
+
+!testRun: #CreditCardTest #test05CreditCardWithExpirationDateAfterTodayShouldNotBeExpired stamp: 'FF 6/12/2022 14:35:57'!
+PASSED!
+
+!testRun: #CreditCardTest #test06CreditCardExpirationMonthIsIncludedOnTheExpirationPeriod stamp: 'FF 6/12/2022 14:35:57'!
+PASSED!
+
+!testRun: #CreditCardTest #test07CardCannotBeCreatedWithEmptyOwnerName stamp: 'FF 6/12/2022 14:35:57'!
+PASSED!
+!CreditCard class methodsFor: 'instance creation' stamp: 'FF 6/12/2022 14:37:12' prior: 50493811!
+number: aCreditCardNumber validTo: anExpirationMonthOfYear from: aCardOwnerName  	
+
+	self assertCreditCardIsValid: aCreditCardNumber expiringOn: anExpirationMonthOfYear from: aCardOwnerName.
+	^self new number: aCreditCardNumber validTo: anExpirationMonthOfYear from: aCardOwnerName ! !
+!CreditCard class methodsFor: 'assertions' stamp: 'FF 6/12/2022 14:37:31'!
+assertCreditCardIsValid: aCreditCardNumber expiringOn: anExpirationMonthOfYear from: aCardOwnerName
+
+	self assertCreditCardValidLenght: aCreditCardNumber.
+	self assertCreditCardValidFormat: aCreditCardNumber.
+	self assertCreditCardValidExpirationMonth: anExpirationMonthOfYear.
+	self assertOwnerNameIsNotEmpty: aCardOwnerName .! !
+
+!methodRemoval: CreditCard class #assertCreditCardIsValid:expiringOn: stamp: 'FF 6/12/2022 14:37:33'!
+assertCreditCardIsValid: aCreditCardNumber expiringOn: anExpirationMonthOfYear
+
+	self assertCreditCardValidLenght: aCreditCardNumber.
+	self assertCreditCardValidFormat: aCreditCardNumber.
+	self assertCreditCardValidExpirationMonth: anExpirationMonthOfYear!
+!InterfaceFacade methodsFor: 'cart' stamp: 'FF 6/12/2022 14:39:53' prior: 50492522!
+listCart: aCartId 
+	| cartFound |
+	self findCart: aCartId.
+	self assertCartIsNotExpired: aCartId.
+	self updateLastTimeUsed: aCartId.
+	^cartFound books.! !
+!InterfaceFacade methodsFor: 'cart' stamp: 'FF 6/12/2022 14:41:29'!
+findValidCartAndUpdateLastTimeUsed: aCartId
+
+	self findCart: aCartId.
+	self assertCartIsNotExpired: aCartId.
+	self updateLastTimeUsed: aCartId! !
+!InterfaceFacade methodsFor: 'cart' stamp: 'FF 6/12/2022 14:41:29' prior: 50493899!
+listCart: aCartId 
+	| cartFound |
+	self findValidCartAndUpdateLastTimeUsed: aCartId.
+	^cartFound books.! !
+!InterfaceFacade methodsFor: 'cart' stamp: 'FF 6/12/2022 14:41:40' prior: 50493914!
+listCart: aCartId 
+	| cartFound |
+	cartFound := self findValidCartAndUpdateLastTimeUsed: aCartId.
+	^cartFound books.! !
+!InterfaceFacade methodsFor: 'cart' stamp: 'FF 6/12/2022 14:41:58' prior: 50492616!
+addToCart: aCartId book: aBookISBN quantity: aQuantityToAdd
+	| cartFound |
+	cartFound := self findValidCartAndUpdateLastTimeUsed: aCartId.
+	cartFound add: aQuantityToAdd of: aBookISBN.
+	! !
+!InterfaceFacade methodsFor: 'cart' stamp: 'FF 6/12/2022 14:42:06' prior: 50493906!
+findValidCartAndUpdateLastTimeUsed: aCartId
+	self findCart: aCartId.
+	self assertCartIsNotExpired: aCartId.
+	self updateLastTimeUsed: aCartId! !
+!InterfaceFacade methodsFor: 'cart' stamp: 'FF 6/12/2022 14:42:26' prior: 50493936!
+findValidCartAndUpdateLastTimeUsed: aCartId
+	| cart |
+	cart := self findCart: aCartId.
+	self assertCartIsNotExpired: aCartId.
+	self updateLastTimeUsed: aCartId.
+	^cart.! !
+!InterfaceFacade methodsFor: 'cart' stamp: 'FF 6/12/2022 14:43:04' prior: 50492214!
+checkOut: aCartId withCardNumber: aCreditCardNumber expirationDate: anExpirationDate from: aCardOwnerName 
+	| creditCard cart cashier |
+	cart := self findCart: aCartId.
+	self assertCartIsNotExpired: aCartId.
+	
+	cashier := Cashier using: salesList debitProcessor: merchantProcessor.
+	creditCard := CreditCard number: aCreditCardNumber validTo: anExpirationDate from: aCardOwnerName .
+	cashier checkOut: cart payingWith: creditCard on: today.
+	self deleteCart: aCartId .
+	lastTransactionId := lastTransactionId + 1.
+	^lastTransactionId.! !
+!InterfaceFacade methodsFor: 'cart' stamp: 'FF 6/12/2022 14:43:50' prior: 50493952!
+checkOut: aCartId withCardNumber: aCreditCardNumber expirationDate: anExpirationDate from: aCardOwnerName 
+	| creditCard cartFound cashier |
+	cartFound := self findValidCartAndUpdateLastTimeUsed: aCartId.
+	
+	cashier := Cashier using: salesList debitProcessor: merchantProcessor.
+	creditCard := CreditCard number: aCreditCardNumber validTo: anExpirationDate from: aCardOwnerName .
+	cashier checkOut: cartFound payingWith: creditCard on: today.
+	self deleteCart: aCartId .
+	lastTransactionId := lastTransactionId + 1.
+	^lastTransactionId.! !
+!InterfaceFacade methodsFor: 'cart' stamp: 'FF 6/12/2022 14:44:45' prior: 50493972!
+checkOut: aCartId withCardNumber: aCreditCardNumber expirationDate: anExpirationDate from: aCardOwnerName 
+	| creditCard cartFound cashier |
+	cartFound := self findValidCartAndUpdateLastTimeUsed: aCartId.
+	
+	cashier := Cashier using: salesList debitProcessor: merchantProcessor.
+	creditCard := CreditCard number: aCreditCardNumber validTo: anExpirationDate from: aCardOwnerName .
+	cashier checkOut: cartFound payingWith: creditCard on: today.
+	self deleteCart: aCartId .
+	^self getNextTransactionId.! !
+!InterfaceFacade methodsFor: 'cart' stamp: 'FF 6/12/2022 14:45:13'!
+getNextTransactionId
+	lastTransactionId := lastTransactionId + 1.
+	^lastTransactionId.! !
+!InterfaceFacade methodsFor: 'cart' stamp: 'FF 6/12/2022 14:45:40'!
+getNextCartId
+	lastCartId := lastCartId + 1.
+	^lastCartId.! !
+!InterfaceFacade methodsFor: 'cart' stamp: 'FF 6/12/2022 14:46:24' prior: 50493220!
+createCartFor: aClientId signInWith: aPassword 
+	| newCart newCartId |
+	
+	self assertClient: aClientId canAuthenticateUsing: aPassword.
+	
+	newCart := Cart from: aClientId with: priceList.
+	newCartId := self getNextCartId .
+	self updateLastTimeUsed: newCartId .
+	carts at: newCartId put: newCart. 
+	^newCartId.! !
+
+!testRun: #InterfaceFacadeTest #test01ValidClientCanCreateACart stamp: 'FF 6/12/2022 14:46:26'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test02InvalidClientCannotCreateACart stamp: 'FF 6/12/2022 14:46:26'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test03CreateCartReturnsUniqueCartId stamp: 'FF 6/12/2022 14:46:26'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test04ListCartOfInvalidCartIdThrowsError stamp: 'FF 6/12/2022 14:46:26'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test05ListCartIncludesAddedItemsAndItsQuantity stamp: 'FF 6/12/2022 14:46:26'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test06AddToCartWithInvalidCartIdThrowsError stamp: 'FF 6/12/2022 14:46:26'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test07CheckOutCartReturnsTransactionId stamp: 'FF 6/12/2022 14:46:26'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test08CheckOutCartOfInvalidCartIdThrowsError stamp: 'FF 6/12/2022 14:46:26'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test09CheckOutCartWithInvalidCreditCardThrowsError stamp: 'FF 6/12/2022 14:46:26'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test10ListPurchasesReturnsClientTransactions stamp: 'FF 6/12/2022 14:46:26'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test11InvalidClientCannotListAnyPurchases stamp: 'FF 6/12/2022 14:46:26'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test12CheckOutReturnsUniqueTransactionId stamp: 'FF 6/12/2022 14:46:26'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test13CartIdIsInvalidAfterCheckOut stamp: 'FF 6/12/2022 14:46:26'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test14ListPurchasesAreDifferentBetweenTwoDifferentClients stamp: 'FF 6/12/2022 14:46:26'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test15CannotCheckOutACartAfterTimeExceeded stamp: 'FF 6/12/2022 14:46:26'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test16CannotAddToCartAfterTimeExceeded stamp: 'FF 6/12/2022 14:46:26'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test17CannotListACartAfterTimeExceeded stamp: 'FF 6/12/2022 14:46:26'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test18AddToCartRestartLastTimeUsed stamp: 'FF 6/12/2022 14:46:26'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test19ListCartRestartLastTimeUsed stamp: 'FF 6/12/2022 14:46:26'!
+PASSED!
+
+!testRun: #CartTest #test01CartIsEmptyWhenCreated stamp: 'FF 6/12/2022 14:46:35'!
+PASSED!
+
+!testRun: #CartTest #test02EmptyCartAfterAddingABookIsNotEmpty stamp: 'FF 6/12/2022 14:46:35'!
+PASSED!
+
+!testRun: #CartTest #test03CannotAddBooksToCartWithNonPositiveQuantity stamp: 'FF 6/12/2022 14:46:35'!
+PASSED!
+
+!testRun: #CartTest #test04CannotAddAnUncataloguedBook stamp: 'FF 6/12/2022 14:46:35'!
+PASSED!
+
+!testRun: #CartTest #test05CartReturnsEmptyBookListWhenCreated stamp: 'FF 6/12/2022 14:46:35'!
+PASSED!
+
+!testRun: #CartTest #test06CartBookListIncludesBookAfterAdding stamp: 'FF 6/12/2022 14:46:35'!
+PASSED!
+
+!testRun: #CartTest #test07EmptyCartTotalIsZero stamp: 'FF 6/12/2022 14:46:35'!
+PASSED!
+
+!testRun: #CartTest #test08CartWithItemsTotalIsTheSumOfItemPrices stamp: 'FF 6/12/2022 14:46:36'!
+PASSED!
+
+!testRun: #CashierTest #test01CannotCheckOutEmptyCart stamp: 'FF 6/12/2022 14:46:36'!
+PASSED!
+
+!testRun: #CashierTest #test02CannotCheckOutCartProvidingAnExpiredCreditCard stamp: 'FF 6/12/2022 14:46:36'!
+PASSED!
+
+!testRun: #CashierTest #test03CheckOutCartWithItemsAddElementToSalesList stamp: 'FF 6/12/2022 14:46:36'!
+PASSED!
+
+!testRun: #CashierTest #test04CheckOutCartWithItemsReturnsTotal stamp: 'FF 6/12/2022 14:46:36'!
+PASSED!
+
+!testRun: #CashierTest #test05CannotCheckOutCartProvidingStolenCreditCard stamp: 'FF 6/12/2022 14:46:36'!
+PASSED!
+
+!testRun: #CashierTest #test06CannotCheckOutCartProvidingCreditCardWithoutEnoughLimit stamp: 'FF 6/12/2022 14:46:36'!
+PASSED!
+
+!testRun: #CreditCardTest #test01CardCannotBeCreatedWithInvalidNumberLenght stamp: 'FF 6/12/2022 14:46:36'!
+PASSED!
+
+!testRun: #CreditCardTest #test02CardCannotBeCreatedWithInvalidNumberCharacters stamp: 'FF 6/12/2022 14:46:36'!
+PASSED!
+
+!testRun: #CreditCardTest #test03CardCannotBeCreatedWhenValidToIsNotAMonth stamp: 'FF 6/12/2022 14:46:36'!
+PASSED!
+
+!testRun: #CreditCardTest #test04CreditCardWithExpirationDateBeforeTodayShouldBeExpired stamp: 'FF 6/12/2022 14:46:36'!
+PASSED!
+
+!testRun: #CreditCardTest #test05CreditCardWithExpirationDateAfterTodayShouldNotBeExpired stamp: 'FF 6/12/2022 14:46:36'!
+PASSED!
+
+!testRun: #CreditCardTest #test06CreditCardExpirationMonthIsIncludedOnTheExpirationPeriod stamp: 'FF 6/12/2022 14:46:36'!
+PASSED!
+
+!testRun: #CreditCardTest #test07CardCannotBeCreatedWithEmptyOwnerName stamp: 'FF 6/12/2022 14:46:36'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test01ValidClientCanCreateACart stamp: 'FF 6/12/2022 14:46:36'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test02InvalidClientCannotCreateACart stamp: 'FF 6/12/2022 14:46:36'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test03CreateCartReturnsUniqueCartId stamp: 'FF 6/12/2022 14:46:36'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test04ListCartOfInvalidCartIdThrowsError stamp: 'FF 6/12/2022 14:46:36'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test05ListCartIncludesAddedItemsAndItsQuantity stamp: 'FF 6/12/2022 14:46:36'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test06AddToCartWithInvalidCartIdThrowsError stamp: 'FF 6/12/2022 14:46:36'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test07CheckOutCartReturnsTransactionId stamp: 'FF 6/12/2022 14:46:36'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test08CheckOutCartOfInvalidCartIdThrowsError stamp: 'FF 6/12/2022 14:46:36'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test09CheckOutCartWithInvalidCreditCardThrowsError stamp: 'FF 6/12/2022 14:46:36'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test10ListPurchasesReturnsClientTransactions stamp: 'FF 6/12/2022 14:46:36'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test11InvalidClientCannotListAnyPurchases stamp: 'FF 6/12/2022 14:46:36'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test12CheckOutReturnsUniqueTransactionId stamp: 'FF 6/12/2022 14:46:36'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test13CartIdIsInvalidAfterCheckOut stamp: 'FF 6/12/2022 14:46:36'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test14ListPurchasesAreDifferentBetweenTwoDifferentClients stamp: 'FF 6/12/2022 14:46:36'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test15CannotCheckOutACartAfterTimeExceeded stamp: 'FF 6/12/2022 14:46:36'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test16CannotAddToCartAfterTimeExceeded stamp: 'FF 6/12/2022 14:46:36'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test17CannotListACartAfterTimeExceeded stamp: 'FF 6/12/2022 14:46:36'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test18AddToCartRestartLastTimeUsed stamp: 'FF 6/12/2022 14:46:36'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test19ListCartRestartLastTimeUsed stamp: 'FF 6/12/2022 14:46:36'!
+PASSED!
+!InterfaceFacade methodsFor: 'cart' stamp: 'FF 6/12/2022 14:46:54' prior: 50493992!
+checkOut: aCartId withCardNumber: aCreditCardNumber expirationDate: anExpirationDate from: aCardOwnerName 
+	| creditCard cartFound cashier |
+	
+	cartFound := self findValidCartAndUpdateLastTimeUsed: aCartId.
+	cashier := Cashier using: salesList debitProcessor: merchantProcessor.
+	creditCard := CreditCard number: aCreditCardNumber validTo: anExpirationDate from: aCardOwnerName .
+	cashier checkOut: cartFound payingWith: creditCard on: today.
+	self deleteCart: aCartId .
+	^self getNextTransactionId.! !
+!TimerSimulator methodsFor: 'simulation' stamp: 'FF 6/12/2022 14:49:47'!
+simulateHasPassed: aDuration
+	now := now + aDuration.! !
+
+!methodRemoval: TimerSimulator #simulateHalfHourHasPassed stamp: 'FF 6/12/2022 14:49:55'!
+simulateHalfHourHasPassed
+	now := now + (Duration minutes: 30).!
+
+!methodRemoval: TimerSimulator #simulateQuarterHourHasPassed stamp: 'FF 6/12/2022 14:49:58'!
+simulateQuarterHourHasPassed
+	now := now + (Duration minutes: 15).!
+!InterfaceFacadeTest methodsFor: 'test' stamp: 'FF 6/12/2022 14:50:34' prior: 50491113!
+test15CannotCheckOutACartAfterTimeExceeded
+
+	|  cartId  quantity |
+	quantity := 1.
+	cartId := interfaceFacade createCartFor: clientId signInWith: password.
+	interfaceFacade addToCart: cartId book: validBookISBN quantity: quantity.
+	
+	timerSimulator simulateHasPassed: (Duration minutes: 30).
+		 .
+	self should: [ interfaceFacade checkOut: cartId withCardNumber: creditCardNumber expirationDate: expirationMonth from: cardOwnerName ] 
+	raise:  Error - MessageNotUnderstood 
+	withExceptionDo: [ :anError |
+		self assert: InterfaceFacade cartIsExpired equals: anError messageText.
+	].
+
+	
+	
+	! !
+!InterfaceFacadeTest methodsFor: 'test' stamp: 'FF 6/12/2022 14:50:42' prior: 50492055!
+test16CannotAddToCartAfterTimeExceeded
+
+	|  cartId  quantity |
+	quantity := 1.
+	cartId := interfaceFacade createCartFor: clientId signInWith: password.
+	
+	timerSimulator simulateHasPassed: (Duration minutes: 30)..
+		 .
+	self should: [ interfaceFacade addToCart: cartId book: validBookISBN quantity: quantity. ] 
+	raise:  Error - MessageNotUnderstood 
+	withExceptionDo: [ :anError |
+		self assert: InterfaceFacade cartIsExpired equals: anError messageText.
+	].
+
+	
+	
+	! !
+!InterfaceFacadeTest methodsFor: 'test' stamp: 'FF 6/12/2022 14:50:49' prior: 50492341!
+test17CannotListACartAfterTimeExceeded
+
+	|  cartId  |
+	cartId := interfaceFacade createCartFor: clientId signInWith: password.
+	
+	timerSimulator simulateHasPassed: (Duration minutes: 30)..
+
+	self should: [ interfaceFacade listCart: cartId] 
+	raise:  Error - MessageNotUnderstood 
+	withExceptionDo: [ :anError |
+		self assert: InterfaceFacade cartIsExpired equals: anError messageText.
+	].
+
+	
+	
+	! !
+!InterfaceFacadeTest methodsFor: 'test' stamp: 'FF 6/12/2022 14:50:53' prior: 50494315!
+test17CannotListACartAfterTimeExceeded
+
+	|  cartId  |
+	cartId := interfaceFacade createCartFor: clientId signInWith: password.
+	
+	timerSimulator simulateHasPassed: (Duration minutes: 30).
+
+	self should: [ interfaceFacade listCart: cartId] 
+	raise:  Error - MessageNotUnderstood 
+	withExceptionDo: [ :anError |
+		self assert: InterfaceFacade cartIsExpired equals: anError messageText.
+	].
+
+	
+	
+	! !
+!InterfaceFacadeTest methodsFor: 'test' stamp: 'FF 6/12/2022 14:51:07' prior: 50492373!
+test18AddToCartRestartLastTimeUsed
+
+	|  cartId  quantity listCart |
+	quantity := 1.
+	cartId := interfaceFacade createCartFor: clientId signInWith: password.
+	
+	timerSimulator simulateHasPassed: (Duration minutes: 15).
+	interfaceFacade addToCart: cartId book: validBookISBN quantity: quantity.
+	timerSimulator simulateHasPassed: (Duration minutes: 15).
+	listCart := interfaceFacade listCart: cartId.
+	
+	self deny: listCart isEmpty.! !
+!InterfaceFacadeTest methodsFor: 'test' stamp: 'FF 6/12/2022 14:51:15' prior: 50492485!
+test19ListCartRestartLastTimeUsed
+
+	|  cartId  quantity listCart |
+	quantity := 1.
+	cartId := interfaceFacade createCartFor: clientId signInWith: password.
+	
+	timerSimulator simulateHasPassed: (Duration minutes: 15).
+	interfaceFacade listCart: cartId.
+	timerSimulator simulateHasPassed: (Duration minutes: 15).
+	interfaceFacade addToCart: cartId book: validBookISBN quantity: quantity.
+	listCart := interfaceFacade listCart: cartId.
+	
+	self deny: listCart isEmpty.! !
+
+!testRun: #InterfaceFacadeTest #test19ListCartRestartLastTimeUsed stamp: 'FF 6/12/2022 14:51:16'!
+PASSED!
+
+!testRun: #CartTest #test01CartIsEmptyWhenCreated stamp: 'FF 6/12/2022 14:51:16'!
+PASSED!
+
+!testRun: #CartTest #test02EmptyCartAfterAddingABookIsNotEmpty stamp: 'FF 6/12/2022 14:51:16'!
+PASSED!
+
+!testRun: #CartTest #test03CannotAddBooksToCartWithNonPositiveQuantity stamp: 'FF 6/12/2022 14:51:16'!
+PASSED!
+
+!testRun: #CartTest #test04CannotAddAnUncataloguedBook stamp: 'FF 6/12/2022 14:51:16'!
+PASSED!
+
+!testRun: #CartTest #test05CartReturnsEmptyBookListWhenCreated stamp: 'FF 6/12/2022 14:51:16'!
+PASSED!
+
+!testRun: #CartTest #test06CartBookListIncludesBookAfterAdding stamp: 'FF 6/12/2022 14:51:16'!
+PASSED!
+
+!testRun: #CartTest #test07EmptyCartTotalIsZero stamp: 'FF 6/12/2022 14:51:16'!
+PASSED!
+
+!testRun: #CartTest #test08CartWithItemsTotalIsTheSumOfItemPrices stamp: 'FF 6/12/2022 14:51:16'!
+PASSED!
+
+!testRun: #CashierTest #test01CannotCheckOutEmptyCart stamp: 'FF 6/12/2022 14:51:16'!
+PASSED!
+
+!testRun: #CashierTest #test02CannotCheckOutCartProvidingAnExpiredCreditCard stamp: 'FF 6/12/2022 14:51:16'!
+PASSED!
+
+!testRun: #CashierTest #test03CheckOutCartWithItemsAddElementToSalesList stamp: 'FF 6/12/2022 14:51:16'!
+PASSED!
+
+!testRun: #CashierTest #test04CheckOutCartWithItemsReturnsTotal stamp: 'FF 6/12/2022 14:51:17'!
+PASSED!
+
+!testRun: #CashierTest #test05CannotCheckOutCartProvidingStolenCreditCard stamp: 'FF 6/12/2022 14:51:17'!
+PASSED!
+
+!testRun: #CashierTest #test06CannotCheckOutCartProvidingCreditCardWithoutEnoughLimit stamp: 'FF 6/12/2022 14:51:17'!
+PASSED!
+
+!testRun: #CreditCardTest #test01CardCannotBeCreatedWithInvalidNumberLenght stamp: 'FF 6/12/2022 14:51:17'!
+PASSED!
+
+!testRun: #CreditCardTest #test02CardCannotBeCreatedWithInvalidNumberCharacters stamp: 'FF 6/12/2022 14:51:17'!
+PASSED!
+
+!testRun: #CreditCardTest #test03CardCannotBeCreatedWhenValidToIsNotAMonth stamp: 'FF 6/12/2022 14:51:17'!
+PASSED!
+
+!testRun: #CreditCardTest #test04CreditCardWithExpirationDateBeforeTodayShouldBeExpired stamp: 'FF 6/12/2022 14:51:17'!
+PASSED!
+
+!testRun: #CreditCardTest #test05CreditCardWithExpirationDateAfterTodayShouldNotBeExpired stamp: 'FF 6/12/2022 14:51:17'!
+PASSED!
+
+!testRun: #CreditCardTest #test06CreditCardExpirationMonthIsIncludedOnTheExpirationPeriod stamp: 'FF 6/12/2022 14:51:17'!
+PASSED!
+
+!testRun: #CreditCardTest #test07CardCannotBeCreatedWithEmptyOwnerName stamp: 'FF 6/12/2022 14:51:17'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test01ValidClientCanCreateACart stamp: 'FF 6/12/2022 14:51:17'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test02InvalidClientCannotCreateACart stamp: 'FF 6/12/2022 14:51:17'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test03CreateCartReturnsUniqueCartId stamp: 'FF 6/12/2022 14:51:17'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test04ListCartOfInvalidCartIdThrowsError stamp: 'FF 6/12/2022 14:51:17'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test05ListCartIncludesAddedItemsAndItsQuantity stamp: 'FF 6/12/2022 14:51:17'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test06AddToCartWithInvalidCartIdThrowsError stamp: 'FF 6/12/2022 14:51:17'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test07CheckOutCartReturnsTransactionId stamp: 'FF 6/12/2022 14:51:17'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test08CheckOutCartOfInvalidCartIdThrowsError stamp: 'FF 6/12/2022 14:51:17'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test09CheckOutCartWithInvalidCreditCardThrowsError stamp: 'FF 6/12/2022 14:51:17'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test10ListPurchasesReturnsClientTransactions stamp: 'FF 6/12/2022 14:51:17'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test11InvalidClientCannotListAnyPurchases stamp: 'FF 6/12/2022 14:51:17'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test12CheckOutReturnsUniqueTransactionId stamp: 'FF 6/12/2022 14:51:17'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test13CartIdIsInvalidAfterCheckOut stamp: 'FF 6/12/2022 14:51:17'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test14ListPurchasesAreDifferentBetweenTwoDifferentClients stamp: 'FF 6/12/2022 14:51:17'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test15CannotCheckOutACartAfterTimeExceeded stamp: 'FF 6/12/2022 14:51:17'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test16CannotAddToCartAfterTimeExceeded stamp: 'FF 6/12/2022 14:51:17'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test17CannotListACartAfterTimeExceeded stamp: 'FF 6/12/2022 14:51:17'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test18AddToCartRestartLastTimeUsed stamp: 'FF 6/12/2022 14:51:17'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test19ListCartRestartLastTimeUsed stamp: 'FF 6/12/2022 14:51:17'!
+PASSED!
+
+----SNAPSHOT----(12 June 2022 14:51:38) CuisUniversity-5096.image priorSource: 5150501!
+
+Object subclass: #FactoryObjectsToTest
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'TusLibros'!
+
+!classDefinition: #FactoryObjectsToTest category: 'TusLibros' stamp: 'FF 6/12/2022 14:53:50'!
+Object subclass: #FactoryObjectsToTest
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'TusLibros'!
+!CartTest methodsFor: 'test' stamp: 'FF 6/12/2022 14:59:22' prior: 50490297!
+test02EmptyCartAfterAddingABookIsNotEmpty
+
+	|  cart |
+	cart := Cart from: clientId with: priceList.
+	cart add: 1 of: book1 .
+	self deny: cart isEmpty.! !
+
+!classRemoval: #FactoryObjectsToTest stamp: 'FF 6/12/2022 15:00:24'!
+Object subclass: #FactoryObjectsToTest
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'TusLibros'!
+
+!testRun: #InterfaceFacadeTest #test03CreateCartReturnsUniqueCartId stamp: 'FF 6/12/2022 15:00:35'!
+PASSED!
+
+!testRun: #CartTest #test01CartIsEmptyWhenCreated stamp: 'FF 6/12/2022 15:00:35'!
+PASSED!
+
+!testRun: #CartTest #test02EmptyCartAfterAddingABookIsNotEmpty stamp: 'FF 6/12/2022 15:00:35'!
+PASSED!
+
+!testRun: #CartTest #test03CannotAddBooksToCartWithNonPositiveQuantity stamp: 'FF 6/12/2022 15:00:35'!
+PASSED!
+
+!testRun: #CartTest #test04CannotAddAnUncataloguedBook stamp: 'FF 6/12/2022 15:00:35'!
+PASSED!
+
+!testRun: #CartTest #test05CartReturnsEmptyBookListWhenCreated stamp: 'FF 6/12/2022 15:00:35'!
+PASSED!
+
+!testRun: #CartTest #test06CartBookListIncludesBookAfterAdding stamp: 'FF 6/12/2022 15:00:35'!
+PASSED!
+
+!testRun: #CartTest #test07EmptyCartTotalIsZero stamp: 'FF 6/12/2022 15:00:35'!
+PASSED!
+
+!testRun: #CartTest #test08CartWithItemsTotalIsTheSumOfItemPrices stamp: 'FF 6/12/2022 15:00:35'!
+PASSED!
+
+!testRun: #CashierTest #test01CannotCheckOutEmptyCart stamp: 'FF 6/12/2022 15:00:35'!
+PASSED!
+
+!testRun: #CashierTest #test02CannotCheckOutCartProvidingAnExpiredCreditCard stamp: 'FF 6/12/2022 15:00:35'!
+PASSED!
+
+!testRun: #CashierTest #test03CheckOutCartWithItemsAddElementToSalesList stamp: 'FF 6/12/2022 15:00:35'!
+PASSED!
+
+!testRun: #CashierTest #test04CheckOutCartWithItemsReturnsTotal stamp: 'FF 6/12/2022 15:00:35'!
+PASSED!
+
+!testRun: #CashierTest #test05CannotCheckOutCartProvidingStolenCreditCard stamp: 'FF 6/12/2022 15:00:35'!
+PASSED!
+
+!testRun: #CashierTest #test06CannotCheckOutCartProvidingCreditCardWithoutEnoughLimit stamp: 'FF 6/12/2022 15:00:35'!
+PASSED!
+
+!testRun: #CreditCardTest #test01CardCannotBeCreatedWithInvalidNumberLenght stamp: 'FF 6/12/2022 15:00:35'!
+PASSED!
+
+!testRun: #CreditCardTest #test02CardCannotBeCreatedWithInvalidNumberCharacters stamp: 'FF 6/12/2022 15:00:35'!
+PASSED!
+
+!testRun: #CreditCardTest #test03CardCannotBeCreatedWhenValidToIsNotAMonth stamp: 'FF 6/12/2022 15:00:35'!
+PASSED!
+
+!testRun: #CreditCardTest #test04CreditCardWithExpirationDateBeforeTodayShouldBeExpired stamp: 'FF 6/12/2022 15:00:35'!
+PASSED!
+
+!testRun: #CreditCardTest #test05CreditCardWithExpirationDateAfterTodayShouldNotBeExpired stamp: 'FF 6/12/2022 15:00:35'!
+PASSED!
+
+!testRun: #CreditCardTest #test06CreditCardExpirationMonthIsIncludedOnTheExpirationPeriod stamp: 'FF 6/12/2022 15:00:35'!
+PASSED!
+
+!testRun: #CreditCardTest #test07CardCannotBeCreatedWithEmptyOwnerName stamp: 'FF 6/12/2022 15:00:35'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test01ValidClientCanCreateACart stamp: 'FF 6/12/2022 15:00:35'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test02InvalidClientCannotCreateACart stamp: 'FF 6/12/2022 15:00:35'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test03CreateCartReturnsUniqueCartId stamp: 'FF 6/12/2022 15:00:35'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test04ListCartOfInvalidCartIdThrowsError stamp: 'FF 6/12/2022 15:00:35'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test05ListCartIncludesAddedItemsAndItsQuantity stamp: 'FF 6/12/2022 15:00:35'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test06AddToCartWithInvalidCartIdThrowsError stamp: 'FF 6/12/2022 15:00:35'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test07CheckOutCartReturnsTransactionId stamp: 'FF 6/12/2022 15:00:35'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test08CheckOutCartOfInvalidCartIdThrowsError stamp: 'FF 6/12/2022 15:00:35'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test09CheckOutCartWithInvalidCreditCardThrowsError stamp: 'FF 6/12/2022 15:00:35'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test10ListPurchasesReturnsClientTransactions stamp: 'FF 6/12/2022 15:00:35'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test11InvalidClientCannotListAnyPurchases stamp: 'FF 6/12/2022 15:00:35'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test12CheckOutReturnsUniqueTransactionId stamp: 'FF 6/12/2022 15:00:35'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test13CartIdIsInvalidAfterCheckOut stamp: 'FF 6/12/2022 15:00:35'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test14ListPurchasesAreDifferentBetweenTwoDifferentClients stamp: 'FF 6/12/2022 15:00:35'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test15CannotCheckOutACartAfterTimeExceeded stamp: 'FF 6/12/2022 15:00:35'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test16CannotAddToCartAfterTimeExceeded stamp: 'FF 6/12/2022 15:00:35'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test17CannotListACartAfterTimeExceeded stamp: 'FF 6/12/2022 15:00:35'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test18AddToCartRestartLastTimeUsed stamp: 'FF 6/12/2022 15:00:35'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test19ListCartRestartLastTimeUsed stamp: 'FF 6/12/2022 15:00:35'!
+PASSED!
+
+----SNAPSHOT----(12 June 2022 15:01:33) CuisUniversity-5096.image priorSource: 5211994!
+
+----SNAPSHOT----(12 June 2022 15:33:52) CuisUniversity-5096.image priorSource: 5217524!

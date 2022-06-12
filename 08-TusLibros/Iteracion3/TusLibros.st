@@ -15,14 +15,12 @@ test01CartIsEmptyWhenCreated
 	self assert: cart isEmpty.
 	! !
 
-!CartTest methodsFor: 'test' stamp: 'FF 6/12/2022 11:02:48'!
+!CartTest methodsFor: 'test' stamp: 'FF 6/12/2022 14:59:22'!
 test02EmptyCartAfterAddingABookIsNotEmpty
 
 	|  cart |
 	cart := Cart from: clientId with: priceList.
-	
 	cart add: 1 of: book1 .
-	
 	self deny: cart isEmpty.! !
 
 !CartTest methodsFor: 'test' stamp: 'FF 6/12/2022 11:02:48'!
@@ -219,16 +217,17 @@ setUp
 
 !classDefinition: #CreditCardTest category: 'TusLibros'!
 TestCase subclass: #CreditCardTest
-	instanceVariableNames: 'today ownerName'
+	instanceVariableNames: 'today ownerName validNumber'
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'TusLibros'!
 
-!CreditCardTest methodsFor: 'setUp' stamp: 'FF 6/11/2022 20:17:33'!
+!CreditCardTest methodsFor: 'setUp' stamp: 'FF 6/12/2022 14:28:35'!
 setUp
 
 	today := Date today.
-	ownerName := 'owner'! !
+	ownerName := 'owner'.
+	validNumber := '4251236587945120'.! !
 
 
 !CreditCardTest methodsFor: 'test' stamp: 'FF 6/11/2022 20:18:14'!
@@ -253,49 +252,60 @@ test02CardCannotBeCreatedWithInvalidNumberCharacters
 		self assert: card isNil.
 		]! !
 
-!CreditCardTest methodsFor: 'test' stamp: 'FF 6/11/2022 20:18:26'!
+!CreditCardTest methodsFor: 'test' stamp: 'FF 6/12/2022 14:29:00'!
 test03CardCannotBeCreatedWhenValidToIsNotAMonth
 	|card|
 
-	self should: [card := CreditCard number: '4251236587945120' validTo: '' from: ownerName ]
+	self should: [card := CreditCard number: validNumber validTo: '' from: ownerName ]
 	raise: Error - MessageNotUnderstood 
 	withExceptionDo: [:anError | 
 		self assert: CreditCard invalidExpirationDate equals: anError messageText .
 		self assert: card isNil.
 		]! !
 
-!CreditCardTest methodsFor: 'test' stamp: 'FF 6/11/2022 20:18:32'!
+!CreditCardTest methodsFor: 'test' stamp: 'FF 6/12/2022 14:29:07'!
 test04CreditCardWithExpirationDateBeforeTodayShouldBeExpired
 
 	|card|
 	
-	card := CreditCard number: '4251236587945120' validTo: today month previous from: ownerName .
+	card := CreditCard number: validNumber validTo: today month previous from: ownerName .
 	
 	self assert: (card isExpiredOn: today).
 
 		! !
 
-!CreditCardTest methodsFor: 'test' stamp: 'FF 6/11/2022 20:18:44'!
+!CreditCardTest methodsFor: 'test' stamp: 'FF 6/12/2022 14:29:14'!
 test05CreditCardWithExpirationDateAfterTodayShouldNotBeExpired
 
 	|card|
 	
-	card := CreditCard number: '4251236587945120' validTo: today month next from: ownerName .
+	card := CreditCard number: validNumber validTo: today month next from: ownerName .
 	
 	self deny: (card isExpiredOn: today).
 
 		! !
 
-!CreditCardTest methodsFor: 'test' stamp: 'FF 6/11/2022 20:17:43'!
+!CreditCardTest methodsFor: 'test' stamp: 'FF 6/12/2022 14:29:20'!
 test06CreditCardExpirationMonthIsIncludedOnTheExpirationPeriod
 
 	|card|
 	
-	card := CreditCard number: '4251236587945120' validTo: today month from: ownerName .
+	card := CreditCard number: validNumber validTo: today month from: ownerName .
 	
 	self deny: (card isExpiredOn: today).
 
 		! !
+
+!CreditCardTest methodsFor: 'test' stamp: 'FF 6/12/2022 14:29:53'!
+test07CardCannotBeCreatedWithEmptyOwnerName
+	|card|
+
+	self should: [card := CreditCard number: validNumber validTo: today month from: '' ]
+	raise: Error - MessageNotUnderstood 
+	withExceptionDo: [:anError | 
+		self assert: CreditCard invalidCreditCardOwner equals: anError messageText .
+		self assert: card isNil.
+		]! !
 
 
 !classDefinition: #InterfaceFacadeTest category: 'TusLibros'!
@@ -572,7 +582,7 @@ test14ListPurchasesAreDifferentBetweenTwoDifferentClients
 	
 	! !
 
-!InterfaceFacadeTest methodsFor: 'test' stamp: 'FF 6/12/2022 11:52:37'!
+!InterfaceFacadeTest methodsFor: 'test' stamp: 'FF 6/12/2022 14:50:34'!
 test15CannotCheckOutACartAfterTimeExceeded
 
 	|  cartId  quantity |
@@ -580,7 +590,7 @@ test15CannotCheckOutACartAfterTimeExceeded
 	cartId := interfaceFacade createCartFor: clientId signInWith: password.
 	interfaceFacade addToCart: cartId book: validBookISBN quantity: quantity.
 	
-	timerSimulator simulateHalfHourHasPassed.
+	timerSimulator simulateHasPassed: (Duration minutes: 30).
 		 .
 	self should: [ interfaceFacade checkOut: cartId withCardNumber: creditCardNumber expirationDate: expirationMonth from: cardOwnerName ] 
 	raise:  Error - MessageNotUnderstood 
@@ -592,14 +602,14 @@ test15CannotCheckOutACartAfterTimeExceeded
 	
 	! !
 
-!InterfaceFacadeTest methodsFor: 'test' stamp: 'FF 6/12/2022 12:31:37'!
+!InterfaceFacadeTest methodsFor: 'test' stamp: 'FF 6/12/2022 14:50:42'!
 test16CannotAddToCartAfterTimeExceeded
 
 	|  cartId  quantity |
 	quantity := 1.
 	cartId := interfaceFacade createCartFor: clientId signInWith: password.
 	
-	timerSimulator simulateHalfHourHasPassed.
+	timerSimulator simulateHasPassed: (Duration minutes: 30)..
 		 .
 	self should: [ interfaceFacade addToCart: cartId book: validBookISBN quantity: quantity. ] 
 	raise:  Error - MessageNotUnderstood 
@@ -611,13 +621,13 @@ test16CannotAddToCartAfterTimeExceeded
 	
 	! !
 
-!InterfaceFacadeTest methodsFor: 'test' stamp: 'FF 6/12/2022 12:39:55'!
+!InterfaceFacadeTest methodsFor: 'test' stamp: 'FF 6/12/2022 14:50:53'!
 test17CannotListACartAfterTimeExceeded
 
 	|  cartId  |
 	cartId := interfaceFacade createCartFor: clientId signInWith: password.
 	
-	timerSimulator simulateHalfHourHasPassed.
+	timerSimulator simulateHasPassed: (Duration minutes: 30).
 
 	self should: [ interfaceFacade listCart: cartId] 
 	raise:  Error - MessageNotUnderstood 
@@ -629,30 +639,30 @@ test17CannotListACartAfterTimeExceeded
 	
 	! !
 
-!InterfaceFacadeTest methodsFor: 'test' stamp: 'FF 6/12/2022 12:44:14'!
+!InterfaceFacadeTest methodsFor: 'test' stamp: 'FF 6/12/2022 14:51:07'!
 test18AddToCartRestartLastTimeUsed
 
 	|  cartId  quantity listCart |
 	quantity := 1.
 	cartId := interfaceFacade createCartFor: clientId signInWith: password.
 	
-	timerSimulator simulateQuarterHourHasPassed.
+	timerSimulator simulateHasPassed: (Duration minutes: 15).
 	interfaceFacade addToCart: cartId book: validBookISBN quantity: quantity.
-	timerSimulator simulateQuarterHourHasPassed.
+	timerSimulator simulateHasPassed: (Duration minutes: 15).
 	listCart := interfaceFacade listCart: cartId.
 	
 	self deny: listCart isEmpty.! !
 
-!InterfaceFacadeTest methodsFor: 'test' stamp: 'FF 6/12/2022 12:48:08'!
+!InterfaceFacadeTest methodsFor: 'test' stamp: 'FF 6/12/2022 14:51:15'!
 test19ListCartRestartLastTimeUsed
 
 	|  cartId  quantity listCart |
 	quantity := 1.
 	cartId := interfaceFacade createCartFor: clientId signInWith: password.
 	
-	timerSimulator simulateQuarterHourHasPassed.
+	timerSimulator simulateHasPassed: (Duration minutes: 15).
 	interfaceFacade listCart: cartId.
-	timerSimulator simulateQuarterHourHasPassed.
+	timerSimulator simulateHasPassed: (Duration minutes: 15).
 	interfaceFacade addToCart: cartId book: validBookISBN quantity: quantity.
 	listCart := interfaceFacade listCart: cartId.
 	
@@ -722,9 +732,8 @@ assertQuantityIsPositive: quantityOfBookToBeAdded
 	(quantityOfBookToBeAdded <=0) ifTrue: [^self error: self class cannotAddBookWithNonPositiveQuantity ].! !
 
 
-!Cart methodsFor: 'accessing' stamp: 'FF 6/11/2022 11:56:28'!
+!Cart methodsFor: 'accessing' stamp: 'FF 6/12/2022 14:18:26'!
 books
-
 	^books copy.! !
 
 
@@ -771,21 +780,19 @@ assertCartIsNotEmpty: aCart
 	aCart isEmpty ifTrue:[^self error: self class cannotCheckOutAnEmptyCart ].
 	! !
 
-!Cashier methodsFor: 'checking out' stamp: 'FF 6/12/2022 09:02:04'!
+!Cashier methodsFor: 'checking out' stamp: 'FF 6/12/2022 13:55:22'!
 assertCreditCardIsNotExpired: aCreditCard on: anExpirationDate
-	
 	(aCreditCard isExpiredOn: anExpirationDate) ifTrue:[^self error: self class cannotPayWithExpiredCreditCard].
 ! !
 
-!Cashier methodsFor: 'checking out' stamp: 'FF 6/12/2022 11:27:08'!
+!Cashier methodsFor: 'checking out' stamp: 'FF 6/12/2022 14:20:19'!
 checkOut: aCart payingWith: aCreditCard on: aDateOfSale
 
-	| totalToDebit ticket |
+	| ticket |
 	self assertCartIsNotEmpty: aCart.
 	self assertCreditCardIsNotExpired: aCreditCard on: aDateOfSale .
 	
-	totalToDebit := aCart total.
-	merchantProcessor debit: totalToDebit from: aCreditCard .
+	merchantProcessor debit: aCart total from: aCreditCard .
 	ticket := aCart generateTicket.
 	salesList add: ticket.
 	
@@ -831,11 +838,14 @@ number: aCreditCardNumber validTo: anExpirationMonthOfYear from: aCardOwnerName
 	owner := aCardOwnerName .! !
 
 
-!CreditCard methodsFor: 'testing' stamp: 'FF 6/12/2022 09:08:39'!
+!CreditCard methodsFor: 'testing' stamp: 'FF 6/12/2022 14:21:25'!
+expirationDate
+
+	^ Date year: expirationMonth yearNumber month: expirationMonth monthName day: expirationMonth daysInMonth! !
+
+!CreditCard methodsFor: 'testing' stamp: 'FF 6/12/2022 14:21:53'!
 isExpiredOn: aDate 
-	| expirationDate |
-	expirationDate := Date year: expirationMonth yearNumber month: expirationMonth monthName day: expirationMonth daysInMonth.
-	^aDate > expirationDate.! !
+	^ aDate > self expirationDate.! !
 
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
@@ -843,12 +853,39 @@ isExpiredOn: aDate
 CreditCard class
 	instanceVariableNames: ''!
 
-!CreditCard class methodsFor: 'instance creation' stamp: 'FF 6/11/2022 20:14:34'!
+!CreditCard class methodsFor: 'assertions' stamp: 'FF 6/12/2022 14:37:31'!
+assertCreditCardIsValid: aCreditCardNumber expiringOn: anExpirationMonthOfYear from: aCardOwnerName
+
+	self assertCreditCardValidLenght: aCreditCardNumber.
+	self assertCreditCardValidFormat: aCreditCardNumber.
+	self assertCreditCardValidExpirationMonth: anExpirationMonthOfYear.
+	self assertOwnerNameIsNotEmpty: aCardOwnerName .! !
+
+!CreditCard class methodsFor: 'assertions' stamp: 'FF 6/12/2022 14:24:02'!
+assertCreditCardValidExpirationMonth: anExpirationMonthOfYear
+
+	^ (anExpirationMonthOfYear isKindOf: Month) ifFalse: [self error: self invalidExpirationDate]! !
+
+!CreditCard class methodsFor: 'assertions' stamp: 'FF 6/12/2022 14:23:32'!
+assertCreditCardValidFormat: aCreditCardNumber
+
+	^ (aCreditCardNumber noneSatisfy: [:aCharacter | aCharacter isDigit ]) ifTrue: [self error: self invalidCreditCardNumber]! !
+
+!CreditCard class methodsFor: 'assertions' stamp: 'FF 6/12/2022 14:23:03'!
+assertCreditCardValidLenght: aCreditCardNumber
+
+	^ (aCreditCardNumber size < 16) ifTrue: [self error: self invalidCreditCardNumber]! !
+
+!CreditCard class methodsFor: 'assertions' stamp: 'FF 6/12/2022 14:35:48'!
+assertOwnerNameIsNotEmpty: aCreditCardOwnerName
+
+	aCreditCardOwnerName isEmpty ifTrue:[self error: self invalidCreditCardOwner ].! !
+
+
+!CreditCard class methodsFor: 'instance creation' stamp: 'FF 6/12/2022 14:37:12'!
 number: aCreditCardNumber validTo: anExpirationMonthOfYear from: aCardOwnerName  	
 
-	(aCreditCardNumber size < 16) ifTrue: [^self error: self invalidCreditCardNumber].
-	(aCreditCardNumber noneSatisfy: [:aCharacter | aCharacter isDigit ]) ifTrue: [^self error: self invalidCreditCardNumber].
-	(anExpirationMonthOfYear isKindOf: Month) ifFalse: [^self error: self invalidExpirationDate].
+	self assertCreditCardIsValid: aCreditCardNumber expiringOn: anExpirationMonthOfYear from: aCardOwnerName.
 	^self new number: aCreditCardNumber validTo: anExpirationMonthOfYear from: aCardOwnerName ! !
 
 
@@ -856,6 +893,10 @@ number: aCreditCardNumber validTo: anExpirationMonthOfYear from: aCardOwnerName
 invalidCreditCardNumber
 	
 	^'The credit card number is invalid. The number should be 16 digits'! !
+
+!CreditCard class methodsFor: 'error messages' stamp: 'FF 6/12/2022 14:30:25'!
+invalidCreditCardOwner
+	^'The card owner is not valid'.! !
 
 !CreditCard class methodsFor: 'error messages' stamp: 'FG 6/7/2022 21:00:20'!
 invalidExpirationDate
@@ -870,81 +911,87 @@ Object subclass: #InterfaceFacade
 	poolDictionaries: ''
 	category: 'TusLibros'!
 
-!InterfaceFacade methodsFor: 'cart' stamp: 'FF 6/12/2022 12:48:55'!
+!InterfaceFacade methodsFor: 'cart' stamp: 'FF 6/12/2022 14:41:58'!
 addToCart: aCartId book: aBookISBN quantity: aQuantityToAdd
-
 	| cartFound |
-	cartFound := self findCart: aCartId.
-	
-	self assertCartIsNotExpired: aCartId.
-	
-	self updateLastTimeUsed: aCartId.
-	
+	cartFound := self findValidCartAndUpdateLastTimeUsed: aCartId.
 	cartFound add: aQuantityToAdd of: aBookISBN.
 	! !
 
-!InterfaceFacade methodsFor: 'cart' stamp: 'FF 6/12/2022 12:36:38'!
+!InterfaceFacade methodsFor: 'cart' stamp: 'FF 6/12/2022 14:02:22'!
 assertCartIsNotExpired: aCartId
 	|  lastTimeUsed now |
 	now := timer now.
-	lastTimeUsed := (cartsLastTimeUsed at: aCartId).
-	((now - lastTimeUsed) >= (Duration minutes: 30) ) 
-	ifTrue: [
+	lastTimeUsed := cartsLastTimeUsed at: aCartId.
+	now - lastTimeUsed >= (Duration minutes: 30) ifTrue: [
 		self deleteCart: aCartId .
 		self error: self class cartIsExpired.
 	 ].
 	! !
 
-!InterfaceFacade methodsFor: 'cart' stamp: 'FF 6/12/2022 12:37:17'!
+!InterfaceFacade methodsFor: 'cart' stamp: 'FF 6/12/2022 14:46:54'!
 checkOut: aCartId withCardNumber: aCreditCardNumber expirationDate: anExpirationDate from: aCardOwnerName 
-	| creditCard cart cashier |
-	cart := self findCart: aCartId.
+	| creditCard cartFound cashier |
 	
-	self assertCartIsNotExpired: aCartId.
-	
+	cartFound := self findValidCartAndUpdateLastTimeUsed: aCartId.
 	cashier := Cashier using: salesList debitProcessor: merchantProcessor.
 	creditCard := CreditCard number: aCreditCardNumber validTo: anExpirationDate from: aCardOwnerName .
-	cashier checkOut: cart payingWith: creditCard on: today.
+	cashier checkOut: cartFound payingWith: creditCard on: today.
 	self deleteCart: aCartId .
-	lastTransactionId := lastTransactionId + 1.
-	^lastTransactionId.! !
+	^self getNextTransactionId.! !
 
-!InterfaceFacade methodsFor: 'cart' stamp: 'FF 6/12/2022 12:14:58'!
+!InterfaceFacade methodsFor: 'cart' stamp: 'FF 6/12/2022 14:46:24'!
 createCartFor: aClientId signInWith: aPassword 
-	| newCart |
+	| newCart newCartId |
 	
 	self assertClient: aClientId canAuthenticateUsing: aPassword.
 	
 	newCart := Cart from: aClientId with: priceList.
-	lastCartId := lastCartId + 1.
-	cartsLastTimeUsed at: lastCartId put: timer now.
-	carts at: lastCartId put: newCart. 
-	^lastCartId.! !
+	newCartId := self getNextCartId .
+	self updateLastTimeUsed: newCartId .
+	carts at: newCartId put: newCart. 
+	^newCartId.! !
 
-!InterfaceFacade methodsFor: 'cart' stamp: 'FF 6/12/2022 12:36:48'!
+!InterfaceFacade methodsFor: 'cart' stamp: 'FF 6/12/2022 14:41:40'!
+listCart: aCartId 
+	| cartFound |
+	cartFound := self findValidCartAndUpdateLastTimeUsed: aCartId.
+	^cartFound books.! !
+
+
+!InterfaceFacade methodsFor: 'cart - private' stamp: 'FF 6/12/2022 12:36:48'!
 deleteCart: aCartId
 
 	carts removeKey: aCartId.
 	cartsLastTimeUsed removeKey: aCartId! !
 
-!InterfaceFacade methodsFor: 'cart' stamp: 'FF 6/12/2022 12:49:03'!
-listCart: aCartId 
-	| cartFound |
-	cartFound := self findCart: aCartId.
-	self assertCartIsNotExpired: aCartId.
-	self updateLastTimeUsed: aCartId.
-	^cartFound books.! !
-
-!InterfaceFacade methodsFor: 'cart' stamp: 'FF 6/12/2022 12:48:54'!
-updateLastTimeUsed: aCartId
-
-	^ cartsLastTimeUsed at: aCartId put: timer now! !
-
-
 !InterfaceFacade methodsFor: 'cart - private' stamp: 'FF 6/11/2022 19:24:18'!
 findCart: aCartId
 
 	^ carts at: aCartId ifAbsent:[self error: self class cartDoesNotExist]! !
+
+!InterfaceFacade methodsFor: 'cart - private' stamp: 'FF 6/12/2022 14:42:26'!
+findValidCartAndUpdateLastTimeUsed: aCartId
+	| cart |
+	cart := self findCart: aCartId.
+	self assertCartIsNotExpired: aCartId.
+	self updateLastTimeUsed: aCartId.
+	^cart.! !
+
+!InterfaceFacade methodsFor: 'cart - private' stamp: 'FF 6/12/2022 14:45:40'!
+getNextCartId
+	lastCartId := lastCartId + 1.
+	^lastCartId.! !
+
+!InterfaceFacade methodsFor: 'cart - private' stamp: 'FF 6/12/2022 14:45:13'!
+getNextTransactionId
+	lastTransactionId := lastTransactionId + 1.
+	^lastTransactionId.! !
+
+!InterfaceFacade methodsFor: 'cart - private' stamp: 'FF 6/12/2022 12:48:54'!
+updateLastTimeUsed: aCartId
+
+	^ cartsLastTimeUsed at: aCartId put: timer now! !
 
 
 !InterfaceFacade methodsFor: 'initialization' stamp: 'FF 6/12/2022 12:14:58'!
@@ -1099,10 +1146,6 @@ initialize
 	now := DateAndTime now.! !
 
 
-!TimerSimulator methodsFor: 'simulation' stamp: 'FF 6/12/2022 12:20:55'!
-simulateHalfHourHasPassed
-	now := now + (Duration minutes: 30).! !
-
-!TimerSimulator methodsFor: 'simulation' stamp: 'FF 6/12/2022 12:45:20'!
-simulateQuarterHourHasPassed
-	now := now + (Duration minutes: 15).! !
+!TimerSimulator methodsFor: 'simulation' stamp: 'FF 6/12/2022 14:49:47'!
+simulateHasPassed: aDuration
+	now := now + aDuration.! !
