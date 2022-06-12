@@ -11525,3 +11525,2941 @@ of: aBookBag total: anAmount
 FAILURE!
 
 ----SNAPSHOT----(11 June 2022 20:48:26) CuisUniversity-5096.image priorSource: 4972552!
+
+----STARTUP---- (12 June 2022 08:42:49) as C:\Users\Flor\Documents\windows64\CuisUniversity-5096.image!
+
+!Cashier methodsFor: 'checking out' stamp: 'FF 6/12/2022 09:02:04' prior: 50483362!
+assertCreditCardIsNotExpired: aCreditCard on: anExpirationDate
+	
+	(aCreditCard isExpiredOn: anExpirationDate) ifTrue:[^self error: self class cannotPayWithExpiredCreditCard].
+! !
+!Cashier methodsFor: 'checking out' stamp: 'FF 6/12/2022 09:02:19' prior: 50483346!
+assertCartIsNotEmpty: aCart
+	aCart isEmpty ifTrue:[^self error: self class cannotCheckOutAnEmptyCart ].
+	! !
+!Cart methodsFor: 'total' stamp: 'FF 6/12/2022 09:04:36' prior: 50486975!
+total
+	^ books sum: [:aBook | priceList at: aBook] ifEmpty: [^0].
+	! !
+!CreditCard methodsFor: 'testing' stamp: 'FF 6/12/2022 09:08:39' prior: 50483154!
+isExpiredOn: aDate 
+	| expirationDate |
+	expirationDate := Date year: expirationMonth yearNumber month: expirationMonth monthName day: expirationMonth daysInMonth.
+	^aDate > expirationDate.! !
+!Cart class methodsFor: 'instance creation' stamp: 'FF 6/12/2022 09:10:48' prior: 50483424!
+with: aPriceList 
+	^self new initializeWith: aPriceList.! !
+!Cart class methodsFor: 'error messages' stamp: 'FF 6/12/2022 09:10:56' prior: 50482236!
+cannotAddAnUncataloguedBook
+	^'The book is not in the catalog'.! !
+!Cart class methodsFor: 'error messages' stamp: 'FF 6/12/2022 09:11:05' prior: 50482210!
+cannotAddBookWithNonPositiveQuantity
+	^'Can not add books with zero or negative quantity'! !
+!Cart methodsFor: 'testing' stamp: 'FF 6/12/2022 09:40:32' prior: 50482194!
+isEmpty
+	^books isEmpty.! !
+
+!classDefinition: #InterfaceFacade category: 'TusLibros' stamp: 'FF 6/12/2022 10:08:27'!
+Object subclass: #InterfaceFacade
+	instanceVariableNames: 'authenticatorService lastCartId carts priceList merchantProcessor today salesList'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'TusLibros'!
+!InterfaceFacade methodsFor: 'cart' stamp: 'FF 6/12/2022 10:08:26' prior: 50488771!
+checkOut: aCartId withCardNumber: aCreditCardNumber expirationDate: anExpirationDate from: aCardOwnerName 
+	| creditCard cart cashier |
+	cart := self findCart: aCartId.
+	cashier := Cashier using: salesList debitProcessor: merchantProcessor.
+	creditCard := CreditCard number: aCreditCardNumber validTo: anExpirationDate from: aCardOwnerName .
+	cashier checkOut: cart payingWith: creditCard on: today.! !
+!InterfaceFacade methodsFor: 'initialization' stamp: 'FF 6/12/2022 10:08:51' prior: 50486922!
+priceList: aPriceList authenticator: anAuthenticatorService
+	authenticatorService := anAuthenticatorService.
+	carts := Dictionary new.
+	lastCartId := 0.
+	priceList := aPriceList .
+	! !
+
+!testRun: #InterfaceFacadeTest #test04ListCartOfInvalidCartIdThrowsError stamp: 'FF 6/12/2022 10:08:57'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test01ValidClientCanCreateACart stamp: 'FF 6/12/2022 10:08:57'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test02InvalidClientCannotCreateACart stamp: 'FF 6/12/2022 10:08:57'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test03CreateCartReturnsUniqueCartId stamp: 'FF 6/12/2022 10:08:57'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test04ListCartOfInvalidCartIdThrowsError stamp: 'FF 6/12/2022 10:08:57'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test05ListCartIncludesAddedItemsAndItsQuantity stamp: 'FF 6/12/2022 10:08:57'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test06AddToCartWithInvalidCartIdThrowsError stamp: 'FF 6/12/2022 10:08:57'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test07CheckOutCartReturnsTransactionId stamp: 'FF 6/12/2022 10:08:57'!
+ERROR!
+
+!testRun: #InterfaceFacadeTest #test08CheckOutCartOfInvalidCartIdThrowsError stamp: 'FF 6/12/2022 10:08:57'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test09CheckOutCartWithInvalidCreditCardThrowsError stamp: 'FF 6/12/2022 10:08:57'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test10ListPurchasesReturnsClientTransactions stamp: 'FF 6/12/2022 10:08:57'!
+ERROR!
+
+!testRun: #InterfaceFacadeTest #test10ListPurchasesReturnsClientTransactions stamp: 'FF 6/12/2022 10:09:06'!
+ERROR!
+
+!testRun: #InterfaceFacadeTest #test09CheckOutCartWithInvalidCreditCardThrowsError stamp: 'FF 6/12/2022 10:09:15'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test01ValidClientCanCreateACart stamp: 'FF 6/12/2022 10:09:15'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test02InvalidClientCannotCreateACart stamp: 'FF 6/12/2022 10:09:15'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test03CreateCartReturnsUniqueCartId stamp: 'FF 6/12/2022 10:09:15'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test04ListCartOfInvalidCartIdThrowsError stamp: 'FF 6/12/2022 10:09:15'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test05ListCartIncludesAddedItemsAndItsQuantity stamp: 'FF 6/12/2022 10:09:15'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test06AddToCartWithInvalidCartIdThrowsError stamp: 'FF 6/12/2022 10:09:15'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test07CheckOutCartReturnsTransactionId stamp: 'FF 6/12/2022 10:09:15'!
+ERROR!
+
+!testRun: #InterfaceFacadeTest #test08CheckOutCartOfInvalidCartIdThrowsError stamp: 'FF 6/12/2022 10:09:15'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test09CheckOutCartWithInvalidCreditCardThrowsError stamp: 'FF 6/12/2022 10:09:15'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test10ListPurchasesReturnsClientTransactions stamp: 'FF 6/12/2022 10:09:15'!
+ERROR!
+!InterfaceFacade methodsFor: 'initialization' stamp: 'FF 6/12/2022 10:09:57' prior: 50489006!
+priceList: aPriceList authenticator: anAuthenticatorService
+	authenticatorService := anAuthenticatorService.
+	carts := Dictionary new.
+	lastCartId := 0.
+	priceList := aPriceList .
+	! !
+!InterfaceFacade methodsFor: 'initialization' stamp: 'FF 6/12/2022 10:11:52' prior: 50489098!
+priceList: aPriceList authenticator: anAuthenticatorService
+	authenticatorService := anAuthenticatorService.
+	carts := Dictionary new.
+	lastCartId := 0.
+	priceList := aPriceList .
+	salesList := OrderedCollection new.
+	merchantProcessor := MerchantProcessorSimulator new.
+	
+	! !
+!InterfaceFacade methodsFor: 'initialization' stamp: 'FF 6/12/2022 10:12:24' prior: 50489107!
+priceList: aPriceList authenticator: anAuthenticatorService
+	authenticatorService := anAuthenticatorService.
+	carts := Dictionary new.
+	lastCartId := 0.
+	priceList := aPriceList .
+	salesList := OrderedCollection new.
+	merchantProcessor := MerchantProcessorSimulator new.
+	today := Date today.
+	! !
+!InterfaceFacade methodsFor: 'cart' stamp: 'FF 6/12/2022 10:14:07' prior: 50488990!
+checkOut: aCartId withCardNumber: aCreditCardNumber expirationDate: anExpirationDate from: aCardOwnerName 
+	| creditCard cart cashier |
+	cart := self findCart: aCartId.
+	cashier := Cashier using: salesList debitProcessor: merchantProcessor.
+	creditCard := CreditCard number: aCreditCardNumber validTo: anExpirationDate from: aCardOwnerName .
+	cashier checkOut: cart payingWith: creditCard on: today.
+	^0.! !
+
+!testRun: #CashierTest #test05CannotCheckOutCartProvidingStolenCreditCard stamp: 'FF 6/12/2022 10:16:20'!
+PASSED!
+
+!testRun: #CashierTest #test01CannotCheckOutEmptyCart stamp: 'FF 6/12/2022 10:16:20'!
+PASSED!
+
+!testRun: #CashierTest #test02CannotCheckOutCartProvidingAnExpiredCreditCard stamp: 'FF 6/12/2022 10:16:20'!
+PASSED!
+
+!testRun: #CashierTest #test03CheckOutCartWithItemsAddElementToSalesList stamp: 'FF 6/12/2022 10:16:20'!
+PASSED!
+
+!testRun: #CashierTest #test04CheckOutCartWithItemsReturnsTotal stamp: 'FF 6/12/2022 10:16:20'!
+FAILURE!
+
+!testRun: #CashierTest #test05CannotCheckOutCartProvidingStolenCreditCard stamp: 'FF 6/12/2022 10:16:20'!
+PASSED!
+
+!testRun: #CashierTest #test06CannotCheckOutCartProvidingCreditCardWithoutEnoughLimit stamp: 'FF 6/12/2022 10:16:20'!
+PASSED!
+
+!testRun: #CashierTest #test04CheckOutCartWithItemsReturnsTotal stamp: 'FF 6/12/2022 10:16:20'!
+FAILURE!
+!CashierTest methodsFor: 'test' stamp: 'FF 6/12/2022 10:17:24' prior: 50485332!
+test04CheckOutCartWithItemsReturnsTotal
+
+	| cart cashier ticket |
+	
+	cart := Cart with: priceList.
+	cart add: 1 of: book1.
+	cart add: 2 of: book2.
+	cashier := Cashier using: sales debitProcessor: merchantProcessor .
+	
+	ticket := cashier checkOut: cart payingWith: validCreditCard on: today.
+	
+	self assert: cart total equals: ticket total.
+	self assert: 1 equals: merchantProcessor answeredCalls.! !
+
+!testRun: #CashierTest #test04CheckOutCartWithItemsReturnsTotal stamp: 'FF 6/12/2022 10:17:32'!
+ERROR!
+!Ticket methodsFor: 'initialization' stamp: 'FF 6/12/2022 10:19:59'!
+total
+	^total.! !
+!Ticket methodsFor: 'initialization' stamp: 'FF 6/12/2022 10:20:12'!
+books
+	^books copy.! !
+
+!testRun: #CashierTest #test05CannotCheckOutCartProvidingStolenCreditCard stamp: 'FF 6/12/2022 10:20:25'!
+PASSED!
+
+!testRun: #CashierTest #test01CannotCheckOutEmptyCart stamp: 'FF 6/12/2022 10:20:25'!
+PASSED!
+
+!testRun: #CashierTest #test02CannotCheckOutCartProvidingAnExpiredCreditCard stamp: 'FF 6/12/2022 10:20:25'!
+PASSED!
+
+!testRun: #CashierTest #test03CheckOutCartWithItemsAddElementToSalesList stamp: 'FF 6/12/2022 10:20:25'!
+PASSED!
+
+!testRun: #CashierTest #test04CheckOutCartWithItemsReturnsTotal stamp: 'FF 6/12/2022 10:20:25'!
+PASSED!
+
+!testRun: #CashierTest #test05CannotCheckOutCartProvidingStolenCreditCard stamp: 'FF 6/12/2022 10:20:25'!
+PASSED!
+
+!testRun: #CashierTest #test06CannotCheckOutCartProvidingCreditCardWithoutEnoughLimit stamp: 'FF 6/12/2022 10:20:25'!
+PASSED!
+
+!methodRemoval: Cashier class #using: stamp: 'FF 6/12/2022 10:20:37'!
+using: aSalesList
+	^self new initializeUsing: aSalesList. !
+
+!methodRemoval: Cashier class #with: stamp: 'FF 6/12/2022 10:20:44'!
+with: anOrderedCollection 
+	"DO NOT FORGET TO RENAME COLLABORATORS AND REMOVE THIS COMMENT!!!!"
+	self shouldBeImplemented.
+	^self new initializeWith: anOrderedCollection !
+
+!testRun: #InterfaceFacadeTest #test10ListPurchasesReturnsClientTransactions stamp: 'FF 6/12/2022 10:21:14'!
+ERROR!
+!InterfaceFacade methodsFor: 'client' stamp: 'FF 6/12/2022 10:21:52' prior: 50488735!
+listPurchasesFrom: aClientId signInWith: aPassword 
+	^salesList.! !
+
+!testRun: #InterfaceFacadeTest #test10ListPurchasesReturnsClientTransactions stamp: 'FF 6/12/2022 10:21:59'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test01ValidClientCanCreateACart stamp: 'FF 6/12/2022 10:21:59'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test02InvalidClientCannotCreateACart stamp: 'FF 6/12/2022 10:21:59'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test03CreateCartReturnsUniqueCartId stamp: 'FF 6/12/2022 10:21:59'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test04ListCartOfInvalidCartIdThrowsError stamp: 'FF 6/12/2022 10:21:59'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test05ListCartIncludesAddedItemsAndItsQuantity stamp: 'FF 6/12/2022 10:21:59'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test06AddToCartWithInvalidCartIdThrowsError stamp: 'FF 6/12/2022 10:21:59'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test07CheckOutCartReturnsTransactionId stamp: 'FF 6/12/2022 10:21:59'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test08CheckOutCartOfInvalidCartIdThrowsError stamp: 'FF 6/12/2022 10:21:59'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test09CheckOutCartWithInvalidCreditCardThrowsError stamp: 'FF 6/12/2022 10:21:59'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test10ListPurchasesReturnsClientTransactions stamp: 'FF 6/12/2022 10:21:59'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test10ListPurchasesReturnsClientTransactions stamp: 'FF 6/12/2022 10:22:05'!
+PASSED!
+
+!testRun: #CartTest #test01CartIsEmptyWhenCreated stamp: 'FF 6/12/2022 10:22:05'!
+PASSED!
+
+!testRun: #CartTest #test02EmptyCartAfterAddingABookIsNotEmpty stamp: 'FF 6/12/2022 10:22:05'!
+PASSED!
+
+!testRun: #CartTest #test03CannotAddBooksToCartWithNonPositiveQuantity stamp: 'FF 6/12/2022 10:22:05'!
+PASSED!
+
+!testRun: #CartTest #test04CannotAddAnUncataloguedBook stamp: 'FF 6/12/2022 10:22:05'!
+PASSED!
+
+!testRun: #CartTest #test05CartReturnsEmptyBookListWhenCreated stamp: 'FF 6/12/2022 10:22:05'!
+PASSED!
+
+!testRun: #CartTest #test06CartBookListIncludesBookAfterAdding stamp: 'FF 6/12/2022 10:22:05'!
+PASSED!
+
+!testRun: #CartTest #test07EmptyCartTotalIsZero stamp: 'FF 6/12/2022 10:22:05'!
+PASSED!
+
+!testRun: #CartTest #test08CartWithItemsTotalIsTheSumOfItemPrices stamp: 'FF 6/12/2022 10:22:05'!
+PASSED!
+
+!testRun: #CashierTest #test01CannotCheckOutEmptyCart stamp: 'FF 6/12/2022 10:22:05'!
+PASSED!
+
+!testRun: #CashierTest #test02CannotCheckOutCartProvidingAnExpiredCreditCard stamp: 'FF 6/12/2022 10:22:05'!
+PASSED!
+
+!testRun: #CashierTest #test03CheckOutCartWithItemsAddElementToSalesList stamp: 'FF 6/12/2022 10:22:05'!
+PASSED!
+
+!testRun: #CashierTest #test04CheckOutCartWithItemsReturnsTotal stamp: 'FF 6/12/2022 10:22:05'!
+PASSED!
+
+!testRun: #CashierTest #test05CannotCheckOutCartProvidingStolenCreditCard stamp: 'FF 6/12/2022 10:22:05'!
+PASSED!
+
+!testRun: #CashierTest #test06CannotCheckOutCartProvidingCreditCardWithoutEnoughLimit stamp: 'FF 6/12/2022 10:22:05'!
+PASSED!
+
+!testRun: #CreditCardTest #test01CardCannotBeCreatedWithInvalidNumberLenght stamp: 'FF 6/12/2022 10:22:05'!
+PASSED!
+
+!testRun: #CreditCardTest #test02CardCannotBeCreatedWithInvalidNumberCharacters stamp: 'FF 6/12/2022 10:22:05'!
+PASSED!
+
+!testRun: #CreditCardTest #test03CardCannotBeCreatedWhenValidToIsNotAMonth stamp: 'FF 6/12/2022 10:22:05'!
+PASSED!
+
+!testRun: #CreditCardTest #test04CreditCardWithExpirationDateBeforeTodayShouldBeExpired stamp: 'FF 6/12/2022 10:22:05'!
+PASSED!
+
+!testRun: #CreditCardTest #test05CreditCardWithExpirationDateAfterTodayShouldNotBeExpired stamp: 'FF 6/12/2022 10:22:05'!
+PASSED!
+
+!testRun: #CreditCardTest #test06CreditCardExpirationMonthIsIncludedOnTheExpirationPeriod stamp: 'FF 6/12/2022 10:22:05'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test01ValidClientCanCreateACart stamp: 'FF 6/12/2022 10:22:05'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test02InvalidClientCannotCreateACart stamp: 'FF 6/12/2022 10:22:05'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test03CreateCartReturnsUniqueCartId stamp: 'FF 6/12/2022 10:22:05'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test04ListCartOfInvalidCartIdThrowsError stamp: 'FF 6/12/2022 10:22:05'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test05ListCartIncludesAddedItemsAndItsQuantity stamp: 'FF 6/12/2022 10:22:05'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test06AddToCartWithInvalidCartIdThrowsError stamp: 'FF 6/12/2022 10:22:05'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test07CheckOutCartReturnsTransactionId stamp: 'FF 6/12/2022 10:22:05'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test08CheckOutCartOfInvalidCartIdThrowsError stamp: 'FF 6/12/2022 10:22:05'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test09CheckOutCartWithInvalidCreditCardThrowsError stamp: 'FF 6/12/2022 10:22:05'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test10ListPurchasesReturnsClientTransactions stamp: 'FF 6/12/2022 10:22:05'!
+PASSED!
+!InterfaceFacadeTest methodsFor: 'test' stamp: 'FF 6/12/2022 10:27:30'!
+test11InvalidClientCannotListAnyPurchases
+
+	| listPurchases |
+	
+	self should: [ listPurchases := interfaceFacadeInvalid listPurchasesFrom: clientId signInWith: password ] 
+	raise:  Error - MessageNotUnderstood 
+	withExceptionDo: [ :anError |
+		self assert: InterfaceFacade clientIsNotValid equals: anError messageText.
+		self assert: listPurchases isNil.
+	].
+
+	
+	
+	! !
+
+!testRun: #InterfaceFacadeTest #test11InvalidClientCannotListAnyPurchases stamp: 'FF 6/12/2022 10:27:33'!
+FAILURE!
+!InterfaceFacade methodsFor: 'client' stamp: 'FF 6/12/2022 10:28:05' prior: 50489240!
+listPurchasesFrom: aClientId signInWith: aPassword 
+	(authenticatorService canAuthenticate: aClientId with: aPassword) ifFalse: [^self error: self class clientIsNotValid].
+	^salesList.! !
+
+!testRun: #InterfaceFacadeTest #test11InvalidClientCannotListAnyPurchases stamp: 'FF 6/12/2022 10:28:13'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test01ValidClientCanCreateACart stamp: 'FF 6/12/2022 10:28:13'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test02InvalidClientCannotCreateACart stamp: 'FF 6/12/2022 10:28:13'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test03CreateCartReturnsUniqueCartId stamp: 'FF 6/12/2022 10:28:13'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test04ListCartOfInvalidCartIdThrowsError stamp: 'FF 6/12/2022 10:28:13'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test05ListCartIncludesAddedItemsAndItsQuantity stamp: 'FF 6/12/2022 10:28:13'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test06AddToCartWithInvalidCartIdThrowsError stamp: 'FF 6/12/2022 10:28:13'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test07CheckOutCartReturnsTransactionId stamp: 'FF 6/12/2022 10:28:13'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test08CheckOutCartOfInvalidCartIdThrowsError stamp: 'FF 6/12/2022 10:28:13'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test09CheckOutCartWithInvalidCreditCardThrowsError stamp: 'FF 6/12/2022 10:28:13'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test10ListPurchasesReturnsClientTransactions stamp: 'FF 6/12/2022 10:28:13'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test11InvalidClientCannotListAnyPurchases stamp: 'FF 6/12/2022 10:28:13'!
+PASSED!
+!InterfaceFacade methodsFor: 'cart' stamp: 'FF 6/12/2022 10:28:46' prior: 50486820!
+createCartFor: aClientId signInWith: aPassword 
+	| newCart |
+	
+	(authenticatorService canAuthenticate: aClientId with: aPassword) ifFalse: [self error: self class clientIsNotValid].
+	
+	newCart := Cart with: priceList.
+	lastCartId := lastCartId + 1.
+	carts at: lastCartId put: newCart. 
+	^lastCartId.! !
+!InterfaceFacade methodsFor: 'cart' stamp: 'FF 6/12/2022 10:29:49'!
+assertClient: aClientId canAuthenticateUsing: aPassword
+
+	^ (authenticatorService canAuthenticate: aClientId with: aPassword) ifFalse: [self error: self class clientIsNotValid]! !
+!InterfaceFacade methodsFor: 'cart' stamp: 'FF 6/12/2022 10:29:49' prior: 50489463!
+createCartFor: aClientId signInWith: aPassword 
+	| newCart |
+	
+	self assertClient: aClientId canAuthenticateUsing: aPassword.
+	
+	newCart := Cart with: priceList.
+	lastCartId := lastCartId + 1.
+	carts at: lastCartId put: newCart. 
+	^lastCartId.! !
+!InterfaceFacade methodsFor: 'client' stamp: 'FF 6/12/2022 10:30:26' prior: 50489411!
+listPurchasesFrom: aClientId signInWith: aPassword 
+	self assertClient: aClientId canAuthenticateUsing: aPassword.
+	^salesList.! !
+
+!testRun: #InterfaceFacadeTest #test11InvalidClientCannotListAnyPurchases stamp: 'FF 6/12/2022 10:32:12'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test01ValidClientCanCreateACart stamp: 'FF 6/12/2022 10:32:12'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test02InvalidClientCannotCreateACart stamp: 'FF 6/12/2022 10:32:12'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test03CreateCartReturnsUniqueCartId stamp: 'FF 6/12/2022 10:32:12'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test04ListCartOfInvalidCartIdThrowsError stamp: 'FF 6/12/2022 10:32:12'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test05ListCartIncludesAddedItemsAndItsQuantity stamp: 'FF 6/12/2022 10:32:12'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test06AddToCartWithInvalidCartIdThrowsError stamp: 'FF 6/12/2022 10:32:12'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test07CheckOutCartReturnsTransactionId stamp: 'FF 6/12/2022 10:32:12'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test08CheckOutCartOfInvalidCartIdThrowsError stamp: 'FF 6/12/2022 10:32:13'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test09CheckOutCartWithInvalidCreditCardThrowsError stamp: 'FF 6/12/2022 10:32:13'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test10ListPurchasesReturnsClientTransactions stamp: 'FF 6/12/2022 10:32:13'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test11InvalidClientCannotListAnyPurchases stamp: 'FF 6/12/2022 10:32:13'!
+PASSED!
+!InterfaceFacadeTest methodsFor: 'test' stamp: 'FF 6/12/2022 10:32:50'!
+test12CheckOutReturnsUniqueTransactionId
+
+	| firstCartId secondCartId |
+	
+	firstCartId := interfaceFacade createCartFor: clientId signInWith: password .
+	secondCartId := interfaceFacade createCartFor: clientId signInWith: password .
+
+	self deny: (firstCartId = secondCartId).
+	
+
+	
+	
+	! !
+!InterfaceFacadeTest methodsFor: 'test' stamp: 'FF 6/12/2022 10:35:17' prior: 50489545!
+test12CheckOutReturnsUniqueTransactionId
+
+	| firstCartId secondCartId quantity firstTransactionId secondTransactionId |
+	quantity := 1.
+	firstCartId := interfaceFacade createCartFor: clientId signInWith: password.
+	interfaceFacade addToCart: firstCartId book: validBookISBN quantity: quantity.
+		
+	firstTransactionId := interfaceFacade checkOut: firstCartId withCardNumber: creditCardNumber expirationDate: expirationMonth from: cardOwnerName .
+	
+	secondCartId := interfaceFacade createCartFor: clientId signInWith: password.
+	interfaceFacade addToCart: secondCartId book: validBookISBN quantity: quantity.
+		
+	secondTransactionId := interfaceFacade checkOut: secondCartId withCardNumber: creditCardNumber expirationDate: expirationMonth from: cardOwnerName .
+	
+
+	self deny: (firstTransactionId = secondTransactionId).
+	
+
+	
+	
+	! !
+
+!testRun: #InterfaceFacadeTest #test12CheckOutReturnsUniqueTransactionId stamp: 'FF 6/12/2022 10:35:34'!
+FAILURE!
+
+!classDefinition: #InterfaceFacade category: 'TusLibros' stamp: 'FF 6/12/2022 10:36:20'!
+Object subclass: #InterfaceFacade
+	instanceVariableNames: 'authenticatorService lastCartId carts priceList merchantProcessor today salesList lastTransactionId'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'TusLibros'!
+!InterfaceFacade methodsFor: 'cart' stamp: 'FF 6/12/2022 10:36:17' prior: 50489131!
+checkOut: aCartId withCardNumber: aCreditCardNumber expirationDate: anExpirationDate from: aCardOwnerName 
+	| creditCard cart cashier |
+	cart := self findCart: aCartId.
+	cashier := Cashier using: salesList debitProcessor: merchantProcessor.
+	creditCard := CreditCard number: aCreditCardNumber validTo: anExpirationDate from: aCardOwnerName .
+	cashier checkOut: cart payingWith: creditCard on: today.
+	lastTransactionId := lastTransactionId + 1.
+	^lastTransactionId.! !
+!InterfaceFacade methodsFor: 'initialization' stamp: 'FF 6/12/2022 10:36:36' prior: 50489119!
+priceList: aPriceList authenticator: anAuthenticatorService
+	authenticatorService := anAuthenticatorService.
+	carts := Dictionary new.
+	lastCartId := 0.
+	priceList := aPriceList .
+	salesList := OrderedCollection new.
+	merchantProcessor := MerchantProcessorSimulator new.
+	today := Date today.
+	lastTransactionId := 0.
+	! !
+
+!testRun: #InterfaceFacadeTest #test12CheckOutReturnsUniqueTransactionId stamp: 'FF 6/12/2022 10:36:50'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test12CheckOutReturnsUniqueTransactionId stamp: 'FF 6/12/2022 10:36:53'!
+PASSED!
+
+!testRun: #CartTest #test01CartIsEmptyWhenCreated stamp: 'FF 6/12/2022 10:36:53'!
+PASSED!
+
+!testRun: #CartTest #test02EmptyCartAfterAddingABookIsNotEmpty stamp: 'FF 6/12/2022 10:36:53'!
+PASSED!
+
+!testRun: #CartTest #test03CannotAddBooksToCartWithNonPositiveQuantity stamp: 'FF 6/12/2022 10:36:53'!
+PASSED!
+
+!testRun: #CartTest #test04CannotAddAnUncataloguedBook stamp: 'FF 6/12/2022 10:36:53'!
+PASSED!
+
+!testRun: #CartTest #test05CartReturnsEmptyBookListWhenCreated stamp: 'FF 6/12/2022 10:36:53'!
+PASSED!
+
+!testRun: #CartTest #test06CartBookListIncludesBookAfterAdding stamp: 'FF 6/12/2022 10:36:53'!
+PASSED!
+
+!testRun: #CartTest #test07EmptyCartTotalIsZero stamp: 'FF 6/12/2022 10:36:53'!
+PASSED!
+
+!testRun: #CartTest #test08CartWithItemsTotalIsTheSumOfItemPrices stamp: 'FF 6/12/2022 10:36:53'!
+PASSED!
+
+!testRun: #CashierTest #test01CannotCheckOutEmptyCart stamp: 'FF 6/12/2022 10:36:53'!
+PASSED!
+
+!testRun: #CashierTest #test02CannotCheckOutCartProvidingAnExpiredCreditCard stamp: 'FF 6/12/2022 10:36:54'!
+PASSED!
+
+!testRun: #CashierTest #test03CheckOutCartWithItemsAddElementToSalesList stamp: 'FF 6/12/2022 10:36:54'!
+PASSED!
+
+!testRun: #CashierTest #test04CheckOutCartWithItemsReturnsTotal stamp: 'FF 6/12/2022 10:36:54'!
+PASSED!
+
+!testRun: #CashierTest #test05CannotCheckOutCartProvidingStolenCreditCard stamp: 'FF 6/12/2022 10:36:54'!
+PASSED!
+
+!testRun: #CashierTest #test06CannotCheckOutCartProvidingCreditCardWithoutEnoughLimit stamp: 'FF 6/12/2022 10:36:54'!
+PASSED!
+
+!testRun: #CreditCardTest #test01CardCannotBeCreatedWithInvalidNumberLenght stamp: 'FF 6/12/2022 10:36:54'!
+PASSED!
+
+!testRun: #CreditCardTest #test02CardCannotBeCreatedWithInvalidNumberCharacters stamp: 'FF 6/12/2022 10:36:54'!
+PASSED!
+
+!testRun: #CreditCardTest #test03CardCannotBeCreatedWhenValidToIsNotAMonth stamp: 'FF 6/12/2022 10:36:54'!
+PASSED!
+
+!testRun: #CreditCardTest #test04CreditCardWithExpirationDateBeforeTodayShouldBeExpired stamp: 'FF 6/12/2022 10:36:54'!
+PASSED!
+
+!testRun: #CreditCardTest #test05CreditCardWithExpirationDateAfterTodayShouldNotBeExpired stamp: 'FF 6/12/2022 10:36:54'!
+PASSED!
+
+!testRun: #CreditCardTest #test06CreditCardExpirationMonthIsIncludedOnTheExpirationPeriod stamp: 'FF 6/12/2022 10:36:54'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test01ValidClientCanCreateACart stamp: 'FF 6/12/2022 10:36:54'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test02InvalidClientCannotCreateACart stamp: 'FF 6/12/2022 10:36:54'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test03CreateCartReturnsUniqueCartId stamp: 'FF 6/12/2022 10:36:54'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test04ListCartOfInvalidCartIdThrowsError stamp: 'FF 6/12/2022 10:36:54'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test05ListCartIncludesAddedItemsAndItsQuantity stamp: 'FF 6/12/2022 10:36:54'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test06AddToCartWithInvalidCartIdThrowsError stamp: 'FF 6/12/2022 10:36:54'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test07CheckOutCartReturnsTransactionId stamp: 'FF 6/12/2022 10:36:54'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test08CheckOutCartOfInvalidCartIdThrowsError stamp: 'FF 6/12/2022 10:36:54'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test09CheckOutCartWithInvalidCreditCardThrowsError stamp: 'FF 6/12/2022 10:36:54'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test10ListPurchasesReturnsClientTransactions stamp: 'FF 6/12/2022 10:36:54'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test11InvalidClientCannotListAnyPurchases stamp: 'FF 6/12/2022 10:36:54'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test12CheckOutReturnsUniqueTransactionId stamp: 'FF 6/12/2022 10:36:54'!
+PASSED!
+!InterfaceFacadeTest methodsFor: 'test' stamp: 'FF 6/12/2022 10:40:25'!
+test13CartIdIsInvalidAfterCheckOut
+
+	|  cartId  quantity listPurchases transactionId |
+	quantity := 1.
+	cartId := interfaceFacade createCartFor: clientId signInWith: password.
+	interfaceFacade addToCart: cartId book: validBookISBN quantity: quantity.
+		
+	transactionId := interfaceFacade checkOut: cartId withCardNumber: creditCardNumber expirationDate: expirationMonth from: cardOwnerName .
+	listPurchases := interfaceFacade listPurchasesFrom: clientId signInWith: password.
+	
+	self assert: transactionId notNil.
+	self deny: listPurchases isEmpty.
+	self assert: (listPurchases at: 1) books includes: validBookISBN .
+	self assert: quantity equals: ((listPurchases at: 1) books occurrencesOf: validBookISBN).
+	self assert: 15 equals: ((listPurchases at: 1) total).
+
+	
+	
+	! !
+!InterfaceFacadeTest methodsFor: 'test' stamp: 'FF 6/12/2022 10:43:07' prior: 50489751!
+test13CartIdIsInvalidAfterCheckOut
+
+	|  cartId  quantity transactionId |
+	quantity := 1.
+	cartId := interfaceFacade createCartFor: clientId signInWith: password.
+	interfaceFacade addToCart: cartId book: validBookISBN quantity: quantity.
+		
+	transactionId := interfaceFacade checkOut: cartId withCardNumber: creditCardNumber expirationDate: expirationMonth from: cardOwnerName .
+	
+	self should: [ transactionId := interfaceFacade checkOut: cartId withCardNumber: creditCardNumber expirationDate: expirationMonth from: cardOwnerName ] 
+	raise:  Error - MessageNotUnderstood 
+	withExceptionDo: [ :anError |
+		self assert: InterfaceFacade cartDoesNotExist equals: anError messageText.
+	].
+
+	
+	
+	! !
+!InterfaceFacadeTest methodsFor: 'test' stamp: 'FF 6/12/2022 10:43:26' prior: 50489778!
+test13CartIdIsInvalidAfterCheckOut
+
+	|  cartId  quantity transactionId |
+	quantity := 1.
+	cartId := interfaceFacade createCartFor: clientId signInWith: password.
+	interfaceFacade addToCart: cartId book: validBookISBN quantity: quantity.
+		
+	interfaceFacade checkOut: cartId withCardNumber: creditCardNumber expirationDate: expirationMonth from: cardOwnerName .
+	
+	self should: [ transactionId := interfaceFacade checkOut: cartId withCardNumber: creditCardNumber expirationDate: expirationMonth from: cardOwnerName ] 
+	raise:  Error - MessageNotUnderstood 
+	withExceptionDo: [ :anError |
+		self assert: InterfaceFacade cartDoesNotExist equals: anError messageText.
+	].
+
+	
+	
+	! !
+!InterfaceFacadeTest methodsFor: 'test' stamp: 'FF 6/12/2022 10:43:33' prior: 50489803!
+test13CartIdIsInvalidAfterCheckOut
+
+	|  cartId  quantity |
+	quantity := 1.
+	cartId := interfaceFacade createCartFor: clientId signInWith: password.
+	interfaceFacade addToCart: cartId book: validBookISBN quantity: quantity.
+		
+	interfaceFacade checkOut: cartId withCardNumber: creditCardNumber expirationDate: expirationMonth from: cardOwnerName .
+	
+	self should: [ interfaceFacade checkOut: cartId withCardNumber: creditCardNumber expirationDate: expirationMonth from: cardOwnerName ] 
+	raise:  Error - MessageNotUnderstood 
+	withExceptionDo: [ :anError |
+		self assert: InterfaceFacade cartDoesNotExist equals: anError messageText.
+	].
+
+	
+	
+	! !
+
+!testRun: #InterfaceFacadeTest #test13CartIdIsInvalidAfterCheckOut stamp: 'FF 6/12/2022 10:43:40'!
+FAILURE!
+!InterfaceFacade methodsFor: 'cart' stamp: 'FF 6/12/2022 10:44:49' prior: 50489600!
+checkOut: aCartId withCardNumber: aCreditCardNumber expirationDate: anExpirationDate from: aCardOwnerName 
+	| creditCard cart cashier |
+	cart := self findCart: aCartId.
+	cashier := Cashier using: salesList debitProcessor: merchantProcessor.
+	creditCard := CreditCard number: aCreditCardNumber validTo: anExpirationDate from: aCardOwnerName .
+	cashier checkOut: cart payingWith: creditCard on: today.
+	carts removeKey: aCartId.
+	lastTransactionId := lastTransactionId + 1.
+	^lastTransactionId.! !
+
+!testRun: #InterfaceFacadeTest #test13CartIdIsInvalidAfterCheckOut stamp: 'FF 6/12/2022 10:45:03'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test13CartIdIsInvalidAfterCheckOut stamp: 'FF 6/12/2022 10:45:06'!
+PASSED!
+
+!testRun: #CartTest #test01CartIsEmptyWhenCreated stamp: 'FF 6/12/2022 10:45:06'!
+PASSED!
+
+!testRun: #CartTest #test02EmptyCartAfterAddingABookIsNotEmpty stamp: 'FF 6/12/2022 10:45:06'!
+PASSED!
+
+!testRun: #CartTest #test03CannotAddBooksToCartWithNonPositiveQuantity stamp: 'FF 6/12/2022 10:45:06'!
+PASSED!
+
+!testRun: #CartTest #test04CannotAddAnUncataloguedBook stamp: 'FF 6/12/2022 10:45:06'!
+PASSED!
+
+!testRun: #CartTest #test05CartReturnsEmptyBookListWhenCreated stamp: 'FF 6/12/2022 10:45:06'!
+PASSED!
+
+!testRun: #CartTest #test06CartBookListIncludesBookAfterAdding stamp: 'FF 6/12/2022 10:45:06'!
+PASSED!
+
+!testRun: #CartTest #test07EmptyCartTotalIsZero stamp: 'FF 6/12/2022 10:45:06'!
+PASSED!
+
+!testRun: #CartTest #test08CartWithItemsTotalIsTheSumOfItemPrices stamp: 'FF 6/12/2022 10:45:06'!
+PASSED!
+
+!testRun: #CashierTest #test01CannotCheckOutEmptyCart stamp: 'FF 6/12/2022 10:45:06'!
+PASSED!
+
+!testRun: #CashierTest #test02CannotCheckOutCartProvidingAnExpiredCreditCard stamp: 'FF 6/12/2022 10:45:06'!
+PASSED!
+
+!testRun: #CashierTest #test03CheckOutCartWithItemsAddElementToSalesList stamp: 'FF 6/12/2022 10:45:06'!
+PASSED!
+
+!testRun: #CashierTest #test04CheckOutCartWithItemsReturnsTotal stamp: 'FF 6/12/2022 10:45:06'!
+PASSED!
+
+!testRun: #CashierTest #test05CannotCheckOutCartProvidingStolenCreditCard stamp: 'FF 6/12/2022 10:45:06'!
+PASSED!
+
+!testRun: #CashierTest #test06CannotCheckOutCartProvidingCreditCardWithoutEnoughLimit stamp: 'FF 6/12/2022 10:45:06'!
+PASSED!
+
+!testRun: #CreditCardTest #test01CardCannotBeCreatedWithInvalidNumberLenght stamp: 'FF 6/12/2022 10:45:06'!
+PASSED!
+
+!testRun: #CreditCardTest #test02CardCannotBeCreatedWithInvalidNumberCharacters stamp: 'FF 6/12/2022 10:45:06'!
+PASSED!
+
+!testRun: #CreditCardTest #test03CardCannotBeCreatedWhenValidToIsNotAMonth stamp: 'FF 6/12/2022 10:45:06'!
+PASSED!
+
+!testRun: #CreditCardTest #test04CreditCardWithExpirationDateBeforeTodayShouldBeExpired stamp: 'FF 6/12/2022 10:45:06'!
+PASSED!
+
+!testRun: #CreditCardTest #test05CreditCardWithExpirationDateAfterTodayShouldNotBeExpired stamp: 'FF 6/12/2022 10:45:06'!
+PASSED!
+
+!testRun: #CreditCardTest #test06CreditCardExpirationMonthIsIncludedOnTheExpirationPeriod stamp: 'FF 6/12/2022 10:45:06'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test01ValidClientCanCreateACart stamp: 'FF 6/12/2022 10:45:06'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test02InvalidClientCannotCreateACart stamp: 'FF 6/12/2022 10:45:06'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test03CreateCartReturnsUniqueCartId stamp: 'FF 6/12/2022 10:45:06'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test04ListCartOfInvalidCartIdThrowsError stamp: 'FF 6/12/2022 10:45:06'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test05ListCartIncludesAddedItemsAndItsQuantity stamp: 'FF 6/12/2022 10:45:06'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test06AddToCartWithInvalidCartIdThrowsError stamp: 'FF 6/12/2022 10:45:06'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test07CheckOutCartReturnsTransactionId stamp: 'FF 6/12/2022 10:45:06'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test08CheckOutCartOfInvalidCartIdThrowsError stamp: 'FF 6/12/2022 10:45:06'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test09CheckOutCartWithInvalidCreditCardThrowsError stamp: 'FF 6/12/2022 10:45:06'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test10ListPurchasesReturnsClientTransactions stamp: 'FF 6/12/2022 10:45:06'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test11InvalidClientCannotListAnyPurchases stamp: 'FF 6/12/2022 10:45:06'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test12CheckOutReturnsUniqueTransactionId stamp: 'FF 6/12/2022 10:45:06'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test13CartIdIsInvalidAfterCheckOut stamp: 'FF 6/12/2022 10:45:06'!
+PASSED!
+!InterfaceFacadeTest methodsFor: 'test' stamp: 'FF 6/12/2022 10:49:58'!
+test14ListPurchasesAreDifferentBetweenTwoDifferentClients
+
+	|  cartId  quantity listPurchases transactionId listPurchasesFromAnotherClient |
+	quantity := 1.
+	cartId := interfaceFacade createCartFor: clientId signInWith: password.
+	interfaceFacade addToCart: cartId book: validBookISBN quantity: quantity.
+		
+	transactionId := interfaceFacade checkOut: cartId withCardNumber: creditCardNumber expirationDate: expirationMonth from: cardOwnerName .
+	listPurchases := interfaceFacade listPurchasesFrom: clientId signInWith: password.
+	listPurchasesFromAnotherClient := interfaceFacade listPurchasesFrom: 'anotherClientId' signInWith: password.
+	
+	
+	self assert: transactionId notNil.
+	self deny: listPurchases isEmpty.
+	self assert: (listPurchases at: 1) books includes: validBookISBN .
+	self assert: quantity equals: ((listPurchases at: 1) books occurrencesOf: validBookISBN).
+	self assert: 15 equals: ((listPurchases at: 1) total).
+
+	
+	
+	! !
+!InterfaceFacadeTest methodsFor: 'test' stamp: 'FF 6/12/2022 10:50:43' prior: 50489995!
+test14ListPurchasesAreDifferentBetweenTwoDifferentClients
+
+	|  cartId  quantity listPurchases transactionId listPurchasesFromAnotherClient |
+	quantity := 1.
+	cartId := interfaceFacade createCartFor: clientId signInWith: password.
+	interfaceFacade addToCart: cartId book: validBookISBN quantity: quantity.
+		
+	transactionId := interfaceFacade checkOut: cartId withCardNumber: creditCardNumber expirationDate: expirationMonth from: cardOwnerName .
+	listPurchases := interfaceFacade listPurchasesFrom: clientId signInWith: password.
+	listPurchasesFromAnotherClient := interfaceFacade listPurchasesFrom: 'anotherClientId' signInWith: password.
+	
+	self deny: (listPurchases = listPurchasesFromAnotherClient).
+
+	
+	
+	! !
+!InterfaceFacadeTest methodsFor: 'test' stamp: 'FF 6/12/2022 10:50:59' prior: 50490028!
+test14ListPurchasesAreDifferentBetweenTwoDifferentClients
+
+	|  cartId  quantity listPurchases listPurchasesFromAnotherClient |
+	quantity := 1.
+	cartId := interfaceFacade createCartFor: clientId signInWith: password.
+	interfaceFacade addToCart: cartId book: validBookISBN quantity: quantity.
+		
+	interfaceFacade checkOut: cartId withCardNumber: creditCardNumber expirationDate: expirationMonth from: cardOwnerName .
+	listPurchases := interfaceFacade listPurchasesFrom: clientId signInWith: password.
+	listPurchasesFromAnotherClient := interfaceFacade listPurchasesFrom: 'anotherClientId' signInWith: password.
+	
+	self deny: (listPurchases = listPurchasesFromAnotherClient).
+
+	
+	
+	! !
+
+!testRun: #InterfaceFacadeTest #test14ListPurchasesAreDifferentBetweenTwoDifferentClients stamp: 'FF 6/12/2022 10:51:02'!
+FAILURE!
+!InterfaceFacade methodsFor: 'client' stamp: 'FF 6/12/2022 10:53:09' prior: 50489495!
+listPurchasesFrom: aClientId signInWith: aPassword 
+	self assertClient: aClientId canAuthenticateUsing: aPassword.
+	^salesList select:[:ticket | ticket clientId = aClientId ].! !
+
+!testRun: #InterfaceFacadeTest #test14ListPurchasesAreDifferentBetweenTwoDifferentClients stamp: 'FF 6/12/2022 10:53:19'!
+ERROR!
+!Ticket methodsFor: 'accessing' stamp: 'FF 6/12/2022 10:53:31'!
+clientId
+	self shouldBeImplemented.! !
+
+!classDefinition: #Ticket category: 'TusLibros' stamp: 'FF 6/12/2022 10:53:42'!
+Object subclass: #Ticket
+	instanceVariableNames: 'books total clientId'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'TusLibros'!
+!Ticket methodsFor: 'accessing' stamp: 'FF 6/12/2022 10:53:41' prior: 50490095!
+clientId
+	^clientId.! !
+
+!testRun: #InterfaceFacadeTest #test14ListPurchasesAreDifferentBetweenTwoDifferentClients stamp: 'FF 6/12/2022 10:53:50'!
+FAILURE!
+!InterfaceFacade methodsFor: 'cart' stamp: 'FF 6/12/2022 10:55:33' prior: 50489484!
+createCartFor: aClientId signInWith: aPassword 
+	| newCart |
+	
+	self assertClient: aClientId canAuthenticateUsing: aPassword.
+	
+	newCart := Cart from: aClientId with: priceList.
+	lastCartId := lastCartId + 1.
+	carts at: lastCartId put: newCart. 
+	^lastCartId.! !
+
+!testRun: #InterfaceFacadeTest #test04ListCartOfInvalidCartIdThrowsError stamp: 'FF 6/12/2022 10:55:42'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test01ValidClientCanCreateACart stamp: 'FF 6/12/2022 10:55:42'!
+ERROR!
+
+!testRun: #InterfaceFacadeTest #test02InvalidClientCannotCreateACart stamp: 'FF 6/12/2022 10:55:42'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test03CreateCartReturnsUniqueCartId stamp: 'FF 6/12/2022 10:55:42'!
+ERROR!
+
+!testRun: #InterfaceFacadeTest #test04ListCartOfInvalidCartIdThrowsError stamp: 'FF 6/12/2022 10:55:42'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test05ListCartIncludesAddedItemsAndItsQuantity stamp: 'FF 6/12/2022 10:55:42'!
+ERROR!
+
+!testRun: #InterfaceFacadeTest #test06AddToCartWithInvalidCartIdThrowsError stamp: 'FF 6/12/2022 10:55:42'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test07CheckOutCartReturnsTransactionId stamp: 'FF 6/12/2022 10:55:42'!
+ERROR!
+
+!testRun: #InterfaceFacadeTest #test08CheckOutCartOfInvalidCartIdThrowsError stamp: 'FF 6/12/2022 10:55:42'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test09CheckOutCartWithInvalidCreditCardThrowsError stamp: 'FF 6/12/2022 10:55:42'!
+ERROR!
+
+!testRun: #InterfaceFacadeTest #test10ListPurchasesReturnsClientTransactions stamp: 'FF 6/12/2022 10:55:42'!
+ERROR!
+
+!testRun: #InterfaceFacadeTest #test11InvalidClientCannotListAnyPurchases stamp: 'FF 6/12/2022 10:55:42'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test12CheckOutReturnsUniqueTransactionId stamp: 'FF 6/12/2022 10:55:42'!
+ERROR!
+
+!testRun: #InterfaceFacadeTest #test13CartIdIsInvalidAfterCheckOut stamp: 'FF 6/12/2022 10:55:42'!
+ERROR!
+
+!testRun: #InterfaceFacadeTest #test14ListPurchasesAreDifferentBetweenTwoDifferentClients stamp: 'FF 6/12/2022 10:55:42'!
+ERROR!
+
+!testRun: #InterfaceFacadeTest #test03CreateCartReturnsUniqueCartId stamp: 'FF 6/12/2022 10:55:51'!
+ERROR!
+
+!testRun: #InterfaceFacadeTest #test03CreateCartReturnsUniqueCartId stamp: 'FF 6/12/2022 10:55:51'!
+ERROR!
+!Cart class methodsFor: 'instance creation' stamp: 'FF 6/12/2022 10:55:58'!
+from: aString with: aDictionary 
+	"DO NOT FORGET TO RENAME COLLABORATORS AND REMOVE THIS COMMENT!!!!"
+	self shouldBeImplemented.
+	^self new initializeFrom: aString with: aDictionary ! !
+!Cart class methodsFor: 'instance creation' stamp: 'FF 6/12/2022 10:56:37' prior: 50490186!
+from: aClientId with: aPriceList 
+	^self new from: aClientId with: aPriceList ! !
+
+!testRun: #InterfaceFacadeTest #test03CreateCartReturnsUniqueCartId stamp: 'FF 6/12/2022 10:56:39'!
+ERROR!
+!Cart methodsFor: 'initialization' stamp: 'FF 6/12/2022 10:56:47'!
+from: aString with: aDictionary 
+	self shouldBeImplemented.! !
+
+!classDefinition: #Cart category: 'TusLibros' stamp: 'FF 6/12/2022 10:57:28'!
+Object subclass: #Cart
+	instanceVariableNames: 'books priceList clientId'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'TusLibros'!
+!Cart methodsFor: 'initialization' stamp: 'FF 6/12/2022 10:57:27' prior: 50490204!
+from: aClientId with: aPriceList
+	priceList := aPriceList .
+	clientId := aClientId.
+	books := Bag new.
+	! !
+
+!testRun: #InterfaceFacadeTest #test03CreateCartReturnsUniqueCartId stamp: 'FF 6/12/2022 10:57:31'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test03CreateCartReturnsUniqueCartId stamp: 'FF 6/12/2022 10:57:34'!
+PASSED!
+
+!methodRemoval: Cart class #from:with: stamp: 'FF 6/12/2022 10:58:13'!
+from: aClientId with: aPriceList 
+	^self new from: aClientId with: aPriceList !
+
+----SNAPSHOT----(12 June 2022 11:00:53) CuisUniversity-5096.image priorSource: 5032788!
+!Cart class methodsFor: 'instance creation' stamp: 'FF 6/12/2022 11:02:48'!
+from: aClientId with: aPriceList 
+	^self new initializeWith: aPriceList.! !
+!CartTest methodsFor: 'as yet unclassified' stamp: 'FF 6/12/2022 11:02:48' prior: 50483761!
+test01CartIsEmptyWhenCreated
+
+	| cart |
+
+	cart := Cart from: clientId with: priceList .
+	
+	self assert: cart isEmpty.
+	! !
+!CartTest methodsFor: 'as yet unclassified' stamp: 'FF 6/12/2022 11:02:48' prior: 50483808!
+test06CartBookListIncludesBookAfterAdding
+
+	| cart  |
+	cart := Cart from: clientId with: priceList.
+	cart add: 2 of: book1 .
+	
+	self deny: cart books isEmpty.
+	self assert: (cart books includes: book1).! !
+!CartTest methodsFor: 'as yet unclassified' stamp: 'FF 6/12/2022 11:02:48' prior: 50483788!
+test04CannotAddAnUncataloguedBook
+
+	| book cart |	
+	book := 'uncatolog book'.
+	cart := Cart from: clientId with: priceList .
+	
+	self should: [cart add: 1 of: book.] 
+	raise: Error - MessageNotUnderstood 
+	withExceptionDo: [:anError | self assert: Cart cannotAddAnUncataloguedBook equals: anError messageText .
+		self assert: cart isEmpty ].! !
+!CashierTest methodsFor: 'as yet unclassified' stamp: 'FF 6/12/2022 11:02:48' prior: 50485461!
+test05CannotCheckOutCartProvidingStolenCreditCard
+
+	| cart cashier |
+	
+	cart := Cart from: clientId with: priceList.
+	cart add: 1 of: book1.
+	cart add: 2 of: book2.
+	merchantProcessor simulateStolenCreditCard.
+	cashier := Cashier using: sales debitProcessor: merchantProcessor.
+	
+	self should: [cashier checkOut: cart payingWith: validCreditCard on: today] 
+	raise: Error - MessageNotUnderstood 
+	withExceptionDo: [:anError |  self assert: MerchantProcessorSimulator cannotPayWithStolenCreditCard equals: anError messageText .
+			self assert: sales isEmpty .
+			self assert: 1 equals: merchantProcessor answeredCalls.
+		].! !
+!CartTest methodsFor: 'as yet unclassified' stamp: 'FF 6/12/2022 11:02:48' prior: 50483767!
+test02EmptyCartAfterAddingABookIsNotEmpty
+
+	|  cart |
+	cart := Cart from: clientId with: priceList.
+	
+	cart add: 1 of: book1 .
+	
+	self deny: cart isEmpty.! !
+!CashierTest methodsFor: 'as yet unclassified' stamp: 'FF 6/12/2022 11:02:48' prior: 50485371!
+test01CannotCheckOutEmptyCart
+
+	| cart cashier |
+	cart := Cart from: clientId with: priceList .
+	cashier := Cashier using: sales debitProcessor: merchantProcessor .
+	
+	self should: [cashier checkOut: cart payingWith: validCreditCard on: today] 
+	raise: Error - MessageNotUnderstood 
+	withExceptionDo: [:anError | self assert: Cashier cannotCheckOutAnEmptyCart equals: anError messageText .
+			self assert: sales isEmpty.
+			self assert: 0 equals: merchantProcessor answeredCalls.
+		].! !
+!CashierTest methodsFor: 'as yet unclassified' stamp: 'FF 6/12/2022 11:02:48' prior: 50485446!
+test03CheckOutCartWithItemsAddElementToSalesList
+
+	| cart cashier |
+	
+	cart := Cart from: clientId with: priceList.
+	cart add: 1 of: book1.
+	cart add: 2 of: book2.
+	cashier := Cashier using: sales debitProcessor: merchantProcessor .
+	 	
+	cashier checkOut: cart payingWith: validCreditCard on: today.
+		self assert: 1 equals: merchantProcessor answeredCalls.
+	self deny: sales isEmpty.! !
+!CartTest methodsFor: 'as yet unclassified' stamp: 'FF 6/12/2022 11:02:48' prior: 50483801!
+test05CartReturnsEmptyBookListWhenCreated
+
+	| cart |
+	cart := Cart from: clientId with: priceList .
+	
+	self assert: cart books isEmpty.! !
+!CartTest methodsFor: 'as yet unclassified' stamp: 'FF 6/12/2022 11:02:48' prior: 50483775!
+test03CannotAddBooksToCartWithNonPositiveQuantity
+
+	| cart |
+	cart := Cart from: clientId with: priceList.
+	
+	self should: [cart add: -1 of: book1.] 
+	raise: Error - MessageNotUnderstood 
+	withExceptionDo: [:anError | self assert: Cart cannotAddBookWithNonPositiveQuantity equals: anError messageText .
+		self assert: cart isEmpty ].! !
+!CashierTest methodsFor: 'as yet unclassified' stamp: 'FF 6/12/2022 11:02:48' prior: 50485312!
+test02CannotCheckOutCartProvidingAnExpiredCreditCard
+	| cart cashier |
+	
+	cart := Cart from: clientId with: priceList .
+	cart add: 1 of: book1. 
+	cashier := Cashier using: sales debitProcessor: merchantProcessor .
+	
+	self should: [cashier checkOut: cart payingWith: expiredCreditCard on: today] 
+	raise: Error - MessageNotUnderstood 
+	withExceptionDo: [:anError |  self assert: Cashier cannotPayWithExpiredCreditCard equals: anError messageText .
+			self assert: sales isEmpty .
+			self assert: 0 equals: merchantProcessor answeredCalls.
+		].! !
+!CartTest methodsFor: 'as yet unclassified' stamp: 'FF 6/12/2022 11:02:48' prior: 50483823!
+test08CartWithItemsTotalIsTheSumOfItemPrices
+
+	| cart |
+
+	cart := Cart from: clientId with: priceList.
+	cart add: 2 of: book1.
+	
+	self assert: 20 equals: cart total.! !
+!CashierTest methodsFor: 'as yet unclassified' stamp: 'FF 6/12/2022 11:02:48' prior: 50485483!
+test06CannotCheckOutCartProvidingCreditCardWithoutEnoughLimit
+
+	| cart cashier |
+	
+	cart := Cart from: clientId with: priceList.
+	cart add: 1 of: book1.
+	cart add: 2 of: book2.
+	merchantProcessor simulateCreditCardWithoutEnoughLimit.
+	cashier := Cashier using: sales debitProcessor: merchantProcessor.
+	
+	self should: [cashier checkOut: cart payingWith: validCreditCard on: today] 
+	raise: Error - MessageNotUnderstood 
+	withExceptionDo: [:anError |  self assert: MerchantProcessorSimulator cannotPayWithCreditCardWithoutEnoughLimit equals: anError messageText .
+			self assert: sales isEmpty .
+			self assert: 1 equals: merchantProcessor answeredCalls.
+		].! !
+!CashierTest methodsFor: 'as yet unclassified' stamp: 'FF 6/12/2022 11:02:48' prior: 50489175!
+test04CheckOutCartWithItemsReturnsTotal
+
+	| cart cashier ticket |
+	
+	cart := Cart from: clientId with: priceList.
+	cart add: 1 of: book1.
+	cart add: 2 of: book2.
+	cashier := Cashier using: sales debitProcessor: merchantProcessor .
+	
+	ticket := cashier checkOut: cart payingWith: validCreditCard on: today.
+	
+	self assert: cart total equals: ticket total.
+	self assert: 1 equals: merchantProcessor answeredCalls.! !
+!CartTest methodsFor: 'as yet unclassified' stamp: 'FF 6/12/2022 11:02:48' prior: 50483817!
+test07EmptyCartTotalIsZero
+
+	| cart |
+	cart := Cart from: clientId with: priceList .
+	
+	self assert: 0 equals: cart total.! !
+
+!methodRemoval: Cart class #with: stamp: 'FF 6/12/2022 11:02:48'!
+with: aPriceList 
+	^self new initializeWith: aPriceList.!
+!Cart class methodsFor: 'instance creation' stamp: 'FF 6/12/2022 11:03:08' prior: 50490237!
+from: aClientId with: aPriceList 
+	^self new from: aClientId with: aPriceList.! !
+
+!methodRemoval: Cart #initializeWith: stamp: 'FF 6/12/2022 11:03:22'!
+initializeWith: aPriceList
+	priceList := aPriceList.
+	books := Bag new.!
+
+!classDefinition: #CartTest category: 'TusLibros' stamp: 'FF 6/12/2022 11:04:02'!
+TestCase subclass: #CartTest
+	instanceVariableNames: 'priceList book1 clientId'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'TusLibros'!
+!CartTest methodsFor: 'setUp' stamp: 'FF 6/12/2022 11:04:00' prior: 50483755 overrides: 16961394!
+setUp
+
+	book1 := 'libro 1'.
+	
+	priceList := Dictionary new.
+	priceList at: book1 put: 10 .
+	clientId := 'clientId'.! !
+
+!testRun: #CartTest #test03CannotAddBooksToCartWithNonPositiveQuantity stamp: 'FF 6/12/2022 11:04:06'!
+PASSED!
+
+!testRun: #CartTest #test01CartIsEmptyWhenCreated stamp: 'FF 6/12/2022 11:04:06'!
+PASSED!
+
+!testRun: #CartTest #test02EmptyCartAfterAddingABookIsNotEmpty stamp: 'FF 6/12/2022 11:04:06'!
+PASSED!
+
+!testRun: #CartTest #test03CannotAddBooksToCartWithNonPositiveQuantity stamp: 'FF 6/12/2022 11:04:06'!
+PASSED!
+
+!testRun: #CartTest #test04CannotAddAnUncataloguedBook stamp: 'FF 6/12/2022 11:04:06'!
+PASSED!
+
+!testRun: #CartTest #test05CartReturnsEmptyBookListWhenCreated stamp: 'FF 6/12/2022 11:04:06'!
+PASSED!
+
+!testRun: #CartTest #test06CartBookListIncludesBookAfterAdding stamp: 'FF 6/12/2022 11:04:06'!
+PASSED!
+
+!testRun: #CartTest #test07EmptyCartTotalIsZero stamp: 'FF 6/12/2022 11:04:06'!
+PASSED!
+
+!testRun: #CartTest #test08CartWithItemsTotalIsTheSumOfItemPrices stamp: 'FF 6/12/2022 11:04:06'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test04ListCartOfInvalidCartIdThrowsError stamp: 'FF 6/12/2022 11:04:17'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test01ValidClientCanCreateACart stamp: 'FF 6/12/2022 11:04:17'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test02InvalidClientCannotCreateACart stamp: 'FF 6/12/2022 11:04:17'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test03CreateCartReturnsUniqueCartId stamp: 'FF 6/12/2022 11:04:17'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test04ListCartOfInvalidCartIdThrowsError stamp: 'FF 6/12/2022 11:04:17'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test05ListCartIncludesAddedItemsAndItsQuantity stamp: 'FF 6/12/2022 11:04:17'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test06AddToCartWithInvalidCartIdThrowsError stamp: 'FF 6/12/2022 11:04:17'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test07CheckOutCartReturnsTransactionId stamp: 'FF 6/12/2022 11:04:17'!
+FAILURE!
+
+!testRun: #InterfaceFacadeTest #test08CheckOutCartOfInvalidCartIdThrowsError stamp: 'FF 6/12/2022 11:04:17'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test09CheckOutCartWithInvalidCreditCardThrowsError stamp: 'FF 6/12/2022 11:04:17'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test10ListPurchasesReturnsClientTransactions stamp: 'FF 6/12/2022 11:04:17'!
+FAILURE!
+
+!testRun: #InterfaceFacadeTest #test11InvalidClientCannotListAnyPurchases stamp: 'FF 6/12/2022 11:04:17'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test12CheckOutReturnsUniqueTransactionId stamp: 'FF 6/12/2022 11:04:17'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test13CartIdIsInvalidAfterCheckOut stamp: 'FF 6/12/2022 11:04:17'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test14ListPurchasesAreDifferentBetweenTwoDifferentClients stamp: 'FF 6/12/2022 11:04:17'!
+FAILURE!
+
+!classDefinition: #CashierTest category: 'TusLibros' stamp: 'FF 6/12/2022 11:04:58'!
+TestCase subclass: #CashierTest
+	instanceVariableNames: 'book1 book2 priceList sales validCreditCard expiredCreditCard today merchantProcessor ownerName clientId'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'TusLibros'!
+!CashierTest methodsFor: 'setUp' stamp: 'FF 6/12/2022 11:04:56' prior: 50488141 overrides: 16961394!
+setUp
+
+	today := Date today.
+	book1 := 'primer libro'.
+	book2 := 'segundo libro'.
+	clientId := 'clientId'.
+
+	priceList := Dictionary new.
+	priceList at: book1 put: 10.
+	priceList at: book2 put: 20.
+	
+	ownerName := 'owner'.
+
+	sales := OrderedCollection new.
+	
+	validCreditCard := CreditCard number: '4545454545454545' validTo: today month next from: ownerName.
+	expiredCreditCard := CreditCard number: '4545454545454545' validTo: today month previous from: ownerName.
+	merchantProcessor := MerchantProcessorSimulator new.! !
+
+!testRun: #CashierTest #test05CannotCheckOutCartProvidingStolenCreditCard stamp: 'FF 6/12/2022 11:05:03'!
+PASSED!
+
+!testRun: #CashierTest #test01CannotCheckOutEmptyCart stamp: 'FF 6/12/2022 11:05:03'!
+PASSED!
+
+!testRun: #CashierTest #test02CannotCheckOutCartProvidingAnExpiredCreditCard stamp: 'FF 6/12/2022 11:05:03'!
+PASSED!
+
+!testRun: #CashierTest #test03CheckOutCartWithItemsAddElementToSalesList stamp: 'FF 6/12/2022 11:05:03'!
+PASSED!
+
+!testRun: #CashierTest #test04CheckOutCartWithItemsReturnsTotal stamp: 'FF 6/12/2022 11:05:03'!
+PASSED!
+
+!testRun: #CashierTest #test05CannotCheckOutCartProvidingStolenCreditCard stamp: 'FF 6/12/2022 11:05:03'!
+PASSED!
+
+!testRun: #CashierTest #test06CannotCheckOutCartProvidingCreditCardWithoutEnoughLimit stamp: 'FF 6/12/2022 11:05:03'!
+PASSED!
+!InterfaceFacade methodsFor: 'cart' stamp: 'FF 6/12/2022 11:05:46' prior: 50490114!
+createCartFor: aClientId signInWith: aPassword 
+	| newCart |
+	
+	self assertClient: aClientId canAuthenticateUsing: aPassword.
+	
+	newCart := Cart from: aClientId with: priceList.
+	lastCartId := lastCartId + 1.
+	carts at: lastCartId put: newCart. 
+	^lastCartId.! !
+
+!testRun: #InterfaceFacadeTest #test14ListPurchasesAreDifferentBetweenTwoDifferentClients stamp: 'FF 6/12/2022 11:06:01'!
+FAILURE!
+!Cart methodsFor: 'total' stamp: 'FF 6/12/2022 11:10:25'!
+clientId
+	^clientId.
+	! !
+!Cashier methodsFor: 'checking out' stamp: 'FF 6/12/2022 11:11:46' prior: 50488829!
+checkOut: aCart payingWith: aCreditCard on: aDateOfSale
+
+	| totalToDebit ticket |
+	self assertCartIsNotEmpty: aCart.
+	self assertCreditCardIsNotExpired: aCreditCard on: aDateOfSale .
+	
+	totalToDebit := aCart total.
+	merchantProcessor debit: totalToDebit from: aCreditCard .
+	ticket := Ticket from: aCart clientId of: aCart books total: totalToDebit .
+	salesList add: ticket.
+	
+	^ticket.! !
+
+!testRun: #InterfaceFacadeTest #test14ListPurchasesAreDifferentBetweenTwoDifferentClients stamp: 'FF 6/12/2022 11:12:01'!
+ERROR!
+!Ticket class methodsFor: 'instance creation' stamp: 'FF 6/12/2022 11:12:25'!
+from: aString of: aBag total: aSmallInteger 
+	"DO NOT FORGET TO RENAME COLLABORATORS AND REMOVE THIS COMMENT!!!!"
+	self shouldBeImplemented.
+	^self new initializeFrom: aString of: aBag total: aSmallInteger ! !
+!Ticket class methodsFor: 'instance creation' stamp: 'FF 6/12/2022 11:13:23' prior: 50490643!
+from: aClientId of: aBooksCollection total: anAmount 
+	^self new from: aClientId of: aBooksCollection total: anAmount ! !
+
+!testRun: #InterfaceFacadeTest #test14ListPurchasesAreDifferentBetweenTwoDifferentClients stamp: 'FF 6/12/2022 11:13:24'!
+ERROR!
+!Ticket methodsFor: 'initialization' stamp: 'FF 6/12/2022 11:13:29'!
+from: aString of: aBag total: aSmallInteger 
+	self shouldBeImplemented.! !
+!Ticket methodsFor: 'initialization' stamp: 'FF 6/12/2022 11:14:14' prior: 50490664!
+from: aClientId of: aBooksCollection total: anAmount 
+	clientId := aClientId .
+	books := aBooksCollection .
+	total := anAmount .! !
+
+!testRun: #InterfaceFacadeTest #test14ListPurchasesAreDifferentBetweenTwoDifferentClients stamp: 'FF 6/12/2022 11:14:15'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test01ValidClientCanCreateACart stamp: 'FF 6/12/2022 11:14:15'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test02InvalidClientCannotCreateACart stamp: 'FF 6/12/2022 11:14:15'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test03CreateCartReturnsUniqueCartId stamp: 'FF 6/12/2022 11:14:15'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test04ListCartOfInvalidCartIdThrowsError stamp: 'FF 6/12/2022 11:14:15'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test05ListCartIncludesAddedItemsAndItsQuantity stamp: 'FF 6/12/2022 11:14:15'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test06AddToCartWithInvalidCartIdThrowsError stamp: 'FF 6/12/2022 11:14:15'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test07CheckOutCartReturnsTransactionId stamp: 'FF 6/12/2022 11:14:15'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test08CheckOutCartOfInvalidCartIdThrowsError stamp: 'FF 6/12/2022 11:14:15'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test09CheckOutCartWithInvalidCreditCardThrowsError stamp: 'FF 6/12/2022 11:14:15'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test10ListPurchasesReturnsClientTransactions stamp: 'FF 6/12/2022 11:14:15'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test11InvalidClientCannotListAnyPurchases stamp: 'FF 6/12/2022 11:14:15'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test12CheckOutReturnsUniqueTransactionId stamp: 'FF 6/12/2022 11:14:15'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test13CartIdIsInvalidAfterCheckOut stamp: 'FF 6/12/2022 11:14:15'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test14ListPurchasesAreDifferentBetweenTwoDifferentClients stamp: 'FF 6/12/2022 11:14:15'!
+PASSED!
+
+!methodRemoval: Ticket #of:total: stamp: 'FF 6/12/2022 11:14:26'!
+of: aBookBag total: anAmount 
+	books := aBookBag .
+	total := anAmount .!
+
+!methodRemoval: Ticket class #of:total: stamp: 'FF 6/12/2022 11:14:45'!
+of: aBookBag total: anAmount 
+	
+	^self new of: aBookBag total: anAmount !
+
+!testRun: #InterfaceFacadeTest #test14ListPurchasesAreDifferentBetweenTwoDifferentClients stamp: 'FF 6/12/2022 11:22:56'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test01ValidClientCanCreateACart stamp: 'FF 6/12/2022 11:22:56'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test02InvalidClientCannotCreateACart stamp: 'FF 6/12/2022 11:22:56'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test03CreateCartReturnsUniqueCartId stamp: 'FF 6/12/2022 11:22:56'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test04ListCartOfInvalidCartIdThrowsError stamp: 'FF 6/12/2022 11:22:56'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test05ListCartIncludesAddedItemsAndItsQuantity stamp: 'FF 6/12/2022 11:22:56'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test06AddToCartWithInvalidCartIdThrowsError stamp: 'FF 6/12/2022 11:22:56'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test07CheckOutCartReturnsTransactionId stamp: 'FF 6/12/2022 11:22:56'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test08CheckOutCartOfInvalidCartIdThrowsError stamp: 'FF 6/12/2022 11:22:56'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test09CheckOutCartWithInvalidCreditCardThrowsError stamp: 'FF 6/12/2022 11:22:56'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test10ListPurchasesReturnsClientTransactions stamp: 'FF 6/12/2022 11:22:56'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test11InvalidClientCannotListAnyPurchases stamp: 'FF 6/12/2022 11:22:56'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test12CheckOutReturnsUniqueTransactionId stamp: 'FF 6/12/2022 11:22:56'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test13CartIdIsInvalidAfterCheckOut stamp: 'FF 6/12/2022 11:22:56'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test14ListPurchasesAreDifferentBetweenTwoDifferentClients stamp: 'FF 6/12/2022 11:22:56'!
+PASSED!
+!Cashier methodsFor: 'checking out' stamp: 'FF 6/12/2022 11:27:08' prior: 50490624!
+checkOut: aCart payingWith: aCreditCard on: aDateOfSale
+
+	| totalToDebit ticket |
+	self assertCartIsNotEmpty: aCart.
+	self assertCreditCardIsNotExpired: aCreditCard on: aDateOfSale .
+	
+	totalToDebit := aCart total.
+	merchantProcessor debit: totalToDebit from: aCreditCard .
+	ticket := aCart generateTicket.
+	salesList add: ticket.
+	
+	^ticket.! !
+!Cart methodsFor: 'total' stamp: 'FF 6/12/2022 11:28:22'!
+generateTicket
+	^Ticket from: clientId of: books total: self total .
+
+	! !
+
+!methodRemoval: Cart #clientId stamp: 'FF 6/12/2022 11:28:32'!
+clientId
+	^clientId.
+	!
+!Cart methodsFor: 'total' stamp: 'FF 6/12/2022 11:29:37' prior: 50490807!
+generateTicket
+	^Ticket from: clientId of: self books total: self total .
+
+	! !
+
+!testRun: #InterfaceFacadeTest #test14ListPurchasesAreDifferentBetweenTwoDifferentClients stamp: 'FF 6/12/2022 11:30:03'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test01ValidClientCanCreateACart stamp: 'FF 6/12/2022 11:30:03'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test02InvalidClientCannotCreateACart stamp: 'FF 6/12/2022 11:30:03'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test03CreateCartReturnsUniqueCartId stamp: 'FF 6/12/2022 11:30:03'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test04ListCartOfInvalidCartIdThrowsError stamp: 'FF 6/12/2022 11:30:03'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test05ListCartIncludesAddedItemsAndItsQuantity stamp: 'FF 6/12/2022 11:30:03'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test06AddToCartWithInvalidCartIdThrowsError stamp: 'FF 6/12/2022 11:30:03'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test07CheckOutCartReturnsTransactionId stamp: 'FF 6/12/2022 11:30:03'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test08CheckOutCartOfInvalidCartIdThrowsError stamp: 'FF 6/12/2022 11:30:03'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test09CheckOutCartWithInvalidCreditCardThrowsError stamp: 'FF 6/12/2022 11:30:03'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test10ListPurchasesReturnsClientTransactions stamp: 'FF 6/12/2022 11:30:04'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test11InvalidClientCannotListAnyPurchases stamp: 'FF 6/12/2022 11:30:04'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test12CheckOutReturnsUniqueTransactionId stamp: 'FF 6/12/2022 11:30:04'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test13CartIdIsInvalidAfterCheckOut stamp: 'FF 6/12/2022 11:30:04'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test14ListPurchasesAreDifferentBetweenTwoDifferentClients stamp: 'FF 6/12/2022 11:30:04'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test14ListPurchasesAreDifferentBetweenTwoDifferentClients stamp: 'FF 6/12/2022 11:30:08'!
+PASSED!
+
+!testRun: #CartTest #test01CartIsEmptyWhenCreated stamp: 'FF 6/12/2022 11:30:08'!
+PASSED!
+
+!testRun: #CartTest #test02EmptyCartAfterAddingABookIsNotEmpty stamp: 'FF 6/12/2022 11:30:08'!
+PASSED!
+
+!testRun: #CartTest #test03CannotAddBooksToCartWithNonPositiveQuantity stamp: 'FF 6/12/2022 11:30:08'!
+PASSED!
+
+!testRun: #CartTest #test04CannotAddAnUncataloguedBook stamp: 'FF 6/12/2022 11:30:08'!
+PASSED!
+
+!testRun: #CartTest #test05CartReturnsEmptyBookListWhenCreated stamp: 'FF 6/12/2022 11:30:08'!
+PASSED!
+
+!testRun: #CartTest #test06CartBookListIncludesBookAfterAdding stamp: 'FF 6/12/2022 11:30:08'!
+PASSED!
+
+!testRun: #CartTest #test07EmptyCartTotalIsZero stamp: 'FF 6/12/2022 11:30:08'!
+PASSED!
+
+!testRun: #CartTest #test08CartWithItemsTotalIsTheSumOfItemPrices stamp: 'FF 6/12/2022 11:30:08'!
+PASSED!
+
+!testRun: #CashierTest #test01CannotCheckOutEmptyCart stamp: 'FF 6/12/2022 11:30:08'!
+PASSED!
+
+!testRun: #CashierTest #test02CannotCheckOutCartProvidingAnExpiredCreditCard stamp: 'FF 6/12/2022 11:30:08'!
+PASSED!
+
+!testRun: #CashierTest #test03CheckOutCartWithItemsAddElementToSalesList stamp: 'FF 6/12/2022 11:30:08'!
+PASSED!
+
+!testRun: #CashierTest #test04CheckOutCartWithItemsReturnsTotal stamp: 'FF 6/12/2022 11:30:08'!
+PASSED!
+
+!testRun: #CashierTest #test05CannotCheckOutCartProvidingStolenCreditCard stamp: 'FF 6/12/2022 11:30:08'!
+PASSED!
+
+!testRun: #CashierTest #test06CannotCheckOutCartProvidingCreditCardWithoutEnoughLimit stamp: 'FF 6/12/2022 11:30:08'!
+PASSED!
+
+!testRun: #CreditCardTest #test01CardCannotBeCreatedWithInvalidNumberLenght stamp: 'FF 6/12/2022 11:30:08'!
+PASSED!
+
+!testRun: #CreditCardTest #test02CardCannotBeCreatedWithInvalidNumberCharacters stamp: 'FF 6/12/2022 11:30:08'!
+PASSED!
+
+!testRun: #CreditCardTest #test03CardCannotBeCreatedWhenValidToIsNotAMonth stamp: 'FF 6/12/2022 11:30:08'!
+PASSED!
+
+!testRun: #CreditCardTest #test04CreditCardWithExpirationDateBeforeTodayShouldBeExpired stamp: 'FF 6/12/2022 11:30:08'!
+PASSED!
+
+!testRun: #CreditCardTest #test05CreditCardWithExpirationDateAfterTodayShouldNotBeExpired stamp: 'FF 6/12/2022 11:30:08'!
+PASSED!
+
+!testRun: #CreditCardTest #test06CreditCardExpirationMonthIsIncludedOnTheExpirationPeriod stamp: 'FF 6/12/2022 11:30:08'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test01ValidClientCanCreateACart stamp: 'FF 6/12/2022 11:30:08'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test02InvalidClientCannotCreateACart stamp: 'FF 6/12/2022 11:30:08'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test03CreateCartReturnsUniqueCartId stamp: 'FF 6/12/2022 11:30:08'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test04ListCartOfInvalidCartIdThrowsError stamp: 'FF 6/12/2022 11:30:08'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test05ListCartIncludesAddedItemsAndItsQuantity stamp: 'FF 6/12/2022 11:30:08'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test06AddToCartWithInvalidCartIdThrowsError stamp: 'FF 6/12/2022 11:30:08'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test07CheckOutCartReturnsTransactionId stamp: 'FF 6/12/2022 11:30:08'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test08CheckOutCartOfInvalidCartIdThrowsError stamp: 'FF 6/12/2022 11:30:08'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test09CheckOutCartWithInvalidCreditCardThrowsError stamp: 'FF 6/12/2022 11:30:08'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test10ListPurchasesReturnsClientTransactions stamp: 'FF 6/12/2022 11:30:08'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test11InvalidClientCannotListAnyPurchases stamp: 'FF 6/12/2022 11:30:08'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test12CheckOutReturnsUniqueTransactionId stamp: 'FF 6/12/2022 11:30:08'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test13CartIdIsInvalidAfterCheckOut stamp: 'FF 6/12/2022 11:30:08'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test14ListPurchasesAreDifferentBetweenTwoDifferentClients stamp: 'FF 6/12/2022 11:30:08'!
+PASSED!
+!CashierTest methodsFor: 'test' stamp: 'FF 6/12/2022 11:31:18' prior: 50490306!
+test01CannotCheckOutEmptyCart
+
+	| cart cashier |
+	cart := Cart from: clientId with: priceList .
+	cashier := Cashier using: sales debitProcessor: merchantProcessor .
+	
+	self should: [cashier checkOut: cart payingWith: validCreditCard on: today] 
+	raise: Error - MessageNotUnderstood 
+	withExceptionDo: [:anError | self assert: Cashier cannotCheckOutAnEmptyCart equals: anError messageText .
+			self assert: sales isEmpty.
+			self assert: 0 equals: merchantProcessor answeredCalls.
+		].! !
+!CashierTest methodsFor: 'test' stamp: 'FF 6/12/2022 11:31:31' prior: 50490363!
+test02CannotCheckOutCartProvidingAnExpiredCreditCard
+	| cart cashier |
+	
+	cart := Cart from: clientId with: priceList .
+	cart add: 1 of: book1. 
+	cashier := Cashier using: sales debitProcessor: merchantProcessor .
+	
+	self should: [cashier checkOut: cart payingWith: expiredCreditCard on: today] 
+	raise: Error - MessageNotUnderstood 
+	withExceptionDo: [:anError |  self assert: Cashier cannotPayWithExpiredCreditCard equals: anError messageText .
+			self assert: sales isEmpty .
+			self assert: 0 equals: merchantProcessor answeredCalls.
+		].! !
+!CashierTest methodsFor: 'test' stamp: 'FF 6/12/2022 11:32:05' prior: 50490325!
+test03CheckOutCartWithItemsAddElementToSalesList
+	| cart cashier |
+	
+	cart := Cart from: clientId with: priceList.
+	cart add: 1 of: book1.
+	cart add: 2 of: book2.
+	cashier := Cashier using: sales debitProcessor: merchantProcessor .
+	cashier checkOut: cart payingWith: validCreditCard on: today.
+			
+	self assert: 1 equals: merchantProcessor answeredCalls.
+	self deny: sales isEmpty.! !
+
+----SNAPSHOT----(12 June 2022 11:32:33) CuisUniversity-5096.image priorSource: 5074653!
+!InterfaceFacadeTest methodsFor: 'test' stamp: 'FF 6/12/2022 11:43:08'!
+test15CannotCheckOutACartAfterTimeExceeded
+
+	|  cartId  quantity listPurchases listPurchasesFromAnotherClient |
+	quantity := 1.
+	cartId := interfaceFacade createCartFor: clientId signInWith: password.
+	
+	interfaceFacade addToCart: cartId book: validBookISBN quantity: quantity.
+		
+	interfaceFacade checkOut: cartId withCardNumber: creditCardNumber expirationDate: expirationMonth from: cardOwnerName .
+	listPurchases := interfaceFacade listPurchasesFrom: clientId signInWith: password.
+	listPurchasesFromAnotherClient := interfaceFacade listPurchasesFrom: 'anotherClientId' signInWith: password.
+	
+	self deny: (listPurchases = listPurchasesFromAnotherClient).
+
+	
+	
+	! !
+
+!classDefinition: #InterfaceFacadeTest category: 'TusLibros' stamp: 'FF 6/12/2022 11:51:25'!
+TestCase subclass: #InterfaceFacadeTest
+	instanceVariableNames: 'invalidCartId validBookISBN priceList authenticatorServiceSimulatingValidClient authenticatorServiceSimulatingInvalidClient interfaceFacade interfaceFacadeInvalid clientId password creditCardNumber expirationMonth cardOwnerName today timerSimulator'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'TusLibros'!
+!InterfaceFacadeTest methodsFor: 'test' stamp: 'FF 6/12/2022 11:51:22' prior: 50491055!
+test15CannotCheckOutACartAfterTimeExceeded
+
+	|  cartId  quantity listPurchases listPurchasesFromAnotherClient |
+	quantity := 1.
+	cartId := interfaceFacade createCartFor: clientId signInWith: password.
+	interfaceFacade addToCart: cartId book: validBookISBN quantity: quantity.
+	
+	timerSimulator simulateHalfHourHasPassed.
+		
+	interfaceFacade checkOut: cartId withCardNumber: creditCardNumber expirationDate: expirationMonth from: cardOwnerName .
+	
+	self deny: (listPurchases = listPurchasesFromAnotherClient).
+
+	
+	
+	! !
+!InterfaceFacadeTest methodsFor: 'test' stamp: 'FF 6/12/2022 11:52:37' prior: 50491094!
+test15CannotCheckOutACartAfterTimeExceeded
+
+	|  cartId  quantity |
+	quantity := 1.
+	cartId := interfaceFacade createCartFor: clientId signInWith: password.
+	interfaceFacade addToCart: cartId book: validBookISBN quantity: quantity.
+	
+	timerSimulator simulateHalfHourHasPassed.
+		 .
+	self should: [ interfaceFacade checkOut: cartId withCardNumber: creditCardNumber expirationDate: expirationMonth from: cardOwnerName ] 
+	raise:  Error - MessageNotUnderstood 
+	withExceptionDo: [ :anError |
+		self assert: InterfaceFacade cartIsExpired equals: anError messageText.
+	].
+
+	
+	
+	! !
+
+!testRun: #InterfaceFacadeTest #test15CannotCheckOutACartAfterTimeExceeded stamp: 'FF 6/12/2022 11:52:50'!
+ERROR!
+
+!classDefinition: #TimerSimulator category: 'TusLibros' stamp: 'FF 6/12/2022 11:53:42'!
+Object subclass: #TimerSimulator
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'TusLibros'!
+!InterfaceFacadeTest methodsFor: 'setUp' stamp: 'FF 6/12/2022 11:53:36' prior: 50488550 overrides: 16961394!
+setUp
+
+	timerSimulator := TimerSimulator new.
+	today := timerSimulator today.
+	clientId := 'ClientId'.
+	password := 'password'.
+	invalidCartId := nil.
+	validBookISBN := 'book1'.
+	priceList := Dictionary new.
+	priceList at: validBookISBN put: 15.
+	creditCardNumber := '1234123412341234'.
+	expirationMonth := today month next.
+	cardOwnerName := 'owner'.
+	
+	authenticatorServiceSimulatingValidClient := AuthenticatorServiceSimulator simulateClientIsValid: true.
+	authenticatorServiceSimulatingInvalidClient := AuthenticatorServiceSimulator simulateClientIsValid: false.
+
+	interfaceFacade := InterfaceFacade priceList: priceList authenticator: authenticatorServiceSimulatingValidClient.
+	
+	interfaceFacadeInvalid := InterfaceFacade priceList: priceList authenticator: authenticatorServiceSimulatingInvalidClient.! !
+!InterfaceFacadeTest methodsFor: 'setUp' stamp: 'FF 6/12/2022 11:54:36' prior: 50491145 overrides: 16961394!
+setUp
+
+	timerSimulator := TimerSimulator new.
+	today := timerSimulator today.
+	clientId := 'ClientId'.
+	password := 'password'.
+	invalidCartId := nil.
+	validBookISBN := 'book1'.
+	priceList := Dictionary new.
+	priceList at: validBookISBN put: 15.
+	creditCardNumber := '1234123412341234'.
+	expirationMonth := today month next.
+	cardOwnerName := 'owner'.
+	
+	authenticatorServiceSimulatingValidClient := AuthenticatorServiceSimulator simulateClientIsValid: true.
+	authenticatorServiceSimulatingInvalidClient := AuthenticatorServiceSimulator simulateClientIsValid: false.
+
+	interfaceFacade := InterfaceFacade priceList: priceList authenticator: authenticatorServiceSimulatingValidClient timer: timerSimulator.
+	
+	interfaceFacadeInvalid := InterfaceFacade priceList: priceList authenticator: authenticatorServiceSimulatingInvalidClient timer: timerSimulator .! !
+!TimerSimulator methodsFor: 'date' stamp: 'FF 6/12/2022 11:55:07'!
+today
+	self shouldBeImplemented.! !
+
+!classDefinition: #TimerSimulator category: 'TusLibros' stamp: 'FF 6/12/2022 11:55:30'!
+Object subclass: #TimerSimulator
+	instanceVariableNames: 'today'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'TusLibros'!
+!TimerSimulator methodsFor: 'date' stamp: 'FF 6/12/2022 11:55:27' prior: 50491203!
+today
+	^today.! !
+!TimerSimulator methodsFor: 'date' stamp: 'FF 6/12/2022 11:56:03' overrides: 16920235!
+initialize
+	today := Date today.! !
+!InterfaceFacade class methodsFor: 'instance creation' stamp: 'FF 6/12/2022 11:56:34'!
+priceList: aDictionary authenticator: anAuthenticatorServiceSimulator timer: aTimerSimulator 
+	"DO NOT FORGET TO RENAME COLLABORATORS AND REMOVE THIS COMMENT!!!!"
+	self shouldBeImplemented.
+	^self new initializePriceList: aDictionary authenticator: anAuthenticatorServiceSimulator timer: aTimerSimulator ! !
+!InterfaceFacade class methodsFor: 'instance creation' stamp: 'FF 6/12/2022 11:56:44' prior: 50491222!
+priceList: aDictionary authenticator: anAuthenticatorServiceSimulator timer: aTimerSimulator 
+	^self new priceList: aDictionary authenticator: anAuthenticatorServiceSimulator timer: aTimerSimulator ! !
+!InterfaceFacade methodsFor: 'initialization' stamp: 'FF 6/12/2022 11:56:59'!
+priceList: aDictionary authenticator: anAuthenticatorServiceSimulator timer: aTimerSimulator 
+	self shouldBeImplemented.! !
+
+!classDefinition: #InterfaceFacade category: 'TusLibros' stamp: 'FF 6/12/2022 11:57:38'!
+Object subclass: #InterfaceFacade
+	instanceVariableNames: 'authenticatorService lastCartId carts priceList merchantProcessor today salesList lastTransactionId timer'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'TusLibros'!
+!InterfaceFacade methodsFor: 'initialization' stamp: 'FF 6/12/2022 11:57:37' prior: 50491244!
+priceList: aPriceList authenticator: anAuthenticatorService timer: aTimer 
+	priceList := aPriceList .
+	authenticatorService := anAuthenticatorService .
+	timer := aTimer .! !
+!InterfaceFacade methodsFor: 'initialization' stamp: 'FF 6/12/2022 11:58:14' prior: 50491261!
+priceList: aPriceList authenticator: anAuthenticatorService timer: aTimer 
+	priceList := aPriceList .
+	authenticatorService := anAuthenticatorService .
+	timer := aTimer .
+	carts := Dictionary new.
+	lastCartId := 0.
+	lastTransactionId := 0.! !
+
+!testRun: #InterfaceFacadeTest #test15CannotCheckOutACartAfterTimeExceeded stamp: 'FF 6/12/2022 11:58:18'!
+ERROR!
+!InterfaceFacade methodsFor: 'initialization' stamp: 'FF 6/12/2022 11:59:14' prior: 50491270!
+priceList: aPriceList authenticator: anAuthenticatorService timer: aTimer 
+	priceList := aPriceList .
+	authenticatorService := anAuthenticatorService .
+	timer := aTimer .
+	carts := Dictionary new.
+	lastCartId := 0.
+	lastTransactionId := 0.
+	salesList := OrderedCollection new.
+	merchantProcessor := MerchantProcessorSimulator new.
+	today := timer today.! !
+
+!methodRemoval: InterfaceFacade #priceList:authenticator: stamp: 'FF 6/12/2022 11:59:20'!
+priceList: aPriceList authenticator: anAuthenticatorService
+	authenticatorService := anAuthenticatorService.
+	carts := Dictionary new.
+	lastCartId := 0.
+	priceList := aPriceList .
+	salesList := OrderedCollection new.
+	merchantProcessor := MerchantProcessorSimulator new.
+	today := Date today.
+	lastTransactionId := 0.
+	!
+!InterfaceFacade class methodsFor: 'instance creation' stamp: 'FF 6/12/2022 11:59:45' prior: 50491235!
+priceList: aPriceList authenticator: anAuthenticatorService timer: aTimer 
+	^self new priceList: aPriceList authenticator: anAuthenticatorService timer: aTimer ! !
+
+!methodRemoval: InterfaceFacade class #priceList:authenticator: stamp: 'FF 6/12/2022 11:59:49'!
+priceList: aPriceList authenticator: anAuthenticatorService
+	
+	^self new priceList: aPriceList authenticator: anAuthenticatorService!
+
+!testRun: #InterfaceFacadeTest #test15CannotCheckOutACartAfterTimeExceeded stamp: 'FF 6/12/2022 12:00:10'!
+ERROR!
+!TimerSimulator methodsFor: 'simulation' stamp: 'FF 6/12/2022 12:00:23'!
+simulateHalfHourHasPassed
+	self shouldBeImplemented.! !
+!TimerSimulator methodsFor: 'simulation' stamp: 'FF 6/12/2022 12:00:40' prior: 50491332!
+simulateHalfHourHasPassed
+	! !
+!TimerSimulator methodsFor: 'initialization' stamp: 'FF 6/12/2022 12:01:04' prior: 50491218 overrides: 16920235!
+initialize
+	today := DateAndTime today.! !
+!TimerSimulator methodsFor: 'initialization' stamp: 'FF 6/12/2022 12:01:25' prior: 50491342 overrides: 16920235!
+initialize
+	today := DateAndTime now.! !
+!TimerSimulator methodsFor: 'initialization' stamp: 'FF 6/12/2022 12:01:46' prior: 50491347 overrides: 16920235!
+initialize
+	today := DateAndTime now.! !
+
+!classDefinition: #TimerSimulator category: 'TusLibros' stamp: 'FF 6/12/2022 12:02:16'!
+Object subclass: #TimerSimulator
+	instanceVariableNames: 'now'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'TusLibros'!
+!TimerSimulator methodsFor: 'as yet unclassified' stamp: 'FF 6/12/2022 12:02:16' prior: 50491214!
+today
+	^now.! !
+!TimerSimulator methodsFor: 'as yet unclassified' stamp: 'FF 6/12/2022 12:02:16' prior: 50491352 overrides: 16920235!
+initialize
+	now := DateAndTime now.! !
+!TimerSimulator methodsFor: 'date' stamp: 'FF 6/12/2022 12:02:37' prior: 50491364!
+today
+	^now date.! !
+
+!testRun: #InterfaceFacadeTest #test15CannotCheckOutACartAfterTimeExceeded stamp: 'FF 6/12/2022 12:03:15'!
+FAILURE!
+
+!testRun: #InterfaceFacadeTest #test15CannotCheckOutACartAfterTimeExceeded stamp: 'FF 6/12/2022 12:03:24'!
+FAILURE!
+!TimerSimulator methodsFor: 'simulation' stamp: 'FF 6/12/2022 12:04:41' prior: 50491337!
+simulateHalfHourHasPassed
+	now + Duration minutes: 30.! !
+!TimerSimulator methodsFor: 'simulation' stamp: 'FF 6/12/2022 12:04:55' prior: 50491384!
+simulateHalfHourHasPassed
+	now := now + Duration minutes: 30.! !
+
+!classDefinition: #InterfaceFacade category: 'TusLibros' stamp: 'FF 6/12/2022 12:07:18'!
+Object subclass: #InterfaceFacade
+	instanceVariableNames: 'authenticatorService lastCartId carts priceList merchantProcessor today salesList lastTransactionId timer cartsCreationTime'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'TusLibros'!
+!InterfaceFacade methodsFor: 'cart' stamp: 'FF 6/12/2022 12:07:15' prior: 50490605!
+createCartFor: aClientId signInWith: aPassword 
+	| newCart |
+	
+	self assertClient: aClientId canAuthenticateUsing: aPassword.
+	
+	newCart := Cart from: aClientId with: priceList.
+	lastCartId := lastCartId + 1.
+	cartsCreationTime at: lastCartId put: timer now.
+	carts at: lastCartId put: newCart. 
+	^lastCartId.! !
+!InterfaceFacade methodsFor: 'initialization' stamp: 'FF 6/12/2022 12:08:08' prior: 50491285!
+priceList: aPriceList authenticator: anAuthenticatorService timer: aTimer 
+	priceList := aPriceList .
+	authenticatorService := anAuthenticatorService .
+	timer := aTimer .
+	carts := Dictionary new.
+	lastCartId := 0.
+	lastTransactionId := 0.
+	salesList := OrderedCollection new.
+	merchantProcessor := MerchantProcessorSimulator new.
+	cartsCreationTime := Dictionary new.
+	today := timer today.! !
+!InterfaceFacade methodsFor: 'cart' stamp: 'FF 6/12/2022 12:14:33' prior: 50489854!
+checkOut: aCartId withCardNumber: aCreditCardNumber expirationDate: anExpirationDate from: aCardOwnerName 
+	| creditCard cart cashier creationTime lastTimeUsed now |
+	cart := self findCart: aCartId.
+	now := timer now.
+	lastTimeUsed := (cartsCreationTime at: aCartId).
+	
+	(now - creationTime > Duration minutes: 30 ).
+	cashier := Cashier using: salesList debitProcessor: merchantProcessor.
+	creditCard := CreditCard number: aCreditCardNumber validTo: anExpirationDate from: aCardOwnerName .
+	cashier checkOut: cart payingWith: creditCard on: today.
+	carts removeKey: aCartId.
+	lastTransactionId := lastTransactionId + 1.
+	^lastTransactionId.! !
+
+!classDefinition: #InterfaceFacade category: 'TusLibros' stamp: 'FF 6/12/2022 12:14:58'!
+Object subclass: #InterfaceFacade
+	instanceVariableNames: 'authenticatorService lastCartId carts priceList merchantProcessor today salesList lastTransactionId timer cartsLastTimeUsed'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'TusLibros'!
+!InterfaceFacade methodsFor: 'as yet unclassified' stamp: 'FF 6/12/2022 12:14:58' prior: 50491405!
+createCartFor: aClientId signInWith: aPassword 
+	| newCart |
+	
+	self assertClient: aClientId canAuthenticateUsing: aPassword.
+	
+	newCart := Cart from: aClientId with: priceList.
+	lastCartId := lastCartId + 1.
+	cartsLastTimeUsed at: lastCartId put: timer now.
+	carts at: lastCartId put: newCart. 
+	^lastCartId.! !
+!InterfaceFacade methodsFor: 'as yet unclassified' stamp: 'FF 6/12/2022 12:14:58' prior: 50491433!
+checkOut: aCartId withCardNumber: aCreditCardNumber expirationDate: anExpirationDate from: aCardOwnerName 
+	| creditCard cart cashier creationTime lastTimeUsed now |
+	cart := self findCart: aCartId.
+	now := timer now.
+	lastTimeUsed := (cartsLastTimeUsed at: aCartId).
+	
+	(now - creationTime > Duration minutes: 30 ).
+	cashier := Cashier using: salesList debitProcessor: merchantProcessor.
+	creditCard := CreditCard number: aCreditCardNumber validTo: anExpirationDate from: aCardOwnerName .
+	cashier checkOut: cart payingWith: creditCard on: today.
+	carts removeKey: aCartId.
+	lastTransactionId := lastTransactionId + 1.
+	^lastTransactionId.! !
+!InterfaceFacade methodsFor: 'as yet unclassified' stamp: 'FF 6/12/2022 12:14:58' prior: 50491418!
+priceList: aPriceList authenticator: anAuthenticatorService timer: aTimer 
+	priceList := aPriceList .
+	authenticatorService := anAuthenticatorService .
+	timer := aTimer .
+	carts := Dictionary new.
+	lastCartId := 0.
+	lastTransactionId := 0.
+	salesList := OrderedCollection new.
+	merchantProcessor := MerchantProcessorSimulator new.
+	cartsLastTimeUsed := Dictionary new.
+	today := timer today.! !
+!InterfaceFacade methodsFor: 'cart' stamp: 'FF 6/12/2022 12:17:43' prior: 50491480!
+checkOut: aCartId withCardNumber: aCreditCardNumber expirationDate: anExpirationDate from: aCardOwnerName 
+	| creditCard cart cashier creationTime lastTimeUsed now |
+	cart := self findCart: aCartId.
+	now := timer now.
+	lastTimeUsed := (cartsLastTimeUsed at: aCartId).
+	
+	(now - creationTime > Duration minutes: 30 ) 
+	ifTrue: [
+		carts removeKey: aCartId.
+		cartsLastTimeUsed removeKey: aCartId .
+		self error: self class cartIsExpired.
+		 ].
+	cashier := Cashier using: salesList debitProcessor: merchantProcessor.
+	creditCard := CreditCard number: aCreditCardNumber validTo: anExpirationDate from: aCardOwnerName .
+	cashier checkOut: cart payingWith: creditCard on: today.
+	carts removeKey: aCartId.
+	lastTransactionId := lastTransactionId + 1.
+	^lastTransactionId.! !
+!InterfaceFacade methodsFor: 'cart' stamp: 'FF 6/12/2022 12:17:53' prior: 50491519!
+checkOut: aCartId withCardNumber: aCreditCardNumber expirationDate: anExpirationDate from: aCardOwnerName 
+	| creditCard cart cashier lastTimeUsed now |
+	cart := self findCart: aCartId.
+	now := timer now.
+	lastTimeUsed := (cartsLastTimeUsed at: aCartId).
+	
+	(now - lastTimeUsed > Duration minutes: 30 ) 
+	ifTrue: [
+		carts removeKey: aCartId.
+		cartsLastTimeUsed removeKey: aCartId .
+		self error: self class cartIsExpired.
+		 ].
+	cashier := Cashier using: salesList debitProcessor: merchantProcessor.
+	creditCard := CreditCard number: aCreditCardNumber validTo: anExpirationDate from: aCardOwnerName .
+	cashier checkOut: cart payingWith: creditCard on: today.
+	carts removeKey: aCartId.
+	lastTransactionId := lastTransactionId + 1.
+	^lastTransactionId.! !
+!InterfaceFacade methodsFor: 'cart' stamp: 'FF 6/12/2022 12:18:14' prior: 50491546!
+checkOut: aCartId withCardNumber: aCreditCardNumber expirationDate: anExpirationDate from: aCardOwnerName 
+	| creditCard cart cashier lastTimeUsed now |
+	cart := self findCart: aCartId.
+	now := timer now.
+	lastTimeUsed := (cartsLastTimeUsed at: aCartId).
+	
+	(now - lastTimeUsed > Duration minutes: 30 ) 
+	ifTrue: [
+		carts removeKey: aCartId.
+		cartsLastTimeUsed removeKey: aCartId .
+		self error: self class cartIsExpired.
+		 ].
+	cashier := Cashier using: salesList debitProcessor: merchantProcessor.
+	creditCard := CreditCard number: aCreditCardNumber validTo: anExpirationDate from: aCardOwnerName .
+	cashier checkOut: cart payingWith: creditCard on: today.
+	carts removeKey: aCartId.
+	lastTransactionId := lastTransactionId + 1.
+	^lastTransactionId.! !
+
+!testRun: #InterfaceFacadeTest #test15CannotCheckOutACartAfterTimeExceeded stamp: 'FF 6/12/2022 12:19:03'!
+ERROR!
+!TimerSimulator methodsFor: 'date' stamp: 'FF 6/12/2022 12:19:22'!
+now
+	self shouldBeImplemented.
+	^now! !
+!TimerSimulator methodsFor: 'date' stamp: 'FF 6/12/2022 12:19:27' prior: 50491603!
+now
+	^now! !
+!TimerSimulator methodsFor: 'simulation' stamp: 'FF 6/12/2022 12:20:55' prior: 50491389!
+simulateHalfHourHasPassed
+	now := now + (Duration minutes: 30).! !
+
+!testRun: #InterfaceFacadeTest #test15CannotCheckOutACartAfterTimeExceeded stamp: 'FF 6/12/2022 12:20:56'!
+ERROR!
+!InterfaceFacade methodsFor: 'cart' stamp: 'FF 6/12/2022 12:21:39' prior: 50491573!
+checkOut: aCartId withCardNumber: aCreditCardNumber expirationDate: anExpirationDate from: aCardOwnerName 
+	| creditCard cart cashier lastTimeUsed now |
+	cart := self findCart: aCartId.
+	now := timer now.
+	lastTimeUsed := (cartsLastTimeUsed at: aCartId).
+	
+	((now - lastTimeUsed) > Duration minutes: 30 ) 
+	ifTrue: [
+		carts removeKey: aCartId.
+		cartsLastTimeUsed removeKey: aCartId .
+		self error: self class cartIsExpired.
+		 ].
+	cashier := Cashier using: salesList debitProcessor: merchantProcessor.
+	creditCard := CreditCard number: aCreditCardNumber validTo: anExpirationDate from: aCardOwnerName .
+	cashier checkOut: cart payingWith: creditCard on: today.
+	carts removeKey: aCartId.
+	lastTransactionId := lastTransactionId + 1.
+	^lastTransactionId.! !
+!InterfaceFacade methodsFor: 'cart' stamp: 'FF 6/12/2022 12:21:48' prior: 50491620!
+checkOut: aCartId withCardNumber: aCreditCardNumber expirationDate: anExpirationDate from: aCardOwnerName 
+	| creditCard cart cashier lastTimeUsed now |
+	cart := self findCart: aCartId.
+	now := timer now.
+	lastTimeUsed := (cartsLastTimeUsed at: aCartId).
+	
+	((now - lastTimeUsed) > (Duration minutes: 30) ) 
+	ifTrue: [
+		carts removeKey: aCartId.
+		cartsLastTimeUsed removeKey: aCartId .
+		self error: self class cartIsExpired.
+		 ].
+	cashier := Cashier using: salesList debitProcessor: merchantProcessor.
+	creditCard := CreditCard number: aCreditCardNumber validTo: anExpirationDate from: aCardOwnerName .
+	cashier checkOut: cart payingWith: creditCard on: today.
+	carts removeKey: aCartId.
+	lastTransactionId := lastTransactionId + 1.
+	^lastTransactionId.! !
+
+!testRun: #InterfaceFacadeTest #test15CannotCheckOutACartAfterTimeExceeded stamp: 'FF 6/12/2022 12:21:51'!
+FAILURE!
+
+!testRun: #InterfaceFacadeTest #test15CannotCheckOutACartAfterTimeExceeded stamp: 'FF 6/12/2022 12:21:58'!
+FAILURE!
+!InterfaceFacade methodsFor: 'cart' stamp: 'FF 6/12/2022 12:22:40' prior: 50491647!
+checkOut: aCartId withCardNumber: aCreditCardNumber expirationDate: anExpirationDate from: aCardOwnerName 
+	| creditCard cart cashier lastTimeUsed now |
+	cart := self findCart: aCartId.
+	now := timer now.
+	lastTimeUsed := (cartsLastTimeUsed at: aCartId).
+	Halt.
+	((now - lastTimeUsed) > (Duration minutes: 30) ) 
+	ifTrue: [
+		carts removeKey: aCartId.
+		cartsLastTimeUsed removeKey: aCartId .
+		self error: self class cartIsExpired.
+		 ].
+	cashier := Cashier using: salesList debitProcessor: merchantProcessor.
+	creditCard := CreditCard number: aCreditCardNumber validTo: anExpirationDate from: aCardOwnerName .
+	cashier checkOut: cart payingWith: creditCard on: today.
+	carts removeKey: aCartId.
+	lastTransactionId := lastTransactionId + 1.
+	^lastTransactionId.! !
+
+!testRun: #InterfaceFacadeTest #test15CannotCheckOutACartAfterTimeExceeded stamp: 'FF 6/12/2022 12:22:47'!
+FAILURE!
+!InterfaceFacade methodsFor: 'cart' stamp: 'FF 6/12/2022 12:23:24' prior: 50491681!
+checkOut: aCartId withCardNumber: aCreditCardNumber expirationDate: anExpirationDate from: aCardOwnerName 
+	| creditCard cart cashier lastTimeUsed now |
+	cart := self findCart: aCartId.
+	now := timer now.
+	lastTimeUsed := (cartsLastTimeUsed at: aCartId).
+	self shouldBeImplemented .
+	((now - lastTimeUsed) > (Duration minutes: 30) ) 
+	ifTrue: [
+		carts removeKey: aCartId.
+		cartsLastTimeUsed removeKey: aCartId .
+		self error: self class cartIsExpired.
+		 ].
+	cashier := Cashier using: salesList debitProcessor: merchantProcessor.
+	creditCard := CreditCard number: aCreditCardNumber validTo: anExpirationDate from: aCardOwnerName .
+	cashier checkOut: cart payingWith: creditCard on: today.
+	carts removeKey: aCartId.
+	lastTransactionId := lastTransactionId + 1.
+	^lastTransactionId.! !
+
+!testRun: #InterfaceFacadeTest #test15CannotCheckOutACartAfterTimeExceeded stamp: 'FF 6/12/2022 12:23:33'!
+ERROR!
+!InterfaceFacade methodsFor: 'cart' stamp: 'FF 6/12/2022 12:24:21' prior: 50491712!
+checkOut: aCartId withCardNumber: aCreditCardNumber expirationDate: anExpirationDate from: aCardOwnerName 
+	| creditCard cart cashier lastTimeUsed now |
+	cart := self findCart: aCartId.
+	now := timer now.
+	lastTimeUsed := (cartsLastTimeUsed at: aCartId).
+	self halt .
+	((now - lastTimeUsed) > (Duration minutes: 30) ) 
+	ifTrue: [
+		carts removeKey: aCartId.
+		cartsLastTimeUsed removeKey: aCartId .
+		self error: self class cartIsExpired.
+		 ].
+	cashier := Cashier using: salesList debitProcessor: merchantProcessor.
+	creditCard := CreditCard number: aCreditCardNumber validTo: anExpirationDate from: aCardOwnerName .
+	cashier checkOut: cart payingWith: creditCard on: today.
+	carts removeKey: aCartId.
+	lastTransactionId := lastTransactionId + 1.
+	^lastTransactionId.! !
+!InterfaceFacade methodsFor: 'cart' stamp: 'FF 6/12/2022 12:25:23' prior: 50491743!
+checkOut: aCartId withCardNumber: aCreditCardNumber expirationDate: anExpirationDate from: aCardOwnerName 
+	| creditCard cart cashier lastTimeUsed now |
+	cart := self findCart: aCartId.
+	now := timer now.
+	lastTimeUsed := (cartsLastTimeUsed at: aCartId).
+	self halt .
+	((now - lastTimeUsed) >= (Duration minutes: 30) ) 
+	ifTrue: [
+		carts removeKey: aCartId.
+		cartsLastTimeUsed removeKey: aCartId .
+		self error: self class cartIsExpired.
+		 ].
+	cashier := Cashier using: salesList debitProcessor: merchantProcessor.
+	creditCard := CreditCard number: aCreditCardNumber validTo: anExpirationDate from: aCardOwnerName .
+	cashier checkOut: cart payingWith: creditCard on: today.
+	carts removeKey: aCartId.
+	lastTransactionId := lastTransactionId + 1.
+	^lastTransactionId.! !
+
+!testRun: #InterfaceFacadeTest #test15CannotCheckOutACartAfterTimeExceeded stamp: 'FF 6/12/2022 12:25:29'!
+ERROR!
+!InterfaceFacade class methodsFor: 'error messages' stamp: 'FF 6/12/2022 12:25:39'!
+cartIsExpired
+	self shouldBeImplemented.! !
+!InterfaceFacade class methodsFor: 'error messages' stamp: 'FF 6/12/2022 12:26:30' prior: 50491801!
+cartIsExpired
+	'The cart has expired'! !
+
+!testRun: #InterfaceFacadeTest #test15CannotCheckOutACartAfterTimeExceeded stamp: 'FF 6/12/2022 12:26:32'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test01ValidClientCanCreateACart stamp: 'FF 6/12/2022 12:26:32'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test02InvalidClientCannotCreateACart stamp: 'FF 6/12/2022 12:26:32'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test03CreateCartReturnsUniqueCartId stamp: 'FF 6/12/2022 12:26:32'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test04ListCartOfInvalidCartIdThrowsError stamp: 'FF 6/12/2022 12:26:32'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test05ListCartIncludesAddedItemsAndItsQuantity stamp: 'FF 6/12/2022 12:26:32'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test06AddToCartWithInvalidCartIdThrowsError stamp: 'FF 6/12/2022 12:26:32'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test08CheckOutCartOfInvalidCartIdThrowsError stamp: 'FF 6/12/2022 12:26:32'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test11InvalidClientCannotListAnyPurchases stamp: 'FF 6/12/2022 12:26:32'!
+PASSED!
+!InterfaceFacade class methodsFor: 'error messages' stamp: 'FF 6/12/2022 12:26:45' prior: 50491806!
+cartIsExpired
+	^'The cart has expired'! !
+!InterfaceFacade methodsFor: 'cart' stamp: 'FF 6/12/2022 12:27:05' prior: 50491770!
+checkOut: aCartId withCardNumber: aCreditCardNumber expirationDate: anExpirationDate from: aCardOwnerName 
+	| creditCard cart cashier lastTimeUsed now |
+	cart := self findCart: aCartId.
+	now := timer now.
+	lastTimeUsed := (cartsLastTimeUsed at: aCartId).
+	((now - lastTimeUsed) >= (Duration minutes: 30) ) 
+	ifTrue: [
+		carts removeKey: aCartId.
+		cartsLastTimeUsed removeKey: aCartId .
+		self error: self class cartIsExpired.
+		 ].
+	cashier := Cashier using: salesList debitProcessor: merchantProcessor.
+	creditCard := CreditCard number: aCreditCardNumber validTo: anExpirationDate from: aCardOwnerName .
+	cashier checkOut: cart payingWith: creditCard on: today.
+	carts removeKey: aCartId.
+	lastTransactionId := lastTransactionId + 1.
+	^lastTransactionId.! !
+
+!testRun: #InterfaceFacadeTest #test15CannotCheckOutACartAfterTimeExceeded stamp: 'FF 6/12/2022 12:27:10'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test01ValidClientCanCreateACart stamp: 'FF 6/12/2022 12:27:10'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test02InvalidClientCannotCreateACart stamp: 'FF 6/12/2022 12:27:10'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test03CreateCartReturnsUniqueCartId stamp: 'FF 6/12/2022 12:27:10'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test04ListCartOfInvalidCartIdThrowsError stamp: 'FF 6/12/2022 12:27:10'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test05ListCartIncludesAddedItemsAndItsQuantity stamp: 'FF 6/12/2022 12:27:10'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test06AddToCartWithInvalidCartIdThrowsError stamp: 'FF 6/12/2022 12:27:10'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test07CheckOutCartReturnsTransactionId stamp: 'FF 6/12/2022 12:27:10'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test08CheckOutCartOfInvalidCartIdThrowsError stamp: 'FF 6/12/2022 12:27:10'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test09CheckOutCartWithInvalidCreditCardThrowsError stamp: 'FF 6/12/2022 12:27:10'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test10ListPurchasesReturnsClientTransactions stamp: 'FF 6/12/2022 12:27:10'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test11InvalidClientCannotListAnyPurchases stamp: 'FF 6/12/2022 12:27:11'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test12CheckOutReturnsUniqueTransactionId stamp: 'FF 6/12/2022 12:27:11'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test13CartIdIsInvalidAfterCheckOut stamp: 'FF 6/12/2022 12:27:11'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test14ListPurchasesAreDifferentBetweenTwoDifferentClients stamp: 'FF 6/12/2022 12:27:11'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test15CannotCheckOutACartAfterTimeExceeded stamp: 'FF 6/12/2022 12:27:11'!
+PASSED!
+
+----SNAPSHOT----(12 June 2022 12:27:21) CuisUniversity-5096.image priorSource: 5100833!
+
+!testRun: #InterfaceFacadeTest #test15CannotCheckOutACartAfterTimeExceeded stamp: 'FF 6/12/2022 12:30:05'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test01ValidClientCanCreateACart stamp: 'FF 6/12/2022 12:30:05'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test02InvalidClientCannotCreateACart stamp: 'FF 6/12/2022 12:30:05'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test03CreateCartReturnsUniqueCartId stamp: 'FF 6/12/2022 12:30:05'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test04ListCartOfInvalidCartIdThrowsError stamp: 'FF 6/12/2022 12:30:05'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test05ListCartIncludesAddedItemsAndItsQuantity stamp: 'FF 6/12/2022 12:30:05'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test06AddToCartWithInvalidCartIdThrowsError stamp: 'FF 6/12/2022 12:30:05'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test07CheckOutCartReturnsTransactionId stamp: 'FF 6/12/2022 12:30:05'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test08CheckOutCartOfInvalidCartIdThrowsError stamp: 'FF 6/12/2022 12:30:05'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test09CheckOutCartWithInvalidCreditCardThrowsError stamp: 'FF 6/12/2022 12:30:05'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test10ListPurchasesReturnsClientTransactions stamp: 'FF 6/12/2022 12:30:05'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test11InvalidClientCannotListAnyPurchases stamp: 'FF 6/12/2022 12:30:06'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test12CheckOutReturnsUniqueTransactionId stamp: 'FF 6/12/2022 12:30:06'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test13CartIdIsInvalidAfterCheckOut stamp: 'FF 6/12/2022 12:30:06'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test14ListPurchasesAreDifferentBetweenTwoDifferentClients stamp: 'FF 6/12/2022 12:30:06'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test15CannotCheckOutACartAfterTimeExceeded stamp: 'FF 6/12/2022 12:30:06'!
+PASSED!
+!InterfaceFacadeTest methodsFor: 'test' stamp: 'FF 6/12/2022 12:30:34'!
+test15CannotAddToCartAfterTimeExceeded
+
+	|  cartId  quantity |
+	quantity := 1.
+	cartId := interfaceFacade createCartFor: clientId signInWith: password.
+	interfaceFacade addToCart: cartId book: validBookISBN quantity: quantity.
+	
+	timerSimulator simulateHalfHourHasPassed.
+		 .
+	self should: [ interfaceFacade checkOut: cartId withCardNumber: creditCardNumber expirationDate: expirationMonth from: cardOwnerName ] 
+	raise:  Error - MessageNotUnderstood 
+	withExceptionDo: [ :anError |
+		self assert: InterfaceFacade cartIsExpired equals: anError messageText.
+	].
+
+	
+	
+	! !
+!InterfaceFacadeTest methodsFor: 'test' stamp: 'FF 6/12/2022 12:30:46'!
+test16CannotAddToCartAfterTimeExceeded
+
+	|  cartId  quantity |
+	quantity := 1.
+	cartId := interfaceFacade createCartFor: clientId signInWith: password.
+	interfaceFacade addToCart: cartId book: validBookISBN quantity: quantity.
+	
+	timerSimulator simulateHalfHourHasPassed.
+		 .
+	self should: [ interfaceFacade checkOut: cartId withCardNumber: creditCardNumber expirationDate: expirationMonth from: cardOwnerName ] 
+	raise:  Error - MessageNotUnderstood 
+	withExceptionDo: [ :anError |
+		self assert: InterfaceFacade cartIsExpired equals: anError messageText.
+	].
+
+	
+	
+	! !
+
+!methodRemoval: InterfaceFacadeTest #test15CannotAddToCartAfterTimeExceeded stamp: 'FF 6/12/2022 12:30:46'!
+test15CannotAddToCartAfterTimeExceeded
+
+	|  cartId  quantity |
+	quantity := 1.
+	cartId := interfaceFacade createCartFor: clientId signInWith: password.
+	interfaceFacade addToCart: cartId book: validBookISBN quantity: quantity.
+	
+	timerSimulator simulateHalfHourHasPassed.
+		 .
+	self should: [ interfaceFacade checkOut: cartId withCardNumber: creditCardNumber expirationDate: expirationMonth from: cardOwnerName ] 
+	raise:  Error - MessageNotUnderstood 
+	withExceptionDo: [ :anError |
+		self assert: InterfaceFacade cartIsExpired equals: anError messageText.
+	].
+
+	
+	
+	!
+!InterfaceFacadeTest methodsFor: 'test' stamp: 'FF 6/12/2022 12:31:37' prior: 50492013!
+test16CannotAddToCartAfterTimeExceeded
+
+	|  cartId  quantity |
+	quantity := 1.
+	cartId := interfaceFacade createCartFor: clientId signInWith: password.
+	
+	timerSimulator simulateHalfHourHasPassed.
+		 .
+	self should: [ interfaceFacade addToCart: cartId book: validBookISBN quantity: quantity. ] 
+	raise:  Error - MessageNotUnderstood 
+	withExceptionDo: [ :anError |
+		self assert: InterfaceFacade cartIsExpired equals: anError messageText.
+	].
+
+	
+	
+	! !
+
+!testRun: #InterfaceFacadeTest #test16CannotAddToCartAfterTimeExceeded stamp: 'FF 6/12/2022 12:31:42'!
+FAILURE!
+!InterfaceFacade methodsFor: 'cart' stamp: 'FF 6/12/2022 12:34:58'!
+assertCartIsNotExpired: aCartId
+	|  lastTimeUsed now |
+	now := timer now.
+	lastTimeUsed := (cartsLastTimeUsed at: aCartId).
+	((now - lastTimeUsed) >= (Duration minutes: 30) ) 
+	ifTrue: [
+		carts removeKey: aCartId.
+		cartsLastTimeUsed removeKey: aCartId .
+		self error: self class cartIsExpired.
+		 ].
+	! !
+!InterfaceFacade methodsFor: 'cart' stamp: 'FF 6/12/2022 12:35:06' prior: 50492075!
+assertCartIsNotExpired: aCartId
+	|  lastTimeUsed now |
+	now := timer now.
+	lastTimeUsed := (cartsLastTimeUsed at: aCartId).
+	((now - lastTimeUsed) >= (Duration minutes: 30) ) 
+	ifTrue: [
+		carts removeKey: aCartId.
+		cartsLastTimeUsed removeKey: aCartId .
+		self error: self class cartIsExpired.
+	 ].
+	! !
+!InterfaceFacade methodsFor: 'cart' stamp: 'FF 6/12/2022 12:35:33' prior: 50491847!
+checkOut: aCartId withCardNumber: aCreditCardNumber expirationDate: anExpirationDate from: aCardOwnerName 
+	| creditCard cart cashier |
+	cart := self findCart: aCartId.
+	
+	self assertCartIsNotExpired: aCartId.
+	
+	cashier := Cashier using: salesList debitProcessor: merchantProcessor.
+	creditCard := CreditCard number: aCreditCardNumber validTo: anExpirationDate from: aCardOwnerName .
+	cashier checkOut: cart payingWith: creditCard on: today.
+	carts removeKey: aCartId.
+	lastTransactionId := lastTransactionId + 1.
+	^lastTransactionId.! !
+!InterfaceFacade methodsFor: 'cart' stamp: 'FF 6/12/2022 12:35:48' prior: 50487160!
+addToCart: aCartId book: aBookISBN quantity: aQuantityToAdd
+
+	| cartFound |
+	cartFound := self findCart: aCartId.
+	
+	self assertCartIsNotExpired: aCartId.
+	
+	cartFound add: aQuantityToAdd of: aBookISBN.
+	! !
+
+!testRun: #InterfaceFacadeTest #test16CannotAddToCartAfterTimeExceeded stamp: 'FF 6/12/2022 12:36:06'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test01ValidClientCanCreateACart stamp: 'FF 6/12/2022 12:36:06'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test02InvalidClientCannotCreateACart stamp: 'FF 6/12/2022 12:36:06'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test03CreateCartReturnsUniqueCartId stamp: 'FF 6/12/2022 12:36:06'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test04ListCartOfInvalidCartIdThrowsError stamp: 'FF 6/12/2022 12:36:06'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test05ListCartIncludesAddedItemsAndItsQuantity stamp: 'FF 6/12/2022 12:36:06'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test06AddToCartWithInvalidCartIdThrowsError stamp: 'FF 6/12/2022 12:36:06'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test07CheckOutCartReturnsTransactionId stamp: 'FF 6/12/2022 12:36:06'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test08CheckOutCartOfInvalidCartIdThrowsError stamp: 'FF 6/12/2022 12:36:06'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test09CheckOutCartWithInvalidCreditCardThrowsError stamp: 'FF 6/12/2022 12:36:06'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test10ListPurchasesReturnsClientTransactions stamp: 'FF 6/12/2022 12:36:06'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test11InvalidClientCannotListAnyPurchases stamp: 'FF 6/12/2022 12:36:06'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test12CheckOutReturnsUniqueTransactionId stamp: 'FF 6/12/2022 12:36:06'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test13CartIdIsInvalidAfterCheckOut stamp: 'FF 6/12/2022 12:36:06'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test14ListPurchasesAreDifferentBetweenTwoDifferentClients stamp: 'FF 6/12/2022 12:36:06'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test15CannotCheckOutACartAfterTimeExceeded stamp: 'FF 6/12/2022 12:36:06'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test16CannotAddToCartAfterTimeExceeded stamp: 'FF 6/12/2022 12:36:06'!
+PASSED!
+!InterfaceFacade methodsFor: 'cart' stamp: 'FF 6/12/2022 12:36:38'!
+deleteCart: aCartId
+
+	carts removeKey: aCartId.
+		cartsLastTimeUsed removeKey: aCartId! !
+!InterfaceFacade methodsFor: 'cart' stamp: 'FF 6/12/2022 12:36:38' prior: 50492088!
+assertCartIsNotExpired: aCartId
+	|  lastTimeUsed now |
+	now := timer now.
+	lastTimeUsed := (cartsLastTimeUsed at: aCartId).
+	((now - lastTimeUsed) >= (Duration minutes: 30) ) 
+	ifTrue: [
+		self deleteCart: aCartId .
+		self error: self class cartIsExpired.
+	 ].
+	! !
+!InterfaceFacade methodsFor: 'cart' stamp: 'FF 6/12/2022 12:36:48' prior: 50492191!
+deleteCart: aCartId
+
+	carts removeKey: aCartId.
+	cartsLastTimeUsed removeKey: aCartId! !
+!InterfaceFacade methodsFor: 'cart' stamp: 'FF 6/12/2022 12:37:17' prior: 50492101!
+checkOut: aCartId withCardNumber: aCreditCardNumber expirationDate: anExpirationDate from: aCardOwnerName 
+	| creditCard cart cashier |
+	cart := self findCart: aCartId.
+	
+	self assertCartIsNotExpired: aCartId.
+	
+	cashier := Cashier using: salesList debitProcessor: merchantProcessor.
+	creditCard := CreditCard number: aCreditCardNumber validTo: anExpirationDate from: aCardOwnerName .
+	cashier checkOut: cart payingWith: creditCard on: today.
+	self deleteCart: aCartId .
+	lastTransactionId := lastTransactionId + 1.
+	^lastTransactionId.! !
+!InterfaceFacadeTest methodsFor: 'test' stamp: 'FF 6/12/2022 12:38:32'!
+test17CannotListACartAfterTimeExceeded
+
+	|  cartId  quantity |
+	quantity := 1.
+	cartId := interfaceFacade createCartFor: clientId signInWith: password.
+	
+	timerSimulator simulateHalfHourHasPassed.
+		 .
+	self should: [ interfaceFacade listCart: cartId] 
+	raise:  Error - MessageNotUnderstood 
+	withExceptionDo: [ :anError |
+		self assert: InterfaceFacade cartIsExpired equals: anError messageText.
+	].
+
+	
+	
+	! !
+!InterfaceFacadeTest methodsFor: 'test' stamp: 'FF 6/12/2022 12:39:03' prior: 50492234!
+test17CannotListACartAfterTimeExceeded
+
+	|  cartId  |
+	cartId := interfaceFacade createCartFor: clientId signInWith: password.
+	
+	timerSimulator simulateHalfHourHasPassed.
+		 .
+	self should: [ interfaceFacade listCart: cartId] 
+	raise:  Error - MessageNotUnderstood 
+	withExceptionDo: [ :anError |
+		self assert: InterfaceFacade cartIsExpired equals: anError messageText.
+	].
+
+	
+	
+	! !
+
+!testRun: #InterfaceFacadeTest #test17CannotListACartAfterTimeExceeded stamp: 'FF 6/12/2022 12:39:16'!
+FAILURE!
+!InterfaceFacade methodsFor: 'cart' stamp: 'FF 6/12/2022 12:39:38' prior: 50487168!
+listCart: aCartId 
+	| cartFound |
+	cartFound := self findCart: aCartId.
+	self assertCartIsNotExpired: aCartId.
+	^cartFound books.! !
+
+!testRun: #InterfaceFacadeTest #test17CannotListACartAfterTimeExceeded stamp: 'FF 6/12/2022 12:39:47'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test01ValidClientCanCreateACart stamp: 'FF 6/12/2022 12:39:47'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test02InvalidClientCannotCreateACart stamp: 'FF 6/12/2022 12:39:47'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test03CreateCartReturnsUniqueCartId stamp: 'FF 6/12/2022 12:39:47'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test04ListCartOfInvalidCartIdThrowsError stamp: 'FF 6/12/2022 12:39:47'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test05ListCartIncludesAddedItemsAndItsQuantity stamp: 'FF 6/12/2022 12:39:47'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test06AddToCartWithInvalidCartIdThrowsError stamp: 'FF 6/12/2022 12:39:47'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test07CheckOutCartReturnsTransactionId stamp: 'FF 6/12/2022 12:39:47'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test08CheckOutCartOfInvalidCartIdThrowsError stamp: 'FF 6/12/2022 12:39:47'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test09CheckOutCartWithInvalidCreditCardThrowsError stamp: 'FF 6/12/2022 12:39:47'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test10ListPurchasesReturnsClientTransactions stamp: 'FF 6/12/2022 12:39:47'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test11InvalidClientCannotListAnyPurchases stamp: 'FF 6/12/2022 12:39:47'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test12CheckOutReturnsUniqueTransactionId stamp: 'FF 6/12/2022 12:39:47'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test13CartIdIsInvalidAfterCheckOut stamp: 'FF 6/12/2022 12:39:48'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test14ListPurchasesAreDifferentBetweenTwoDifferentClients stamp: 'FF 6/12/2022 12:39:48'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test15CannotCheckOutACartAfterTimeExceeded stamp: 'FF 6/12/2022 12:39:48'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test16CannotAddToCartAfterTimeExceeded stamp: 'FF 6/12/2022 12:39:48'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test17CannotListACartAfterTimeExceeded stamp: 'FF 6/12/2022 12:39:48'!
+PASSED!
+!InterfaceFacadeTest methodsFor: 'test' stamp: 'FF 6/12/2022 12:39:55' prior: 50492250!
+test17CannotListACartAfterTimeExceeded
+
+	|  cartId  |
+	cartId := interfaceFacade createCartFor: clientId signInWith: password.
+	
+	timerSimulator simulateHalfHourHasPassed.
+
+	self should: [ interfaceFacade listCart: cartId] 
+	raise:  Error - MessageNotUnderstood 
+	withExceptionDo: [ :anError |
+		self assert: InterfaceFacade cartIsExpired equals: anError messageText.
+	].
+
+	
+	
+	! !
+!InterfaceFacadeTest methodsFor: 'test' stamp: 'FF 6/12/2022 12:41:41'!
+test18AddToCartRestartLastTimeUsed
+
+	|  cartId  quantity |
+	quantity := 1.
+	cartId := interfaceFacade createCartFor: clientId signInWith: password.
+	
+	timerSimulator simulateHalfHourHasPassed.
+		 .
+	self should: [ interfaceFacade addToCart: cartId book: validBookISBN quantity: quantity. ] 
+	raise:  Error - MessageNotUnderstood 
+	withExceptionDo: [ :anError |
+		self assert: InterfaceFacade cartIsExpired equals: anError messageText.
+	].
+
+	
+	
+	! !
+!InterfaceFacadeTest methodsFor: 'test' stamp: 'FF 6/12/2022 12:44:14' prior: 50492356!
+test18AddToCartRestartLastTimeUsed
+
+	|  cartId  quantity listCart |
+	quantity := 1.
+	cartId := interfaceFacade createCartFor: clientId signInWith: password.
+	
+	timerSimulator simulateQuarterHourHasPassed.
+	interfaceFacade addToCart: cartId book: validBookISBN quantity: quantity.
+	timerSimulator simulateQuarterHourHasPassed.
+	listCart := interfaceFacade listCart: cartId.
+	
+	self deny: listCart isEmpty.! !
+
+!testRun: #InterfaceFacadeTest #test18AddToCartRestartLastTimeUsed stamp: 'FF 6/12/2022 12:44:50'!
+ERROR!
+!TimerSimulator methodsFor: 'simulation' stamp: 'FF 6/12/2022 12:44:57'!
+simulateQuarterHourHasPassed
+	self shouldBeImplemented.! !
+!TimerSimulator methodsFor: 'simulation' stamp: 'FF 6/12/2022 12:45:20' prior: 50492392!
+simulateQuarterHourHasPassed
+	now := now + (Duration minutes: 15).! !
+
+!testRun: #InterfaceFacadeTest #test18AddToCartRestartLastTimeUsed stamp: 'FF 6/12/2022 12:45:21'!
+ERROR!
+!InterfaceFacade methodsFor: 'cart' stamp: 'FF 6/12/2022 12:46:36' prior: 50492121!
+addToCart: aCartId book: aBookISBN quantity: aQuantityToAdd
+
+	| cartFound |
+	cartFound := self findCart: aCartId.
+	
+	self assertCartIsNotExpired: aCartId.
+	
+	cartsLastTimeUsed at: aCartId put: timer now.
+	
+	cartFound add: aQuantityToAdd of: aBookISBN.
+	! !
+
+!testRun: #InterfaceFacadeTest #test18AddToCartRestartLastTimeUsed stamp: 'FF 6/12/2022 12:46:44'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test01ValidClientCanCreateACart stamp: 'FF 6/12/2022 12:46:44'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test02InvalidClientCannotCreateACart stamp: 'FF 6/12/2022 12:46:44'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test03CreateCartReturnsUniqueCartId stamp: 'FF 6/12/2022 12:46:44'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test04ListCartOfInvalidCartIdThrowsError stamp: 'FF 6/12/2022 12:46:44'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test05ListCartIncludesAddedItemsAndItsQuantity stamp: 'FF 6/12/2022 12:46:44'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test06AddToCartWithInvalidCartIdThrowsError stamp: 'FF 6/12/2022 12:46:44'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test07CheckOutCartReturnsTransactionId stamp: 'FF 6/12/2022 12:46:44'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test08CheckOutCartOfInvalidCartIdThrowsError stamp: 'FF 6/12/2022 12:46:44'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test09CheckOutCartWithInvalidCreditCardThrowsError stamp: 'FF 6/12/2022 12:46:44'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test10ListPurchasesReturnsClientTransactions stamp: 'FF 6/12/2022 12:46:44'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test11InvalidClientCannotListAnyPurchases stamp: 'FF 6/12/2022 12:46:44'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test12CheckOutReturnsUniqueTransactionId stamp: 'FF 6/12/2022 12:46:44'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test13CartIdIsInvalidAfterCheckOut stamp: 'FF 6/12/2022 12:46:44'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test14ListPurchasesAreDifferentBetweenTwoDifferentClients stamp: 'FF 6/12/2022 12:46:44'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test15CannotCheckOutACartAfterTimeExceeded stamp: 'FF 6/12/2022 12:46:44'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test16CannotAddToCartAfterTimeExceeded stamp: 'FF 6/12/2022 12:46:44'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test17CannotListACartAfterTimeExceeded stamp: 'FF 6/12/2022 12:46:44'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test18AddToCartRestartLastTimeUsed stamp: 'FF 6/12/2022 12:46:44'!
+PASSED!
+!InterfaceFacadeTest methodsFor: 'test' stamp: 'FF 6/12/2022 12:48:08'!
+test19ListCartRestartLastTimeUsed
+
+	|  cartId  quantity listCart |
+	quantity := 1.
+	cartId := interfaceFacade createCartFor: clientId signInWith: password.
+	
+	timerSimulator simulateQuarterHourHasPassed.
+	interfaceFacade listCart: cartId.
+	timerSimulator simulateQuarterHourHasPassed.
+	interfaceFacade addToCart: cartId book: validBookISBN quantity: quantity.
+	listCart := interfaceFacade listCart: cartId.
+	
+	self deny: listCart isEmpty.! !
+
+!testRun: #InterfaceFacadeTest #test19ListCartRestartLastTimeUsed stamp: 'FF 6/12/2022 12:48:12'!
+ERROR!
+!InterfaceFacade methodsFor: 'cart' stamp: 'FF 6/12/2022 12:48:54'!
+updateLastTimeUsed: aCartId
+
+	^ cartsLastTimeUsed at: aCartId put: timer now! !
+!InterfaceFacade methodsFor: 'cart' stamp: 'FF 6/12/2022 12:48:55' prior: 50492406!
+addToCart: aCartId book: aBookISBN quantity: aQuantityToAdd
+
+	| cartFound |
+	cartFound := self findCart: aCartId.
+	
+	self assertCartIsNotExpired: aCartId.
+	
+	self updateLastTimeUsed: aCartId.
+	
+	cartFound add: aQuantityToAdd of: aBookISBN.
+	! !
+!InterfaceFacade methodsFor: 'cart' stamp: 'FF 6/12/2022 12:49:03' prior: 50492269!
+listCart: aCartId 
+	| cartFound |
+	cartFound := self findCart: aCartId.
+	self assertCartIsNotExpired: aCartId.
+	self updateLastTimeUsed: aCartId.
+	^cartFound books.! !
+
+!testRun: #InterfaceFacadeTest #test19ListCartRestartLastTimeUsed stamp: 'FF 6/12/2022 12:49:12'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test01ValidClientCanCreateACart stamp: 'FF 6/12/2022 12:49:12'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test02InvalidClientCannotCreateACart stamp: 'FF 6/12/2022 12:49:12'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test03CreateCartReturnsUniqueCartId stamp: 'FF 6/12/2022 12:49:13'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test04ListCartOfInvalidCartIdThrowsError stamp: 'FF 6/12/2022 12:49:13'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test05ListCartIncludesAddedItemsAndItsQuantity stamp: 'FF 6/12/2022 12:49:13'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test06AddToCartWithInvalidCartIdThrowsError stamp: 'FF 6/12/2022 12:49:13'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test07CheckOutCartReturnsTransactionId stamp: 'FF 6/12/2022 12:49:13'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test08CheckOutCartOfInvalidCartIdThrowsError stamp: 'FF 6/12/2022 12:49:13'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test09CheckOutCartWithInvalidCreditCardThrowsError stamp: 'FF 6/12/2022 12:49:13'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test10ListPurchasesReturnsClientTransactions stamp: 'FF 6/12/2022 12:49:13'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test11InvalidClientCannotListAnyPurchases stamp: 'FF 6/12/2022 12:49:13'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test12CheckOutReturnsUniqueTransactionId stamp: 'FF 6/12/2022 12:49:13'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test13CartIdIsInvalidAfterCheckOut stamp: 'FF 6/12/2022 12:49:13'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test14ListPurchasesAreDifferentBetweenTwoDifferentClients stamp: 'FF 6/12/2022 12:49:13'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test15CannotCheckOutACartAfterTimeExceeded stamp: 'FF 6/12/2022 12:49:13'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test16CannotAddToCartAfterTimeExceeded stamp: 'FF 6/12/2022 12:49:13'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test17CannotListACartAfterTimeExceeded stamp: 'FF 6/12/2022 12:49:13'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test18AddToCartRestartLastTimeUsed stamp: 'FF 6/12/2022 12:49:13'!
+PASSED!
+
+!testRun: #InterfaceFacadeTest #test19ListCartRestartLastTimeUsed stamp: 'FF 6/12/2022 12:49:13'!
+PASSED!
+
+----SNAPSHOT----(12 June 2022 12:50:42) CuisUniversity-5096.image priorSource: 5128974!
+
+----SNAPSHOT----(12 June 2022 12:51:16) CuisUniversity-5096.image priorSource: 5150412!
