@@ -1,0 +1,477 @@
+
+
+----STARTUP---- (26 June 2022 19:00:39) as C:\Users\Fabian\Desktop\Ing1\Ejercicio 9\windows64\CuisUniversity-5301.image!
+
+!ImportTest methodsFor: 'tests' stamp: 'FG 6/25/2022 11:48:01'!
+test06CustomerRecordCannotHaveLessThanFiveColumns
+
+	self should: [CustomerImporter valueFrom: self customerRecordWithLessThanFiveColumns into: session.]
+	raise: Error - MessageNotUnderstood
+	withExceptionDo: [ :anError |
+		self assert: CustomerImporter customerRecordInvalidSize equals: anError messageText. 
+		self assert: 0 equals: (session selectAllOfType: Customer) size. 
+	]! !
+!ImportTest methodsFor: 'test data' stamp: 'FG 6/25/2022 11:48:09'!
+customerRecordWithLessThanFiveColumns
+	self shouldBeImplemented.! !
+!ImportTest methodsFor: 'test data' stamp: 'FG 6/25/2022 11:48:33' prior: 50530199!
+customerRecordWithLessThanFiveColumns
+	^ ReadStream on:
+'C,Pepe,Sanchez'! !
+!CustomerImporter class methodsFor: 'error messages' stamp: 'FG 6/25/2022 11:48:45'!
+customerRecordInvalidSize
+	self shouldBeImplemented.! !
+!CustomerImporter class methodsFor: 'error messages' stamp: 'FG 6/25/2022 11:49:12' prior: 50530210!
+customerRecordInvalidSize
+	^'The customer record has less than five columns'.! !
+!CustomerImporter methodsFor: 'evaluating' stamp: 'FG 6/25/2022 11:51:20' prior: 50520004!
+importCustomer
+	(record size < 5) ifTrue: [self error: self class customerRecordInvalidSize].
+	newCustomer := Customer new.
+			newCustomer firstName: record second.
+			newCustomer lastName: record third.
+			newCustomer identificationType: record fourth.
+			newCustomer identificationNumber: record fifth.
+			session persist: newCustomer! !
+!CustomerImporter methodsFor: 'evaluating' stamp: 'FG 6/25/2022 11:51:50'!
+assertValidRecordSize
+
+	^ (record size < 5) ifTrue: [self error: self class customerRecordInvalidSize]! !
+!CustomerImporter methodsFor: 'evaluating' stamp: 'FG 6/25/2022 11:51:50' prior: 50530221!
+importCustomer
+	self assertValidRecordSize.
+	newCustomer := Customer new.
+			newCustomer firstName: record second.
+			newCustomer lastName: record third.
+			newCustomer identificationType: record fourth.
+			newCustomer identificationNumber: record fifth.
+			session persist: newCustomer! !
+!CustomerImporter methodsFor: 'evaluating' stamp: 'FG 6/25/2022 11:52:24'!
+assertValidCustomerRecordSize
+
+	^ (record size < 5) ifTrue: [self error: self class customerRecordInvalidSize]! !
+!CustomerImporter methodsFor: 'as yet unclassified' stamp: 'FG 6/25/2022 11:52:24' prior: 50530241!
+importCustomer
+	self assertValidCustomerRecordSize.
+	newCustomer := Customer new.
+			newCustomer firstName: record second.
+			newCustomer lastName: record third.
+			newCustomer identificationType: record fourth.
+			newCustomer identificationNumber: record fifth.
+			session persist: newCustomer! !
+
+!methodRemoval: CustomerImporter #assertValidRecordSize stamp: 'FG 6/26/2022 19:02:14'!
+assertValidRecordSize
+
+	^ (record size < 5) ifTrue: [self error: self class customerRecordInvalidSize]!
+!ImportTest methodsFor: 'tests' stamp: 'FG 6/25/2022 11:53:39'!
+test07CustomerRecordMustHaveFiveColumns
+
+	self should: [CustomerImporter valueFrom: self customerRecordWithMoreThanFiveColumns into: session.]
+	raise: Error - MessageNotUnderstood
+	withExceptionDo: [ :anError |
+		self assert: CustomerImporter customerRecordInvalidSize equals: anError messageText. 
+		self assert: 0 equals: (session selectAllOfType: Customer) size. 
+	]! !
+!ImportTest methodsFor: 'test data' stamp: 'FG 6/25/2022 11:53:48'!
+customerRecordWithMoreThanFiveColumns
+	self shouldBeImplemented.! !
+!ImportTest methodsFor: 'test data' stamp: 'FG 6/25/2022 11:54:17' prior: 50530292!
+customerRecordWithMoreThanFiveColumns
+	^ ReadStream on:
+'C,Pepe,Sanchez,D,22333444,extracolumn'! !
+!CustomerImporter methodsFor: 'evaluating' stamp: 'FG 6/25/2022 11:55:46' prior: 50530253!
+assertValidCustomerRecordSize
+
+	^ (record size = 5) ifFalse: [self error: self class customerRecordInvalidSize]! !
+!ImportTest methodsFor: 'tests' stamp: 'FG 6/25/2022 11:58:16'!
+test08AddressRecordMustHaveSixColumns
+
+	self should: [CustomerImporter valueFrom: self addressRecordWithWrongNumberOfColumns into: session.]
+	raise: Error - MessageNotUnderstood
+	withExceptionDo: [ :anError |
+		self assert: CustomerImporter addressRecordInvalidSize equals: anError messageText. 
+		self assert: 0 equals: (session selectAllOfType: Address) size. 
+	]! !
+!ImportTest methodsFor: 'test data' stamp: 'FG 6/25/2022 11:58:29'!
+addressRecordWithWrongNumberOfColumns
+	self shouldBeImplemented.! !
+!ImportTest methodsFor: 'test data' stamp: 'FG 6/25/2022 11:58:55' prior: 50530323!
+addressRecordWithWrongNumberOfColumns
+	^ ReadStream on:
+'C,Pepe,Sanchez,D,22333444
+A,San Martin,3322,1636,BsAs'! !
+!CustomerImporter class methodsFor: 'error messages' stamp: 'FG 6/25/2022 11:59:07'!
+addressRecordInvalidSize
+	self shouldBeImplemented.! !
+!CustomerImporter class methodsFor: 'error messages' stamp: 'FG 6/25/2022 11:59:28' prior: 50530335!
+addressRecordInvalidSize
+	^'Address record must have six columns'! !
+!CustomerImporter methodsFor: 'evaluating' stamp: 'FG 6/25/2022 12:00:57' prior: 50520709!
+importCustomerAddress
+
+	| newAddress |
+			record size = 6 ifFalse: [ self error: self class addressRecordInvalidSize ].
+			newAddress := Address new.
+			self assertCustomerHasBeenPreviouslyImported.
+			newCustomer addAddress: newAddress.
+			newAddress streetName: record second.
+			newAddress streetNumber: record third asNumber .
+			newAddress town: record fourth.
+			newAddress zipCode: record fifth asNumber .
+			newAddress province: record sixth! !
+!CustomerImporter class methodsFor: 'error messages' stamp: 'FG 6/25/2022 12:01:20' prior: 50530215!
+customerRecordInvalidSize
+	^'The customer record must have five columns'.! !
+!CustomerImporter class methodsFor: 'error messages' stamp: 'FG 6/25/2022 12:01:33' prior: 50530363!
+customerRecordInvalidSize
+	^'Customer record must have five columns'.! !
+!CustomerImporter methodsFor: 'evaluating' stamp: 'FG 6/25/2022 12:03:02'!
+assertValidAddressRecordSize
+
+	^ record size = 6 ifFalse: [ self error: self class addressRecordInvalidSize ]! !
+!CustomerImporter methodsFor: 'evaluating' stamp: 'FG 6/25/2022 12:03:02' prior: 50530345!
+importCustomerAddress
+
+	| newAddress |
+			self assertValidAddressRecordSize.
+			newAddress := Address new.
+			self assertCustomerHasBeenPreviouslyImported.
+			newCustomer addAddress: newAddress.
+			newAddress streetName: record second.
+			newAddress streetNumber: record third asNumber .
+			newAddress town: record fourth.
+			newAddress zipCode: record fifth asNumber .
+			newAddress province: record sixth! !
+!ImportTest methodsFor: 'test data' stamp: 'FG 6/25/2022 12:15:23' prior: 50519355!
+validImportData
+
+	^ ReadStream on:
+'C,Pepe,Sanchez,D,22333444
+	A,San Martin,3322,Olivos,1636,BsAs
+A,Maipu,888,Florida,1122,Buenos Aires
+C,Juan,Perez,C,23-25666777-9
+A,Alem,1122,CABA,1001,CABA'! !
+!ImportTest methodsFor: 'test data' stamp: 'FG 6/25/2022 12:15:43' prior: 50530397!
+validImportData
+
+	^ ReadStream on:
+'	C,Pepe,Sanchez,D,22333444
+A,San Martin,3322,Olivos,1636,BsAs
+A,Maipu,888,Florida,1122,Buenos Aires
+C,Juan,Perez,C,23-25666777-9
+A,Alem,1122,CABA,1001,CABA'! !
+!ImportTest methodsFor: 'test data' stamp: 'FG 6/25/2022 12:16:09' prior: 50530406!
+validImportData
+
+	^ ReadStream on:
+'C,	Pepe,Sanchez,D,22333444
+A,San Martin,3322,Olivos,1636,BsAs
+A,Maipu,888,Florida,1122,Buenos Aires
+C,Juan,Perez,C,23-25666777-9
+A,Alem,1122,CABA,1001,CABA'! !
+!ImportTest methodsFor: 'test data' stamp: 'FG 6/25/2022 12:16:27' prior: 50530415!
+validImportData
+
+	^ ReadStream on:
+'C,Pepe,Sanchez,D,22333444
+A,San Martin,3322,Olivos,1636,BsAs
+A,Maipu,888,Florida,1122,Buenos Aires
+C,Juan,Perez,C,23-25666777-9
+A,Alem,1122,CABA,1001,CABA'! !
+!ImportTest methodsFor: 'test data' stamp: 'FG 6/25/2022 12:16:37' prior: 50530424!
+validImportData
+
+	^ ReadStream on:
+' C,Pepe,Sanchez,D,22333444
+A,San Martin,3322,Olivos,1636,BsAs
+A,Maipu,888,Florida,1122,Buenos Aires
+C,Juan,Perez,C,23-25666777-9
+A,Alem,1122,CABA,1001,CABA'! !
+!ImportTest methodsFor: 'test data' stamp: 'FG 6/25/2022 12:17:14' prior: 50530433!
+validImportData
+
+	^ ReadStream on:
+'C,Pepe,Sanchez,D,22333444
+A,San Martin,3322,Olivos,1636,BsAs
+A,Maipu,888,Florida,1122,Buenos Aires
+C,Juan,Perez,C,23-25666777-9
+A,Alem,1122,CABA,1001,CABA'! !
+!ImportTest methodsFor: 'test data' stamp: 'FG 6/25/2022 12:17:25' prior: 50530442!
+validImportData
+
+	^ ReadStream on:
+'C,Pepe,Sanchez,,22333444
+A,San Martin,3322,Olivos,1636,BsAs
+A,Maipu,888,Florida,1122,Buenos Aires
+C,Juan,Perez,C,23-25666777-9
+A,Alem,1122,CABA,1001,CABA'! !
+!ImportTest methodsFor: 'test data' stamp: 'FG 6/25/2022 12:17:49' prior: 50530451!
+validImportData
+
+	^ ReadStream on:
+'C,Pepe,Sanchez, ,22333444
+A,San Martin,3322,Olivos,1636,BsAs
+A,Maipu,888,Florida,1122,Buenos Aires
+C,Juan,Perez,C,23-25666777-9
+A,Alem,1122,CABA,1001,CABA'! !
+!ImportTest methodsFor: 'assertions' stamp: 'FG 6/25/2022 12:18:17' prior: 50519317!
+assertPepeSanchezWasImportedCorrecty
+
+	| importedCustomer |
+
+	importedCustomer := self assertCustomerWithIdentificationType: ' ' number: '22333444' hasFirstName: 'Pepe' lastName: 'Sanchez'.
+	self assertAddressOf: importedCustomer at: 'San Martin' hasNumber: 3322 town: 'Olivos' zipCode: 1636 province: 'BsAs'.
+	self assertAddressOf: importedCustomer at: 'Maipu' hasNumber: 888 town: 'Florida' zipCode: 1122 province: 'Buenos Aires'.
+
+
+	! !
+!ImportTest methodsFor: 'assertions' stamp: 'FG 6/25/2022 12:18:35' prior: 50530469!
+assertPepeSanchezWasImportedCorrecty
+
+	| importedCustomer |
+
+	importedCustomer := self assertCustomerWithIdentificationType: 'D' number: '22333444' hasFirstName: 'Pepe' lastName: 'Sanchez'.
+	self assertAddressOf: importedCustomer at: 'San Martin' hasNumber: 3322 town: 'Olivos' zipCode: 1636 province: 'BsAs'.
+	self assertAddressOf: importedCustomer at: 'Maipu' hasNumber: 888 town: 'Florida' zipCode: 1122 province: 'Buenos Aires'.
+
+
+	! !
+!ImportTest methodsFor: 'test data' stamp: 'FG 6/25/2022 12:18:43' prior: 50530460!
+validImportData
+
+	^ ReadStream on:
+'C,Pepe,Sanchez,D,22333444
+A,San Martin,3322,Olivos,1636,BsAs
+A,Maipu,888,Florida,1122,Buenos Aires
+C,Juan,Perez,C,23-25666777-9
+A,Alem,1122,CABA,1001,CABA'! !
+
+!classDefinition: #NullCustomer category: 'CustomerImporter' stamp: 'FG 6/26/2022 19:02:14'!
+Object subclass: #NullCustomer
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'CustomerImporter'!
+
+!classDefinition: #NullCustomer category: 'CustomerImporter' stamp: 'FG 6/26/2022 19:02:14'!
+Object subclass: #NullCustomer
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'CustomerImporter'!
+!NullCustomer methodsFor: 'address' stamp: 'FG 6/25/2022 12:23:19'!
+addAddress: anAddress
+
+	! !
+!NullCustomer methodsFor: 'address' stamp: 'FG 6/25/2022 12:24:47' prior: 50530526!
+addAddress: anAddress
+	
+	^self error: self class addressMustHaveACustomer
+	! !
+!ImportTest methodsFor: 'tests' stamp: 'FG 6/26/2022 18:34:15'!
+shouldFailCustomerImport: anImport withError: anErrorMessage
+	
+	self should: anImport
+	raise: Error - MessageNotUnderstood
+	withExceptionDo: [ :anError |
+		self assert: anErrorMessage equals: anError messageText. 
+		self assert: 0 equals: (session selectAllOfType: Customer) size. ]
+	
+! !
+!ImportTest methodsFor: 'tests' stamp: 'FG 6/26/2022 18:35:17'!
+shouldFailImport: anImport of: aClassToImport withError: anErrorMessage
+	
+	self should: anImport
+	raise: Error - MessageNotUnderstood
+	withExceptionDo: [ :anError |
+		self assert: anErrorMessage equals: anError messageText. 
+		self assert: 0 equals: (session selectAllOfType: aClassToImport) size. ]
+	
+! !
+
+!methodRemoval: ImportTest #shouldFailCustomerImport:withError: stamp: 'FG 6/26/2022 19:02:14'!
+shouldFailCustomerImport: anImport withError: anErrorMessage
+	
+	self should: anImport
+	raise: Error - MessageNotUnderstood
+	withExceptionDo: [ :anError |
+		self assert: anErrorMessage equals: anError messageText. 
+		self assert: 0 equals: (session selectAllOfType: Customer) size. ]
+	
+!
+!ImportTest methodsFor: 'tests' stamp: 'FG 6/26/2022 18:36:02' prior: 50520410!
+test02CustomerRecordMustStartWithC
+
+	self shouldFailImport: [CustomerImporter valueFrom: self invalidBeginningCustomerRecord into: session.] 
+	of: Customer withError: CustomerImporter invalidRecordType.! !
+!ImportTest methodsFor: 'tests' stamp: 'FG 6/26/2022 18:36:38' prior: 50520428!
+test03CustomerRecordMustBeCOnly
+
+	self shouldFailImport: [CustomerImporter valueFrom: self invalidCustomerRecord into: session.]
+	of: Customer withError: CustomerImporter invalidRecordType! !
+!ImportTest methodsFor: 'tests' stamp: 'FG 6/26/2022 18:37:10' prior: 50520474!
+test04AddressRecordMustBeAOnly
+
+	self shouldFailImport: [CustomerImporter valueFrom: self invalidAddressRecord into: session.]
+	of: Address withError: CustomerImporter invalidRecordType.! !
+!ImportTest methodsFor: 'tests' stamp: 'FG 6/26/2022 18:37:53' prior: 50520565!
+test05AddressMustBeImportedAfterCustomer
+
+	self shouldFailImport: [CustomerImporter valueFrom: self addressWithoutCustomerRecord into: session.]
+	of: Address withError:  CustomerImporter addressMustHaveACustomer.! !
+!ImportTest methodsFor: 'tests' stamp: 'FG 6/26/2022 18:38:50' prior: 50530184!
+test06CustomerRecordCannotHaveLessThanFiveColumns
+	self shouldFailImport: [CustomerImporter valueFrom: self customerRecordWithLessThanFiveColumns into: session.]
+	of: Customer withError:  CustomerImporter customerRecordInvalidSize.! !
+!ImportTest methodsFor: 'tests' stamp: 'FG 6/26/2022 18:39:21' prior: 50530609!
+test06CustomerRecordCannotHaveLessThanFiveColumns
+	
+	self shouldFailImport: [CustomerImporter valueFrom: self customerRecordWithLessThanFiveColumns into: session.]
+	of: Customer withError:  CustomerImporter customerRecordInvalidSize.! !
+!ImportTest methodsFor: 'tests' stamp: 'FG 6/26/2022 18:40:12' prior: 50530278!
+test07CustomerRecordMustHaveFiveColumns
+	
+	self shouldFailImport: [CustomerImporter valueFrom: self customerRecordWithMoreThanFiveColumns into: session.]
+	of: Customer withError: CustomerImporter customerRecordInvalidSize! !
+!ImportTest methodsFor: 'tests' stamp: 'FG 6/26/2022 18:40:56' prior: 50530309!
+test08AddressRecordMustHaveSixColumns
+
+	self shouldFailImport: [CustomerImporter valueFrom: self addressRecordWithWrongNumberOfColumns into: session.]
+	of: Address withError: CustomerImporter addressRecordInvalidSize! !
+!ImportTest methodsFor: 'tests' stamp: 'FG 6/26/2022 18:41:30' prior: 50530547!
+shouldFailImport: aReadStreamToImport of: aClassToImport withError: anErrorMessage
+	
+	self should: [CustomerImporter valueFrom: aReadStreamToImport into: session.]
+	raise: Error - MessageNotUnderstood
+	withExceptionDo: [ :anError |
+		self assert: anErrorMessage equals: anError messageText. 
+		self assert: 0 equals: (session selectAllOfType: aClassToImport) size. ]
+	
+! !
+!ImportTest methodsFor: 'tests' stamp: 'FG 6/26/2022 18:41:38' prior: 50530572!
+test02CustomerRecordMustStartWithC
+
+	self shouldFailImport: self invalidBeginningCustomerRecord
+	of: Customer withError: CustomerImporter invalidRecordType.! !
+
+----SNAPSHOT----(26 June 2022 19:02:53) CuisUniversity-5301.image priorSource: 6050546!
+
+----SNAPSHOT----(26 June 2022 19:03:29) CuisUniversity-5301.image priorSource: 6368671!
+!ImportTest methodsFor: 'tests' stamp: 'FG 6/26/2022 19:03:34' prior: 50530581!
+test03CustomerRecordMustBeCOnly
+
+	self shouldFailImport: self invalidCustomerRecord
+	of: Customer withError: CustomerImporter invalidRecordType! !
+!ImportTest methodsFor: 'tests' stamp: 'FG 6/26/2022 19:03:43' prior: 50530590!
+test04AddressRecordMustBeAOnly
+
+	self shouldFailImport: self invalidAddressRecord
+	of: Address withError: CustomerImporter invalidRecordType.! !
+!ImportTest methodsFor: 'tests' stamp: 'FG 6/26/2022 19:03:51' prior: 50530599!
+test05AddressMustBeImportedAfterCustomer
+
+	self shouldFailImport: self addressWithoutCustomerRecord
+	of: Address withError:  CustomerImporter addressMustHaveACustomer.! !
+!ImportTest methodsFor: 'tests' stamp: 'FG 6/26/2022 19:03:59' prior: 50530619!
+test06CustomerRecordCannotHaveLessThanFiveColumns
+	
+	self shouldFailImport: self customerRecordWithLessThanFiveColumns
+	of: Customer withError:  CustomerImporter customerRecordInvalidSize.! !
+!ImportTest methodsFor: 'tests' stamp: 'FG 6/26/2022 19:04:06' prior: 50530629!
+test07CustomerRecordMustHaveFiveColumns
+	
+	self shouldFailImport: self customerRecordWithMoreThanFiveColumns
+	of: Customer withError: CustomerImporter customerRecordInvalidSize! !
+!ImportTest methodsFor: 'tests' stamp: 'FG 6/26/2022 19:04:14' prior: 50530639!
+test08AddressRecordMustHaveSixColumns
+
+	self shouldFailImport: self addressRecordWithWrongNumberOfColumns
+	of: Address withError: CustomerImporter addressRecordInvalidSize! !
+
+----SNAPSHOT----(26 June 2022 19:04:17) CuisUniversity-5301.image priorSource: 6368760!
+
+!testRun: #ImportTest #test08AddressRecordMustHaveSixColumns stamp: 'FG 6/26/2022 19:04:19'!
+PASSED!
+
+!testRun: #ImportTest #test01ImportValidDataCorrectly stamp: 'FG 6/26/2022 19:04:20'!
+PASSED!
+
+!testRun: #ImportTest #test02CustomerRecordMustStartWithC stamp: 'FG 6/26/2022 19:04:20'!
+PASSED!
+
+!testRun: #ImportTest #test03CustomerRecordMustBeCOnly stamp: 'FG 6/26/2022 19:04:20'!
+PASSED!
+
+!testRun: #ImportTest #test04AddressRecordMustBeAOnly stamp: 'FG 6/26/2022 19:04:20'!
+PASSED!
+
+!testRun: #ImportTest #test05AddressMustBeImportedAfterCustomer stamp: 'FG 6/26/2022 19:04:20'!
+PASSED!
+
+!testRun: #ImportTest #test06CustomerRecordCannotHaveLessThanFiveColumns stamp: 'FG 6/26/2022 19:04:20'!
+PASSED!
+
+!testRun: #ImportTest #test07CustomerRecordMustHaveFiveColumns stamp: 'FG 6/26/2022 19:04:21'!
+PASSED!
+
+!testRun: #ImportTest #test08AddressRecordMustHaveSixColumns stamp: 'FG 6/26/2022 19:04:21'!
+PASSED!
+!ImportTest methodsFor: 'tests' stamp: 'FG 6/26/2022 19:05:20'!
+importReadStream: aReadStreamToImport
+
+	^ CustomerImporter valueFrom: aReadStreamToImport into: session! !
+!ImportTest methodsFor: 'tests' stamp: 'FG 6/26/2022 19:05:20' prior: 50530649!
+shouldFailImport: aReadStreamToImport of: aClassToImport withError: anErrorMessage
+	
+	self should: [self importReadStream: aReadStreamToImport.]
+	raise: Error - MessageNotUnderstood
+	withExceptionDo: [ :anError |
+		self assert: anErrorMessage equals: anError messageText. 
+		self assert: 0 equals: (session selectAllOfType: aClassToImport) size. ]
+	
+! !
+!ImportTest methodsFor: 'tests' stamp: 'FG 6/26/2022 19:05:44' prior: 50520187!
+test01ImportValidDataCorrectly
+
+	self importReadStream: self validImportData.
+
+	self assertImportedRightNumberOfCustomers.
+	self assertPepeSanchezWasImportedCorrecty.
+	self assertJuanPerezWasImportedCorrectly ! !
+
+!testRun: #ImportTest #test01ImportValidDataCorrectly stamp: 'FG 6/26/2022 19:05:48'!
+PASSED!
+
+!testRun: #ImportTest #test01ImportValidDataCorrectly stamp: 'FG 6/26/2022 19:05:49'!
+PASSED!
+
+!testRun: #ImportTest #test02CustomerRecordMustStartWithC stamp: 'FG 6/26/2022 19:05:49'!
+PASSED!
+
+!testRun: #ImportTest #test03CustomerRecordMustBeCOnly stamp: 'FG 6/26/2022 19:05:49'!
+PASSED!
+
+!testRun: #ImportTest #test04AddressRecordMustBeAOnly stamp: 'FG 6/26/2022 19:05:49'!
+PASSED!
+
+!testRun: #ImportTest #test05AddressMustBeImportedAfterCustomer stamp: 'FG 6/26/2022 19:05:49'!
+PASSED!
+
+!testRun: #ImportTest #test06CustomerRecordCannotHaveLessThanFiveColumns stamp: 'FG 6/26/2022 19:05:49'!
+PASSED!
+
+!testRun: #ImportTest #test07CustomerRecordMustHaveFiveColumns stamp: 'FG 6/26/2022 19:05:50'!
+PASSED!
+
+!testRun: #ImportTest #test08AddressRecordMustHaveSixColumns stamp: 'FG 6/26/2022 19:05:50'!
+PASSED!
+
+!classRemoval: #NullCustomer stamp: 'FG 6/26/2022 19:07:08'!
+Object subclass: #NullCustomer
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'CustomerImporter'!
+
+----SNAPSHOT----(26 June 2022 19:10:16) CuisUniversity-5301.image priorSource: 6370478!
