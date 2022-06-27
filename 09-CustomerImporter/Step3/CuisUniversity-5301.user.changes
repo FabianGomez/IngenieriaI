@@ -1,0 +1,1117 @@
+
+
+----STARTUP---- (27 June 2022 17:36:41) as /home/clinux01/Documentos/linux64/CuisUniversity-5301.image!
+
+
+----End fileIn of /home/clinux01/Documentos/IngenieriaI-main/09-CustomerImporter/Step2/CustomerImporter.st----!
+!CustomerImporter methodsFor: 'evaluating - private' stamp: 'FF 6/27/2022 19:27:06'!
+addCustomer
+
+	^ session persist: newCustomer! !
+!CustomerImporter methodsFor: 'evaluating - private' stamp: 'FF 6/27/2022 19:27:06' prior: 50519658!
+importCustomer
+	self assertValidCustomerRecordSize.
+	newCustomer := Customer new.
+			newCustomer firstName: record second.
+			newCustomer lastName: record third.
+			newCustomer identificationType: record fourth.
+			newCustomer identificationNumber: record fifth.
+			self addCustomer! !
+!CustomerImporter methodsFor: 'evaluating - private' stamp: 'FF 6/27/2022 19:27:50'!
+addCustomer: aCustomer
+
+	^ session persist: newCustomer! !
+!CustomerImporter methodsFor: 'as yet unclassified' stamp: 'FF 6/27/2022 19:27:50' prior: 50519849!
+importCustomer
+	self assertValidCustomerRecordSize.
+	newCustomer := Customer new.
+			newCustomer firstName: record second.
+			newCustomer lastName: record third.
+			newCustomer identificationType: record fourth.
+			newCustomer identificationNumber: record fifth.
+			self addCustomer: newCustomer! !
+
+!methodRemoval: CustomerImporter #addCustomer stamp: 'FF 6/27/2022 19:27:50'!
+addCustomer
+
+	^ session persist: newCustomer!
+!CustomerImporter methodsFor: 'evaluating - private' stamp: 'FF 6/27/2022 19:28:46' prior: 50519861!
+addCustomer: aCustomer
+
+	^ session persist: aCustomer! !
+!ImportTest methodsFor: 'assertions' stamp: 'FF 6/27/2022 19:29:33'!
+numberOfCustomer
+
+	^ (session selectAllOfType: Customer) size! !
+!ImportTest methodsFor: 'assertions' stamp: 'FF 6/27/2022 19:29:33' prior: 50519358!
+assertImportedRightNumberOfCustomers
+
+	^ self assert: 2 equals: self numberOfCustomer! !
+
+!classDefinition: #ImportTest category: 'CustomerImporter' stamp: 'FF 6/27/2022 19:30:56'!
+TestCase subclass: #ImportTest
+	instanceVariableNames: 'session system'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'CustomerImporter'!
+
+!classDefinition: #PersistentCustomerSystem category: 'CustomerImporter' stamp: 'FF 6/27/2022 19:31:00'!
+Object subclass: #PersistentCustomerSystem
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'CustomerImporter'!
+!ImportTest methodsFor: 'setUp/tearDown' stamp: 'FF 6/27/2022 19:30:53' prior: 50519406 overrides: 16961394!
+setUp
+
+	system:= PersistentCustomerSystem new.
+	session := DataBaseSession for: (Array with: Address with: Customer).
+	session beginTransaction.
+! !
+!ImportTest methodsFor: 'setUp/tearDown' stamp: 'FF 6/27/2022 19:33:18' prior: 50519914 overrides: 16961394!
+setUp
+
+	system:= PersistentCustomerSystem new.
+	system session : DataBaseSession for: (Array with: Address with: Customer).
+	system session beginTransaction.
+! !
+!ImportTest methodsFor: 'setUp/tearDown' stamp: 'FF 6/27/2022 19:33:52' prior: 50519923 overrides: 16961394!
+setUp
+
+	system:= PersistentCustomerSystem new.
+	system session: (DataBaseSession for: (Array with: Address with: Customer)).
+	system session beginTransaction.
+! !
+
+!classDefinition: #PersistentCustomerSystem category: 'CustomerImporter' stamp: 'FF 6/27/2022 19:34:29'!
+Object subclass: #PersistentCustomerSystem
+	instanceVariableNames: 'session'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'CustomerImporter'!
+!PersistentCustomerSystem methodsFor: 'no messages' stamp: 'FF 6/27/2022 19:34:27'!
+session: aSession
+
+	session := aSession.! !
+!PersistentCustomerSystem methodsFor: 'as yet unclassified' stamp: 'FF 6/27/2022 19:34:41'!
+session
+
+	^session! !
+
+!testRun: #ImportTest #test04AddressRecordMustBeAOnly stamp: 'FF 6/27/2022 19:35:02'!
+ERROR!
+!ImportTest methodsFor: 'setUp/tearDown' stamp: 'FF 6/27/2022 19:35:32' prior: 50519413 overrides: 16961402!
+tearDown
+
+	system session commit.
+	system session close.
+	! !
+!ImportTest methodsFor: 'assertions' stamp: 'FF 6/27/2022 19:35:54' prior: 50519392!
+shouldFailImport: aReadStreamToImport of: aClassToImport withError: anErrorMessage
+	
+	self should: [self importReadStream: aReadStreamToImport.]
+	raise: Error - MessageNotUnderstood
+	withExceptionDo: [ :anError |
+		self assert: anErrorMessage equals: anError messageText. 
+		self assert: 0 equals: self numberOfCustomer. ]
+	
+! !
+!ImportTest methodsFor: 'assertions' stamp: 'FF 6/27/2022 19:36:03' prior: 50519887!
+numberOfCustomer
+
+	^ (system session selectAllOfType: Customer) size! !
+!ImportTest methodsFor: 'test data' stamp: 'FF 6/27/2022 19:36:08' prior: 50519449!
+importReadStream: aReadStreamToImport
+
+	^ CustomerImporter valueFrom: aReadStreamToImport into: system session! !
+!ImportTest methodsFor: 'customer' stamp: 'FF 6/27/2022 19:36:15' prior: 50519417!
+customerWithIdentificationType: anIdType number: anIdNumber
+
+	^ (system session
+		select: [ :aCustomer | aCustomer identificationType = anIdType and: [ aCustomer identificationNumber = anIdNumber ]]
+		ofType: Customer) anyOne! !
+!ImportTest methodsFor: 'tests' stamp: 'FF 6/27/2022 19:36:19' prior: 50519281!
+test04AddressRecordMustBeAOnly
+
+	self shouldFailImport: self invalidAddressRecord
+	of: Address withError: CustomerImporter invalidRecordType.self! !
+
+!testRun: #ImportTest #test04AddressRecordMustBeAOnly stamp: 'FF 6/27/2022 19:36:20'!
+FAILURE!
+
+!testRun: #ImportTest #test04AddressRecordMustBeAOnly stamp: 'FF 6/27/2022 19:37:37'!
+FAILURE!
+
+!testRun: #ImportTest #test04AddressRecordMustBeAOnly stamp: 'FF 6/27/2022 19:37:57'!
+FAILURE!
+
+!classRemoval: #PersistentCustomerSystem stamp: 'FF 6/27/2022 19:39:16'!
+Object subclass: #PersistentCustomerSystem
+	instanceVariableNames: 'session'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'CustomerImporter'!
+
+!classRemoval: #DataBaseSession stamp: 'FF 6/27/2022 19:39:16'!
+Object subclass: #DataBaseSession
+	instanceVariableNames: 'configuration tables id'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'CustomerImporter'!
+
+!classRemoval: #CustomerImporter stamp: 'FF 6/27/2022 19:39:17'!
+Object subclass: #CustomerImporter
+	instanceVariableNames: 'session readStream line newCustomer record'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'CustomerImporter'!
+
+!classRemoval: #Customer stamp: 'FF 6/27/2022 19:39:17'!
+Object subclass: #Customer
+	instanceVariableNames: 'id firstName lastName identificationType identificationNumber addresses'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'CustomerImporter'!
+
+!classRemoval: #Address stamp: 'FF 6/27/2022 19:39:17'!
+Object subclass: #Address
+	instanceVariableNames: 'id streetName streetNumber town zipCode province'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'CustomerImporter'!
+
+!classRemoval: #ImportTest stamp: 'FF 6/27/2022 19:39:18'!
+TestCase subclass: #ImportTest
+	instanceVariableNames: 'session system'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'CustomerImporter'!
+
+----End fileIn of /home/clinux01/Descargas/Step2/CustomerImporter-60.st----!
+
+!testRun: #ImportTest #test01ValidDataIsImportedCorrectly stamp: 'FF 6/27/2022 19:40:40'!
+PASSED!
+
+!testRun: #ImportTest #test02CanNotImportAddressWithoutCustomer stamp: 'FF 6/27/2022 19:40:40'!
+PASSED!
+
+!testRun: #ImportTest #test03DoesNotImportRecordsStartingWithCButMoreCharacters stamp: 'FF 6/27/2022 19:40:40'!
+PASSED!
+
+!testRun: #ImportTest #test04DoesNotImportRecordsStartingWithAButMoreCharacters stamp: 'FF 6/27/2022 19:40:41'!
+PASSED!
+
+!testRun: #ImportTest #test05CanNotImportAddressRecordWithLessThanSixFields stamp: 'FF 6/27/2022 19:40:41'!
+PASSED!
+
+!testRun: #ImportTest #test06CanNotImportAddressRecordWithMoreThanSixFields stamp: 'FF 6/27/2022 19:40:41'!
+PASSED!
+
+!testRun: #ImportTest #test07CanNotImportCustomerRecordWithLessThanFiveFields stamp: 'FF 6/27/2022 19:40:41'!
+PASSED!
+
+!testRun: #ImportTest #test08CanNotImportCustomerRecordWithMoreThanFiveFields stamp: 'FF 6/27/2022 19:40:41'!
+PASSED!
+
+!testRun: #ImportTest #test09CannotImportEmptyLine stamp: 'FF 6/27/2022 19:40:41'!
+PASSED!
+
+!classDefinition: #ImportTest category: 'CustomerImporter' stamp: 'FF 6/27/2022 19:42:59'!
+TestCase subclass: #ImportTest
+	instanceVariableNames: 'session system'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'CustomerImporter'!
+
+!classDefinition: #PersistentCustomerSystem category: 'CustomerImporter' stamp: 'FF 6/27/2022 19:43:02'!
+Object subclass: #PersistentCustomerSystem
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'CustomerImporter'!
+!ImportTest methodsFor: 'setUp/tearDown' stamp: 'FF 6/27/2022 19:42:57' prior: 50520266 overrides: 16961394!
+setUp
+
+	system := PersistentCustomerSystem new.
+	session := DataBaseSession for: (Array with: Address with: Customer).
+	session beginTransaction.
+! !
+!ImportTest methodsFor: 'setUp/tearDown' stamp: 'FF 6/27/2022 19:43:23' prior: 50520763 overrides: 16961394!
+setUp
+
+	system := PersistentCustomerSystem new.
+	system session: (DataBaseSession for: (Array with: Address with: Customer)).
+	system session beginTransaction.
+! !
+!ImportTest methodsFor: 'tests' stamp: 'FF 6/27/2022 19:43:41' prior: 50520083!
+test02CanNotImportAddressWithoutCustomer
+
+	self
+		should: [ CustomerImporter valueFrom: self addressWithoutCustomerData into: system session. ]
+		raise: Error - MessageNotUnderstood
+		withMessageText: CustomerImporter canNotImportAddressWithoutCustomerErrorDescription
+
+	! !
+!ImportTest methodsFor: 'tests' stamp: 'FF 6/27/2022 19:43:46' prior: 50520073!
+test01ValidDataIsImportedCorrectly
+
+	CustomerImporter valueFrom: self validImportData into: system session..
+
+	self assertImportedRightNumberOfCustomers.
+	self assertPepeSanchezWasImportedCorrecty.
+	self assertJuanPerezWasImportedCorrectly ! !
+!ImportTest methodsFor: 'setUp/tearDown' stamp: 'FF 6/27/2022 19:43:51' prior: 50520273 overrides: 16961402!
+tearDown
+
+	system session commit.
+	session close.
+	! !
+!ImportTest methodsFor: 'setUp/tearDown' stamp: 'FF 6/27/2022 19:43:54' prior: 50520804 overrides: 16961402!
+tearDown
+
+	system session commit.
+	system session close.
+	! !
+!ImportTest methodsFor: 'assertions' stamp: 'FF 6/27/2022 19:44:00' prior: 50520252!
+shouldFailImporting: aReadStream messageText: anErrorMessageText asserting: anAssertionBlock
+
+	self
+		should: [ CustomerImporter valueFrom: aReadStream into: system session. ]
+		raise: Error - MessageNotUnderstood
+		withExceptionDo: [ :anError |
+			self assert: anErrorMessageText equals: anError messageText.
+			anAssertionBlock value ]
+
+	! !
+!ImportTest methodsFor: 'customer' stamp: 'FF 6/27/2022 19:44:05' prior: 50520287!
+numberOfCustomers
+
+	^ (system session selectAllOfType: Customer) size! !
+!ImportTest methodsFor: 'customer' stamp: 'FF 6/27/2022 19:44:25' prior: 50520277!
+customerWithIdentificationType: anIdType number: anIdNumber
+
+	^ (system session
+		select: [ :aCustomer | aCustomer identificationType = anIdType and: [ aCustomer identificationNumber = anIdNumber ]]
+		ofType: Customer) anyOne! !
+
+!classDefinition: #PersistentCustomerSystem category: 'CustomerImporter' stamp: 'FF 6/27/2022 19:45:33'!
+Object subclass: #PersistentCustomerSystem
+	instanceVariableNames: 'session'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'CustomerImporter'!
+!PersistentCustomerSystem methodsFor: 'no messages' stamp: 'FF 6/27/2022 19:45:30'!
+session: aSession
+	session := aSession .! !
+!PersistentCustomerSystem methodsFor: 'as yet unclassified' stamp: 'FF 6/27/2022 19:46:03' prior: 50520852!
+session: aSession
+	session := aSession.! !
+!PersistentCustomerSystem methodsFor: 'as yet unclassified' stamp: 'FF 6/27/2022 19:46:17'!
+session 
+	^session.! !
+
+!testRun: #ImportTest #test01ValidDataIsImportedCorrectly stamp: 'FF 6/27/2022 19:46:25'!
+PASSED!
+
+!testRun: #ImportTest #test02CanNotImportAddressWithoutCustomer stamp: 'FF 6/27/2022 19:46:26'!
+PASSED!
+
+!testRun: #ImportTest #test03DoesNotImportRecordsStartingWithCButMoreCharacters stamp: 'FF 6/27/2022 19:46:26'!
+PASSED!
+
+!testRun: #ImportTest #test04DoesNotImportRecordsStartingWithAButMoreCharacters stamp: 'FF 6/27/2022 19:46:26'!
+PASSED!
+
+!testRun: #ImportTest #test05CanNotImportAddressRecordWithLessThanSixFields stamp: 'FF 6/27/2022 19:46:26'!
+PASSED!
+
+!testRun: #ImportTest #test06CanNotImportAddressRecordWithMoreThanSixFields stamp: 'FF 6/27/2022 19:46:27'!
+PASSED!
+
+!testRun: #ImportTest #test07CanNotImportCustomerRecordWithLessThanFiveFields stamp: 'FF 6/27/2022 19:46:27'!
+PASSED!
+
+!testRun: #ImportTest #test08CanNotImportCustomerRecordWithMoreThanFiveFields stamp: 'FF 6/27/2022 19:46:27'!
+PASSED!
+
+!testRun: #ImportTest #test09CannotImportEmptyLine stamp: 'FF 6/27/2022 19:46:27'!
+PASSED!
+
+TestCase subclass: #ImportTest
+	instanceVariableNames: 'system'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'CustomerImporter'!
+
+!classDefinition: #ImportTest category: 'CustomerImporter' stamp: 'FF 6/27/2022 19:47:24'!
+TestCase subclass: #ImportTest
+	instanceVariableNames: 'system'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'CustomerImporter'!
+!ImportTest methodsFor: 'setUp/tearDown' stamp: 'FF 6/27/2022 19:48:25'!
+start
+
+	^ system session: (DataBaseSession for: (Array with: Address with: Customer))! !
+!ImportTest methodsFor: 'setUp/tearDown' stamp: 'FF 6/27/2022 19:48:25' prior: 50520772 overrides: 16961394!
+setUp
+
+	system := PersistentCustomerSystem new.
+	self start.
+	system session beginTransaction.
+! !
+!PersistentCustomerSystem methodsFor: 'as yet unclassified' stamp: 'FF 6/27/2022 19:49:11'!
+start
+	^ session := (DataBaseSession for: (Array with: Address with: Customer))! !
+!ImportTest methodsFor: 'setUp/tearDown' stamp: 'FF 6/27/2022 19:49:32' prior: 50520909!
+start
+
+	^ system start.! !
+
+!methodRemoval: ImportTest #start stamp: 'FF 6/27/2022 19:49:53'!
+start
+
+	^ system start.!
+!ImportTest methodsFor: 'setUp/tearDown' stamp: 'FF 6/27/2022 19:49:53' prior: 50520916 overrides: 16961394!
+setUp
+
+	system := PersistentCustomerSystem new.
+	system session beginTransaction.
+! !
+!ImportTest methodsFor: 'setUp/tearDown' stamp: 'FF 6/27/2022 19:50:10' prior: 50520936 overrides: 16961394!
+setUp
+
+	system := PersistentCustomerSystem new.
+	system start.
+	system session beginTransaction.
+	
+! !
+!ImportTest methodsFor: 'setUp/tearDown' stamp: 'FF 6/27/2022 19:50:56'!
+beginTransaction
+
+	^ system session beginTransaction! !
+!ImportTest methodsFor: 'setUp/tearDown' stamp: 'FF 6/27/2022 19:50:56' prior: 50520943 overrides: 16961394!
+setUp
+
+	system := PersistentCustomerSystem new.
+	system start.
+	self beginTransaction.
+	
+! !
+!PersistentCustomerSystem methodsFor: 'as yet unclassified' stamp: 'FF 6/27/2022 19:51:14'!
+beginTransaction
+	^ session beginTransaction! !
+!ImportTest methodsFor: 'setUp/tearDown' stamp: 'FF 6/27/2022 19:51:24' prior: 50520949!
+beginTransaction
+
+	^ system beginTransaction! !
+
+!methodRemoval: ImportTest #beginTransaction stamp: 'FF 6/27/2022 19:51:52'!
+beginTransaction
+
+	^ system beginTransaction!
+!ImportTest methodsFor: 'setUp/tearDown' stamp: 'FF 6/27/2022 19:51:52' prior: 50520955 overrides: 16961394!
+setUp
+
+	system := PersistentCustomerSystem new.
+	system start.
+	 system beginTransaction.
+	
+! !
+!ImportTest methodsFor: 'setUp/tearDown' stamp: 'FF 6/27/2022 19:51:57' prior: 50520975 overrides: 16961394!
+setUp
+
+	system := PersistentCustomerSystem new.
+	system start.
+	system beginTransaction.
+	
+! !
+!ImportTest methodsFor: 'setUp/tearDown' stamp: 'FF 6/27/2022 19:52:15'!
+commit
+
+	^ system session commit! !
+!ImportTest methodsFor: 'setUp/tearDown' stamp: 'FF 6/27/2022 19:52:15' prior: 50520810 overrides: 16961402!
+tearDown
+
+	self commit.
+	system session close.
+	! !
+!PersistentCustomerSystem methodsFor: 'as yet unclassified' stamp: 'FF 6/27/2022 19:52:33'!
+commit
+	^ session commit! !
+!ImportTest methodsFor: 'setUp/tearDown' stamp: 'FF 6/27/2022 19:52:49' prior: 50520988!
+commit
+
+	^ system commit! !
+
+!methodRemoval: ImportTest #commit stamp: 'FF 6/27/2022 19:53:03'!
+commit
+
+	^ system commit!
+!ImportTest methodsFor: 'setUp/tearDown' stamp: 'FF 6/27/2022 19:53:03' prior: 50520993 overrides: 16961402!
+tearDown
+
+	system session close.
+	! !
+!ImportTest methodsFor: 'setUp/tearDown' stamp: 'FF 6/27/2022 19:53:15' prior: 50521010 overrides: 16961402!
+tearDown
+
+	system commit.
+	system session close.
+	! !
+!ImportTest methodsFor: 'setUp/tearDown' stamp: 'FF 6/27/2022 19:53:28'!
+stop
+
+	^ system session close! !
+!ImportTest methodsFor: 'setUp/tearDown' stamp: 'FF 6/27/2022 19:53:28' prior: 50521015 overrides: 16961402!
+tearDown
+
+	system commit.
+	self stop.
+	! !
+!PersistentCustomerSystem methodsFor: 'as yet unclassified' stamp: 'FF 6/27/2022 19:53:54'!
+stop
+
+	^ session close! !
+!ImportTest methodsFor: 'setUp/tearDown' stamp: 'FF 6/27/2022 19:54:04' prior: 50521019!
+stop
+
+	^ system close! !
+!ImportTest methodsFor: 'setUp/tearDown' stamp: 'FF 6/27/2022 19:54:12' prior: 50521033!
+stop
+
+	^ system stop! !
+
+!methodRemoval: ImportTest #stop stamp: 'FF 6/27/2022 19:54:37'!
+stop
+
+	^ system stop!
+!ImportTest methodsFor: 'setUp/tearDown' stamp: 'FF 6/27/2022 19:54:37' prior: 50521024 overrides: 16961402!
+tearDown
+
+	system commit.
+	 system stop.
+	! !
+!ImportTest methodsFor: 'setUp/tearDown' stamp: 'FF 6/27/2022 19:54:41' prior: 50521044 overrides: 16961402!
+tearDown
+
+	system commit.
+	system stop.
+	! !
+!PersistentCustomerSystem methodsFor: 'as yet unclassified' stamp: 'FF 6/27/2022 19:56:23'!
+numberOfCustomers
+
+	^ (session selectAllOfType: Customer) size! !
+!ImportTest methodsFor: 'customer' stamp: 'FF 6/27/2022 19:56:40' prior: 50520829!
+numberOfCustomers
+
+	^ system numberOfCustomers ! !
+!PersistentCustomerSystem methodsFor: 'as yet unclassified' stamp: 'FF 6/27/2022 19:57:04'!
+customerWithIdentificationType: anIdType number: anIdNumber
+
+	^ (session
+		select: [ :aCustomer | aCustomer identificationType = anIdType and: [ aCustomer identificationNumber = anIdNumber ]]
+		ofType: Customer) anyOne! !
+!ImportTest methodsFor: 'customer' stamp: 'FF 6/27/2022 19:57:54' prior: 50520834!
+customerWithIdentificationType: anIdType number: anIdNumber
+
+	^ system customerWithIdentificationType: anIdType number: anIdNumber .! !
+!ImportTest methodsFor: 'assertions' stamp: 'FF 6/27/2022 19:58:46' prior: 50520231!
+assertNoCustomerWasImported
+
+	^ self assert: 0 equals: system numberOfCustomers! !
+!ImportTest methodsFor: 'assertions' stamp: 'FF 6/27/2022 19:58:55' prior: 50520214!
+assertImportedRightNumberOfCustomers
+
+	^ self assert: 2 equals: system numberOfCustomers! !
+!ImportTest methodsFor: 'assertions' stamp: 'FF 6/27/2022 19:59:01' prior: 50520204!
+assertImportedOneCustomerWithoutAddress
+
+	| importedCustomer |
+
+	self assert: 1 equals: system numberOfCustomers.
+	importedCustomer := self customerWithIdentificationType: 'D' number: '22333444'.
+	self assert: importedCustomer isAddressesEmpty
+	! !
+!ImportTest methodsFor: 'assertions' stamp: 'FF 6/27/2022 19:59:08' prior: 50521093!
+assertImportedOneCustomerWithoutAddress
+
+	| importedCustomer |
+
+	self assert: 1 equals: system numberOfCustomers.
+	importedCustomer := system customerWithIdentificationType: 'D' number: '22333444'.
+	self assert: importedCustomer isAddressesEmpty
+	! !
+!ImportTest methodsFor: 'assertions' stamp: 'FF 6/27/2022 19:59:26' prior: 50520185!
+assertCustomerWithIdentificationType: anIdType number: anIdNumber hasFirstName: aFirstName lastName: aLastName
+
+	| importedCustomer |
+
+	importedCustomer := system customerWithIdentificationType: anIdType number: anIdNumber.
+
+	self assert: aFirstName equals: importedCustomer firstName.
+	self assert: aLastName equals: importedCustomer lastName.
+	self assert: anIdType equals: importedCustomer identificationType.
+	self assert: anIdNumber equals: importedCustomer identificationNumber.
+
+	^importedCustomer
+
+	! !
+
+!methodRemoval: ImportTest #customerWithIdentificationType:number: stamp: 'FF 6/27/2022 19:59:37'!
+customerWithIdentificationType: anIdType number: anIdNumber
+
+	^ system customerWithIdentificationType: anIdType number: anIdNumber .!
+
+!methodRemoval: ImportTest #numberOfCustomers stamp: 'FF 6/27/2022 19:59:39'!
+numberOfCustomers
+
+	^ system numberOfCustomers !
+
+----SNAPSHOT----(27 June 2022 19:59:51) CuisUniversity-5301.image priorSource: 6002855!
+
+!testRun: #ImportTest #test01ValidDataIsImportedCorrectly stamp: 'FF 6/27/2022 19:59:57'!
+PASSED!
+
+!testRun: #ImportTest #test02CanNotImportAddressWithoutCustomer stamp: 'FF 6/27/2022 19:59:58'!
+PASSED!
+
+!testRun: #ImportTest #test03DoesNotImportRecordsStartingWithCButMoreCharacters stamp: 'FF 6/27/2022 19:59:58'!
+PASSED!
+
+!testRun: #ImportTest #test04DoesNotImportRecordsStartingWithAButMoreCharacters stamp: 'FF 6/27/2022 19:59:58'!
+PASSED!
+
+!testRun: #ImportTest #test05CanNotImportAddressRecordWithLessThanSixFields stamp: 'FF 6/27/2022 19:59:58'!
+PASSED!
+
+!testRun: #ImportTest #test06CanNotImportAddressRecordWithMoreThanSixFields stamp: 'FF 6/27/2022 19:59:59'!
+PASSED!
+
+!testRun: #ImportTest #test07CanNotImportCustomerRecordWithLessThanFiveFields stamp: 'FF 6/27/2022 19:59:59'!
+PASSED!
+
+!testRun: #ImportTest #test08CanNotImportCustomerRecordWithMoreThanFiveFields stamp: 'FF 6/27/2022 19:59:59'!
+PASSED!
+
+!testRun: #ImportTest #test09CannotImportEmptyLine stamp: 'FF 6/27/2022 19:59:59'!
+PASSED!
+!CustomerImporter class methodsFor: 'importing' stamp: 'FF 6/27/2022 20:02:06'!
+valueFrom: aReadStream into: aSession using: aSystem 
+
+	^(self from: aReadStream into: aSession) value! !
+!ImportTest methodsFor: 'as yet unclassified' stamp: 'FF 6/27/2022 20:02:06' prior: 50520792!
+test01ValidDataIsImportedCorrectly
+
+	CustomerImporter valueFrom: self validImportData into: system session using: system..
+
+	self assertImportedRightNumberOfCustomers.
+	self assertPepeSanchezWasImportedCorrecty.
+	self assertJuanPerezWasImportedCorrectly ! !
+!ImportTest methodsFor: 'as yet unclassified' stamp: 'FF 6/27/2022 20:02:06' prior: 50520815!
+shouldFailImporting: aReadStream messageText: anErrorMessageText asserting: anAssertionBlock
+
+	self
+		should: [ CustomerImporter valueFrom: aReadStream into: system session using: system. ]
+		raise: Error - MessageNotUnderstood
+		withExceptionDo: [ :anError |
+			self assert: anErrorMessageText equals: anError messageText.
+			anAssertionBlock value ]
+
+	! !
+!ImportTest methodsFor: 'as yet unclassified' stamp: 'FF 6/27/2022 20:02:06' prior: 50520780!
+test02CanNotImportAddressWithoutCustomer
+
+	self
+		should: [ CustomerImporter valueFrom: self addressWithoutCustomerData into: system session using: system. ]
+		raise: Error - MessageNotUnderstood
+		withMessageText: CustomerImporter canNotImportAddressWithoutCustomerErrorDescription
+
+	! !
+
+!methodRemoval: CustomerImporter class #valueFrom:into: stamp: 'FF 6/27/2022 20:02:06'!
+valueFrom: aReadStream into: aSession
+
+	^(self from: aReadStream into: aSession) value!
+!CustomerImporter class methodsFor: 'instance creation' stamp: 'FF 6/27/2022 20:03:20'!
+from: aReadStream into: aSession using: aSystem 
+	^self new initializeFrom: aReadStream into: aSession! !
+!CustomerImporter class methodsFor: 'as yet unclassified' stamp: 'FF 6/27/2022 20:03:20' prior: 50521180!
+valueFrom: aReadStream into: aSession using: aSystem 
+
+	^(self from: aReadStream into: aSession using: system) value! !
+
+!methodRemoval: CustomerImporter class #from:into: stamp: 'FF 6/27/2022 20:03:20'!
+from: aReadStream into: aSession
+	^self new initializeFrom: aReadStream into: aSession!
+!CustomerImporter methodsFor: 'initialization' stamp: 'FF 6/27/2022 20:03:52'!
+initializeFrom: aReadStream into: aSession using: aSystem 
+	session := aSession.
+	readStream := aReadStream.! !
+!CustomerImporter class methodsFor: 'as yet unclassified' stamp: 'FF 6/27/2022 20:03:52' prior: 50521231!
+from: aReadStream into: aSession using: aSystem 
+	^self new initializeFrom: aReadStream into: aSession using: aSystem! !
+
+!methodRemoval: CustomerImporter #initializeFrom:into: stamp: 'FF 6/27/2022 20:03:52'!
+initializeFrom: aReadStream into: aSession
+	session := aSession.
+	readStream := aReadStream.!
+!CustomerImporter class methodsFor: 'importing' stamp: 'FF 6/27/2022 20:04:15' prior: 50521238!
+valueFrom: aReadStream into: aSession using: aSystem 
+
+	^(self from: aReadStream into: aSession using: aSystem) value! !
+
+!classDefinition: #CustomerImporter category: 'CustomerImporter' stamp: 'FF 6/27/2022 20:04:32'!
+Object subclass: #CustomerImporter
+	instanceVariableNames: 'session readStream newCustomer line record system'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'CustomerImporter'!
+!CustomerImporter methodsFor: 'initialization' stamp: 'FF 6/27/2022 20:04:30' prior: 50521250!
+initializeFrom: aReadStream into: aSession using: aSystem 
+	session := aSession.
+	readStream := aReadStream.
+	system := aSystem .! !
+
+----SNAPSHOT----(27 June 2022 20:04:46) CuisUniversity-5301.image priorSource: 6063816!
+
+!testRun: #ImportTest #test01ValidDataIsImportedCorrectly stamp: 'FF 6/27/2022 20:04:48'!
+PASSED!
+
+!testRun: #ImportTest #test02CanNotImportAddressWithoutCustomer stamp: 'FF 6/27/2022 20:04:49'!
+PASSED!
+
+!testRun: #ImportTest #test03DoesNotImportRecordsStartingWithCButMoreCharacters stamp: 'FF 6/27/2022 20:04:49'!
+PASSED!
+
+!testRun: #ImportTest #test04DoesNotImportRecordsStartingWithAButMoreCharacters stamp: 'FF 6/27/2022 20:04:49'!
+PASSED!
+
+!testRun: #ImportTest #test05CanNotImportAddressRecordWithLessThanSixFields stamp: 'FF 6/27/2022 20:04:49'!
+PASSED!
+
+!testRun: #ImportTest #test06CanNotImportAddressRecordWithMoreThanSixFields stamp: 'FF 6/27/2022 20:04:50'!
+PASSED!
+
+!testRun: #ImportTest #test07CanNotImportCustomerRecordWithLessThanFiveFields stamp: 'FF 6/27/2022 20:04:50'!
+PASSED!
+
+!testRun: #ImportTest #test08CanNotImportCustomerRecordWithMoreThanFiveFields stamp: 'FF 6/27/2022 20:04:50'!
+PASSED!
+
+!testRun: #ImportTest #test09CannotImportEmptyLine stamp: 'FF 6/27/2022 20:04:50'!
+PASSED!
+!CustomerImporter methodsFor: 'customer' stamp: 'FF 6/27/2022 20:06:18'!
+addCustomer
+
+	^ session persist: newCustomer! !
+!CustomerImporter methodsFor: 'customer' stamp: 'FF 6/27/2022 20:06:18' prior: 50520501!
+importCustomer
+
+	self assertValidCustomerRecord.
+
+	newCustomer := Customer new.
+	newCustomer firstName: record second.
+	newCustomer lastName: record third.
+	newCustomer identificationType: record fourth.
+	newCustomer identificationNumber: record fifth.
+	self addCustomer! !
+!CustomerImporter methodsFor: 'customer' stamp: 'FF 6/27/2022 20:07:12'!
+addCustomer: aNewCustomer
+
+	^ session persist: newCustomer! !
+!CustomerImporter methodsFor: 'as yet unclassified' stamp: 'FF 6/27/2022 20:07:12' prior: 50521332!
+importCustomer
+
+	self assertValidCustomerRecord.
+
+	newCustomer := Customer new.
+	newCustomer firstName: record second.
+	newCustomer lastName: record third.
+	newCustomer identificationType: record fourth.
+	newCustomer identificationNumber: record fifth.
+	self addCustomer: newCustomer! !
+
+!methodRemoval: CustomerImporter #addCustomer stamp: 'FF 6/27/2022 20:07:12'!
+addCustomer
+
+	^ session persist: newCustomer!
+!CustomerImporter methodsFor: 'customer' stamp: 'FF 6/27/2022 20:07:29' prior: 50521343!
+addCustomer: aNewCustomer
+
+	^ session persist: aNewCustomer! !
+!PersistentCustomerSystem methodsFor: 'as yet unclassified' stamp: 'FF 6/27/2022 20:08:04'!
+addCustomer: aNewCustomer
+
+	^ session persist: aNewCustomer! !
+!CustomerImporter methodsFor: 'customer' stamp: 'FF 6/27/2022 20:08:22' prior: 50521365!
+addCustomer: aNewCustomer
+
+	^ system addCustomer: aNewCustomer .! !
+
+!methodRemoval: CustomerImporter #addCustomer: stamp: 'FF 6/27/2022 20:09:16'!
+addCustomer: aNewCustomer
+
+	^ system addCustomer: aNewCustomer .!
+!CustomerImporter methodsFor: 'customer' stamp: 'FF 6/27/2022 20:09:16' prior: 50521349!
+importCustomer
+
+	self assertValidCustomerRecord.
+
+	newCustomer := Customer new.
+	newCustomer firstName: record second.
+	newCustomer lastName: record third.
+	newCustomer identificationType: record fourth.
+	newCustomer identificationNumber: record fifth.
+	 system addCustomer: newCustomer.! !
+!CustomerImporter methodsFor: 'customer' stamp: 'FF 6/27/2022 20:09:28' prior: 50521385!
+importCustomer
+
+	self assertValidCustomerRecord.
+
+	newCustomer := Customer new.
+	newCustomer firstName: record second.
+	newCustomer lastName: record third.
+	newCustomer identificationType: record fourth.
+	newCustomer identificationNumber: record fifth.
+	system addCustomer: newCustomer.! !
+!CustomerImporter methodsFor: 'initialization' stamp: 'FF 6/27/2022 20:10:11' prior: 50521286!
+initializeFrom: aReadStream into: aSession using: aSystem 
+	readStream := aReadStream.
+	system := aSystem .! !
+!CustomerImporter methodsFor: 'initialization' stamp: 'FF 6/27/2022 20:10:41'!
+initializeFrom: aReadStream using: aSystem 
+	readStream := aReadStream.
+	system := aSystem .! !
+!CustomerImporter class methodsFor: 'as yet unclassified' stamp: 'FF 6/27/2022 20:10:41' prior: 50521257!
+from: aReadStream into: aSession using: aSystem 
+	^self new initializeFrom: aReadStream using: aSystem! !
+
+!methodRemoval: CustomerImporter #initializeFrom:into:using: stamp: 'FF 6/27/2022 20:10:41'!
+initializeFrom: aReadStream into: aSession using: aSystem 
+	readStream := aReadStream.
+	system := aSystem .!
+!CustomerImporter class methodsFor: 'instance creation' stamp: 'FF 6/27/2022 20:11:04'!
+from: aReadStream using: aSystem 
+	^self new initializeFrom: aReadStream using: aSystem! !
+!CustomerImporter class methodsFor: 'as yet unclassified' stamp: 'FF 6/27/2022 20:11:04' prior: 50521270!
+valueFrom: aReadStream into: aSession using: aSystem 
+
+	^(self from: aReadStream using: aSystem) value! !
+
+!methodRemoval: CustomerImporter class #from:into:using: stamp: 'FF 6/27/2022 20:11:04'!
+from: aReadStream into: aSession using: aSystem 
+	^self new initializeFrom: aReadStream using: aSystem!
+!CustomerImporter class methodsFor: 'importing' stamp: 'FF 6/27/2022 20:11:38'!
+valueFrom: aReadStream using: aSystem 
+
+	^(self from: aReadStream using: aSystem) value! !
+!ImportTest methodsFor: 'as yet unclassified' stamp: 'FF 6/27/2022 20:11:38' prior: 50521198!
+shouldFailImporting: aReadStream messageText: anErrorMessageText asserting: anAssertionBlock
+
+	self
+		should: [ CustomerImporter valueFrom: aReadStream using: system. ]
+		raise: Error - MessageNotUnderstood
+		withExceptionDo: [ :anError |
+			self assert: anErrorMessageText equals: anError messageText.
+			anAssertionBlock value ]
+
+	! !
+!ImportTest methodsFor: 'as yet unclassified' stamp: 'FF 6/27/2022 20:11:38' prior: 50521187!
+test01ValidDataIsImportedCorrectly
+
+	CustomerImporter valueFrom: self validImportData using: system..
+
+	self assertImportedRightNumberOfCustomers.
+	self assertPepeSanchezWasImportedCorrecty.
+	self assertJuanPerezWasImportedCorrectly ! !
+!ImportTest methodsFor: 'as yet unclassified' stamp: 'FF 6/27/2022 20:11:38' prior: 50521213!
+test02CanNotImportAddressWithoutCustomer
+
+	self
+		should: [ CustomerImporter valueFrom: self addressWithoutCustomerData using: system. ]
+		raise: Error - MessageNotUnderstood
+		withMessageText: CustomerImporter canNotImportAddressWithoutCustomerErrorDescription
+
+	! !
+
+!methodRemoval: CustomerImporter class #valueFrom:into:using: stamp: 'FF 6/27/2022 20:11:38'!
+valueFrom: aReadStream into: aSession using: aSystem 
+
+	^(self from: aReadStream using: aSystem) value!
+
+----SNAPSHOT----(27 June 2022 20:11:49) CuisUniversity-5301.image priorSource: 6068548!
+
+!testRun: #ImportTest #test01ValidDataIsImportedCorrectly stamp: 'FF 6/27/2022 20:11:55'!
+PASSED!
+
+!testRun: #ImportTest #test02CanNotImportAddressWithoutCustomer stamp: 'FF 6/27/2022 20:11:55'!
+PASSED!
+
+!testRun: #ImportTest #test03DoesNotImportRecordsStartingWithCButMoreCharacters stamp: 'FF 6/27/2022 20:11:55'!
+PASSED!
+
+!testRun: #ImportTest #test04DoesNotImportRecordsStartingWithAButMoreCharacters stamp: 'FF 6/27/2022 20:11:56'!
+PASSED!
+
+!testRun: #ImportTest #test05CanNotImportAddressRecordWithLessThanSixFields stamp: 'FF 6/27/2022 20:11:56'!
+PASSED!
+
+!testRun: #ImportTest #test06CanNotImportAddressRecordWithMoreThanSixFields stamp: 'FF 6/27/2022 20:11:56'!
+PASSED!
+
+!testRun: #ImportTest #test07CanNotImportCustomerRecordWithLessThanFiveFields stamp: 'FF 6/27/2022 20:11:57'!
+PASSED!
+
+!testRun: #ImportTest #test08CanNotImportCustomerRecordWithMoreThanFiveFields stamp: 'FF 6/27/2022 20:11:57'!
+PASSED!
+
+!testRun: #ImportTest #test09CannotImportEmptyLine stamp: 'FF 6/27/2022 20:11:57'!
+PASSED!
+
+Object subclass: #CustomerImporter
+	instanceVariableNames: 'readStream newCustomer line record system'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'CustomerImporter'!
+
+!classDefinition: #CustomerImporter category: 'CustomerImporter' stamp: 'FF 6/27/2022 20:12:30'!
+Object subclass: #CustomerImporter
+	instanceVariableNames: 'readStream newCustomer line record system'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'CustomerImporter'!
+
+!methodRemoval: PersistentCustomerSystem #session: stamp: 'FF 6/27/2022 20:13:09'!
+session: aSession
+	session := aSession.!
+
+!methodRemoval: PersistentCustomerSystem #session stamp: 'FF 6/27/2022 20:13:12'!
+session 
+	^session.!
+
+!classDefinition: #CustomerSystem category: 'CustomerImporter' stamp: 'FF 6/27/2022 20:14:07'!
+Object subclass: #CustomerSystem
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'CustomerImporter'!
+
+!classDefinition: #PersistentCustomerSystem category: 'CustomerImporter' stamp: 'FF 6/27/2022 20:14:07'!
+CustomerSystem subclass: #PersistentCustomerSystem
+	instanceVariableNames: 'session'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'CustomerImporter'!
+
+CustomerSystem subclass: #TransientCustomerSystem
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'CustomerImporter'!
+
+!classDefinition: #TransientCustomerSystem category: 'CustomerImporter' stamp: 'FF 6/27/2022 20:14:45'!
+CustomerSystem subclass: #TransientCustomerSystem
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'CustomerImporter'!
+
+----SNAPSHOT----(27 June 2022 20:15:00) CuisUniversity-5301.image priorSource: 6075282!
+!ImportTest methodsFor: 'setUp/tearDown' stamp: 'FF 6/27/2022 20:15:26' prior: 50520982 overrides: 16961394!
+setUp
+
+	system := TransientCustomerSystem new.
+	system start.
+	system beginTransaction.
+	
+! !
+!TransientCustomerSystem methodsFor: 'no messages' stamp: 'FF 6/27/2022 20:16:15'!
+start
+	! !
+!TransientCustomerSystem methodsFor: 'as yet unclassified' stamp: 'FF 6/27/2022 20:16:31'!
+beginTransaction
+	
+	! !
+
+!classDefinition: #TransientCustomerSystem category: 'CustomerImporter' stamp: 'FF 6/27/2022 20:17:29'!
+CustomerSystem subclass: #TransientCustomerSystem
+	instanceVariableNames: 'customer'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'CustomerImporter'!
+!TransientCustomerSystem methodsFor: 'as yet unclassified' stamp: 'FF 6/27/2022 20:17:27' prior: 50521598!
+start
+	customer := OrderedCollection new.
+	! !
+!TransientCustomerSystem methodsFor: 'as yet unclassified' stamp: 'FF 6/27/2022 20:18:06'!
+addCustomer: aNewCustomer
+	customer add: aNewCustomer.
+	! !
+!TransientCustomerSystem methodsFor: 'as yet unclassified' stamp: 'FF 6/27/2022 20:18:42'!
+numberOfCustomer
+	customer size.
+	! !
+!TransientCustomerSystem methodsFor: 'as yet unclassified' stamp: 'FF 6/27/2022 20:19:26'!
+customerWithIdentificationType: anIdType number: anIdNumber
+
+	
+	! !
+!TransientCustomerSystem methodsFor: 'as yet unclassified' stamp: 'FF 6/27/2022 20:20:32' prior: 50521630!
+customerWithIdentificationType: anIdType number: anIdNumber
+
+	^ customer
+		detect: [ :aCustomer | aCustomer identificationType = anIdType and: [ aCustomer identificationNumber = anIdNumber ]].
+	! !
+!TransientCustomerSystem methodsFor: 'as yet unclassified' stamp: 'FF 6/27/2022 20:20:47'!
+commit
+	
+	! !
+!TransientCustomerSystem methodsFor: 'as yet unclassified' stamp: 'FF 6/27/2022 20:20:58'!
+stop
+	customer := nil.
+	
+	! !
+
+!classDefinition: #TransientCustomerSystem category: 'CustomerImporter' stamp: 'FF 6/27/2022 20:21:06'!
+CustomerSystem subclass: #TransientCustomerSystem
+	instanceVariableNames: 'customers'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'CustomerImporter'!
+!TransientCustomerSystem methodsFor: 'as yet unclassified' stamp: 'FF 6/27/2022 20:21:06' prior: 50521625!
+numberOfCustomer
+	customers size.
+	! !
+!TransientCustomerSystem methodsFor: 'as yet unclassified' stamp: 'FF 6/27/2022 20:21:06' prior: 50521620!
+addCustomer: aNewCustomer
+	customers add: aNewCustomer.
+	! !
+!TransientCustomerSystem methodsFor: 'as yet unclassified' stamp: 'FF 6/27/2022 20:21:06' prior: 50521650!
+stop
+	customers := nil.
+	
+	! !
+!TransientCustomerSystem methodsFor: 'as yet unclassified' stamp: 'FF 6/27/2022 20:21:06' prior: 50521615!
+start
+	customers := OrderedCollection new.
+	! !
+!TransientCustomerSystem methodsFor: 'as yet unclassified' stamp: 'FF 6/27/2022 20:21:06' prior: 50521636!
+customerWithIdentificationType: anIdType number: anIdNumber
+
+	^ customers
+		detect: [ :aCustomer | aCustomer identificationType = anIdType and: [ aCustomer identificationNumber = anIdNumber ]].
+	! !
+
+----SNAPSHOT----(27 June 2022 20:21:24) CuisUniversity-5301.image priorSource: 6077984!
+
+!testRun: #ImportTest #test01ValidDataIsImportedCorrectly stamp: 'FF 6/27/2022 20:21:27'!
+ERROR!
+
+!testRun: #ImportTest #test02CanNotImportAddressWithoutCustomer stamp: 'FF 6/27/2022 20:21:27'!
+PASSED!
+
+!testRun: #ImportTest #test03DoesNotImportRecordsStartingWithCButMoreCharacters stamp: 'FF 6/27/2022 20:21:27'!
+ERROR!
+
+!testRun: #ImportTest #test04DoesNotImportRecordsStartingWithAButMoreCharacters stamp: 'FF 6/27/2022 20:21:27'!
+ERROR!
+
+!testRun: #ImportTest #test05CanNotImportAddressRecordWithLessThanSixFields stamp: 'FF 6/27/2022 20:21:27'!
+ERROR!
+
+!testRun: #ImportTest #test06CanNotImportAddressRecordWithMoreThanSixFields stamp: 'FF 6/27/2022 20:21:27'!
+ERROR!
+
+!testRun: #ImportTest #test07CanNotImportCustomerRecordWithLessThanFiveFields stamp: 'FF 6/27/2022 20:21:27'!
+ERROR!
+
+!testRun: #ImportTest #test08CanNotImportCustomerRecordWithMoreThanFiveFields stamp: 'FF 6/27/2022 20:21:27'!
+ERROR!
+
+!testRun: #ImportTest #test09CannotImportEmptyLine stamp: 'FF 6/27/2022 20:21:27'!
+ERROR!
+
+!testRun: #ImportTest #test01ValidDataIsImportedCorrectly stamp: 'FF 6/27/2022 20:21:51'!
+ERROR!
+
+!testRun: #ImportTest #test01ValidDataIsImportedCorrectly stamp: 'FF 6/27/2022 20:21:51'!
+ERROR!
+!TransientCustomerSystem methodsFor: 'as yet unclassified' stamp: 'FF 6/27/2022 20:22:18'!
+numberOfCustomers
+	customers size.
+	! !
+
+!methodRemoval: TransientCustomerSystem #numberOfCustomer stamp: 'FF 6/27/2022 20:22:18'!
+numberOfCustomer
+	customers size.
+	!
+
+!testRun: #ImportTest #test01ValidDataIsImportedCorrectly stamp: 'FF 6/27/2022 20:22:35'!
+FAILURE!
+
+!testRun: #ImportTest #test02CanNotImportAddressWithoutCustomer stamp: 'FF 6/27/2022 20:22:35'!
+PASSED!
+
+!testRun: #ImportTest #test03DoesNotImportRecordsStartingWithCButMoreCharacters stamp: 'FF 6/27/2022 20:22:35'!
+FAILURE!
+
+!testRun: #ImportTest #test04DoesNotImportRecordsStartingWithAButMoreCharacters stamp: 'FF 6/27/2022 20:22:35'!
+FAILURE!
+
+!testRun: #ImportTest #test05CanNotImportAddressRecordWithLessThanSixFields stamp: 'FF 6/27/2022 20:22:35'!
+FAILURE!
+
+!testRun: #ImportTest #test06CanNotImportAddressRecordWithMoreThanSixFields stamp: 'FF 6/27/2022 20:22:35'!
+FAILURE!
+
+!testRun: #ImportTest #test07CanNotImportCustomerRecordWithLessThanFiveFields stamp: 'FF 6/27/2022 20:22:35'!
+FAILURE!
+
+!testRun: #ImportTest #test08CanNotImportCustomerRecordWithMoreThanFiveFields stamp: 'FF 6/27/2022 20:22:35'!
+FAILURE!
+
+!testRun: #ImportTest #test09CannotImportEmptyLine stamp: 'FF 6/27/2022 20:22:35'!
+FAILURE!
+
+!testRun: #ImportTest #test02CanNotImportAddressWithoutCustomer stamp: 'FF 6/27/2022 20:22:53'!
+PASSED!
+
+!testRun: #ImportTest #test01ValidDataIsImportedCorrectly stamp: 'FF 6/27/2022 20:22:56'!
+FAILURE!
+
+!testRun: #ImportTest #test01ValidDataIsImportedCorrectly stamp: 'FF 6/27/2022 20:22:56'!
+FAILURE!
+!TransientCustomerSystem methodsFor: 'as yet unclassified' stamp: 'FF 6/27/2022 20:23:32' prior: 50521734!
+numberOfCustomers
+	^customers size.
+	! !
+
+!testRun: #ImportTest #test01ValidDataIsImportedCorrectly stamp: 'FF 6/27/2022 20:23:44'!
+PASSED!
+
+!testRun: #ImportTest #test02CanNotImportAddressWithoutCustomer stamp: 'FF 6/27/2022 20:23:44'!
+PASSED!
+
+!testRun: #ImportTest #test03DoesNotImportRecordsStartingWithCButMoreCharacters stamp: 'FF 6/27/2022 20:23:44'!
+PASSED!
+
+!testRun: #ImportTest #test04DoesNotImportRecordsStartingWithAButMoreCharacters stamp: 'FF 6/27/2022 20:23:44'!
+PASSED!
+
+!testRun: #ImportTest #test05CanNotImportAddressRecordWithLessThanSixFields stamp: 'FF 6/27/2022 20:23:44'!
+PASSED!
+
+!testRun: #ImportTest #test06CanNotImportAddressRecordWithMoreThanSixFields stamp: 'FF 6/27/2022 20:23:44'!
+PASSED!
+
+!testRun: #ImportTest #test07CanNotImportCustomerRecordWithLessThanFiveFields stamp: 'FF 6/27/2022 20:23:44'!
+PASSED!
+
+!testRun: #ImportTest #test08CanNotImportCustomerRecordWithMoreThanFiveFields stamp: 'FF 6/27/2022 20:23:44'!
+PASSED!
+
+!testRun: #ImportTest #test09CannotImportEmptyLine stamp: 'FF 6/27/2022 20:23:44'!
+PASSED!
+
+----SNAPSHOT----(27 June 2022 20:24:39) CuisUniversity-5301.image priorSource: 6081350!
