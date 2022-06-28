@@ -179,10 +179,10 @@ shouldFailImporting: aReadStream messageText: anErrorMessageText asserting: anAs
 	! !
 
 
-!ImportTest methodsFor: 'setUp/tearDown' stamp: 'FF 6/27/2022 20:15:26'!
+!ImportTest methodsFor: 'setUp/tearDown' stamp: 'FF 6/28/2022 17:33:21'!
 setUp
 
-	system := TransientCustomerSystem new.
+	system := Environment current createCustomerSystem.
 	system start.
 	system beginTransaction.
 	
@@ -545,6 +545,35 @@ Object subclass: #CustomerSystem
 	poolDictionaries: ''
 	category: 'CustomerImporter'!
 
+!CustomerSystem methodsFor: 'system' stamp: 'FF 6/28/2022 17:53:28'!
+beginTransaction
+	self subclassResponsibility ! !
+
+!CustomerSystem methodsFor: 'system' stamp: 'FF 6/28/2022 17:53:21'!
+commit
+	self subclassResponsibility ! !
+
+!CustomerSystem methodsFor: 'system' stamp: 'FF 6/28/2022 17:53:14'!
+start
+	self subclassResponsibility ! !
+
+!CustomerSystem methodsFor: 'system' stamp: 'FF 6/28/2022 17:53:11'!
+stop
+	self subclassResponsibility ! !
+
+
+!CustomerSystem methodsFor: 'customer' stamp: 'FF 6/28/2022 17:53:06'!
+addCustomer
+	self subclassResponsibility ! !
+
+!CustomerSystem methodsFor: 'customer' stamp: 'FF 6/28/2022 17:54:16'!
+customerWithIdentificationType: anIdType number: anIdNumber
+	self subclassResponsibility! !
+
+!CustomerSystem methodsFor: 'customer' stamp: 'FF 6/28/2022 17:53:38'!
+numberOfCustomers
+	self subclassResponsibility ! !
+
 
 !classDefinition: #PersistentCustomerSystem category: 'CustomerImporter'!
 CustomerSystem subclass: #PersistentCustomerSystem
@@ -553,36 +582,37 @@ CustomerSystem subclass: #PersistentCustomerSystem
 	poolDictionaries: ''
 	category: 'CustomerImporter'!
 
-!PersistentCustomerSystem methodsFor: 'as yet unclassified' stamp: 'FF 6/27/2022 20:08:04'!
+!PersistentCustomerSystem methodsFor: 'customer' stamp: 'FF 6/27/2022 20:08:04'!
 addCustomer: aNewCustomer
 
 	^ session persist: aNewCustomer! !
 
-!PersistentCustomerSystem methodsFor: 'as yet unclassified' stamp: 'FF 6/27/2022 19:51:14'!
-beginTransaction
-	^ session beginTransaction! !
-
-!PersistentCustomerSystem methodsFor: 'as yet unclassified' stamp: 'FF 6/27/2022 19:52:33'!
-commit
-	^ session commit! !
-
-!PersistentCustomerSystem methodsFor: 'as yet unclassified' stamp: 'FF 6/27/2022 19:57:04'!
+!PersistentCustomerSystem methodsFor: 'customer' stamp: 'FF 6/27/2022 19:57:04'!
 customerWithIdentificationType: anIdType number: anIdNumber
 
 	^ (session
 		select: [ :aCustomer | aCustomer identificationType = anIdType and: [ aCustomer identificationNumber = anIdNumber ]]
 		ofType: Customer) anyOne! !
 
-!PersistentCustomerSystem methodsFor: 'as yet unclassified' stamp: 'FF 6/27/2022 19:56:23'!
+!PersistentCustomerSystem methodsFor: 'customer' stamp: 'FF 6/27/2022 19:56:23'!
 numberOfCustomers
 
 	^ (session selectAllOfType: Customer) size! !
 
-!PersistentCustomerSystem methodsFor: 'as yet unclassified' stamp: 'FF 6/27/2022 19:49:11'!
+
+!PersistentCustomerSystem methodsFor: 'system' stamp: 'FF 6/27/2022 19:51:14'!
+beginTransaction
+	^ session beginTransaction! !
+
+!PersistentCustomerSystem methodsFor: 'system' stamp: 'FF 6/27/2022 19:52:33'!
+commit
+	^ session commit! !
+
+!PersistentCustomerSystem methodsFor: 'system' stamp: 'FF 6/27/2022 19:49:11'!
 start
 	^ session := (DataBaseSession for: (Array with: Address with: Customer))! !
 
-!PersistentCustomerSystem methodsFor: 'as yet unclassified' stamp: 'FF 6/27/2022 19:53:54'!
+!PersistentCustomerSystem methodsFor: 'system' stamp: 'FF 6/27/2022 19:53:54'!
 stop
 
 	^ session close! !
@@ -595,39 +625,40 @@ CustomerSystem subclass: #TransientCustomerSystem
 	poolDictionaries: ''
 	category: 'CustomerImporter'!
 
-!TransientCustomerSystem methodsFor: 'as yet unclassified' stamp: 'FF 6/27/2022 20:21:06'!
+!TransientCustomerSystem methodsFor: 'customer' stamp: 'FF 6/27/2022 20:21:06'!
 addCustomer: aNewCustomer
 	customers add: aNewCustomer.
 	! !
 
-!TransientCustomerSystem methodsFor: 'as yet unclassified' stamp: 'FF 6/27/2022 20:16:31'!
-beginTransaction
-	
-	! !
-
-!TransientCustomerSystem methodsFor: 'as yet unclassified' stamp: 'FF 6/27/2022 20:20:47'!
-commit
-	
-	! !
-
-!TransientCustomerSystem methodsFor: 'as yet unclassified' stamp: 'FF 6/27/2022 20:21:06'!
+!TransientCustomerSystem methodsFor: 'customer' stamp: 'FF 6/27/2022 20:21:06'!
 customerWithIdentificationType: anIdType number: anIdNumber
 
 	^ customers
 		detect: [ :aCustomer | aCustomer identificationType = anIdType and: [ aCustomer identificationNumber = anIdNumber ]].
 	! !
 
-!TransientCustomerSystem methodsFor: 'as yet unclassified' stamp: 'FF 6/27/2022 20:23:32'!
+!TransientCustomerSystem methodsFor: 'customer' stamp: 'FF 6/27/2022 20:23:32'!
 numberOfCustomers
 	^customers size.
 	! !
 
-!TransientCustomerSystem methodsFor: 'as yet unclassified' stamp: 'FF 6/27/2022 20:21:06'!
+
+!TransientCustomerSystem methodsFor: 'system' stamp: 'FF 6/27/2022 20:16:31'!
+beginTransaction
+	
+	! !
+
+!TransientCustomerSystem methodsFor: 'system' stamp: 'FF 6/27/2022 20:20:47'!
+commit
+	
+	! !
+
+!TransientCustomerSystem methodsFor: 'system' stamp: 'FF 6/27/2022 20:21:06'!
 start
 	customers := OrderedCollection new.
 	! !
 
-!TransientCustomerSystem methodsFor: 'as yet unclassified' stamp: 'FF 6/27/2022 20:21:06'!
+!TransientCustomerSystem methodsFor: 'system' stamp: 'FF 6/27/2022 20:21:06'!
 stop
 	customers := nil.
 	
@@ -732,3 +763,69 @@ DataBaseSession class
 for: aConfiguration
 
 	^self new initializeFor: aConfiguration! !
+
+
+!classDefinition: #Environment category: 'CustomerImporter'!
+Object subclass: #Environment
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'CustomerImporter'!
+
+!Environment methodsFor: 'customer system' stamp: 'FF 6/28/2022 17:47:40'!
+createCustomerSystem
+	self subclassResponsibility .! !
+
+"-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
+
+!classDefinition: 'Environment class' category: 'CustomerImporter'!
+Environment class
+	instanceVariableNames: ''!
+
+!Environment class methodsFor: 'instance creation' stamp: 'FF 6/28/2022 17:43:35'!
+current
+	 ^(self allSubclasses detect:[:aClass | aClass canHandle: (Smalltalk at: #ENV)]) new.! !
+
+
+!classDefinition: #DevelopmentEnvironment category: 'CustomerImporter'!
+Environment subclass: #DevelopmentEnvironment
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'CustomerImporter'!
+
+!DevelopmentEnvironment methodsFor: 'customer system' stamp: 'FF 6/28/2022 17:48:55'!
+createCustomerSystem
+	^TransientCustomerSystem new.! !
+
+"-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
+
+!classDefinition: 'DevelopmentEnvironment class' category: 'CustomerImporter'!
+DevelopmentEnvironment class
+	instanceVariableNames: ''!
+
+!DevelopmentEnvironment class methodsFor: 'instance creation' stamp: 'FF 6/28/2022 17:45:27'!
+canHandle: anEnvironmentVariable
+	^anEnvironmentVariable = #DEV! !
+
+
+!classDefinition: #IntegrationEnvironment category: 'CustomerImporter'!
+Environment subclass: #IntegrationEnvironment
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'CustomerImporter'!
+
+!IntegrationEnvironment methodsFor: 'customer system' stamp: 'FF 6/28/2022 17:48:33'!
+createCustomerSystem
+	^PersistentCustomerSystem new.! !
+
+"-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
+
+!classDefinition: 'IntegrationEnvironment class' category: 'CustomerImporter'!
+IntegrationEnvironment class
+	instanceVariableNames: ''!
+
+!IntegrationEnvironment class methodsFor: 'instance creation' stamp: 'FF 6/28/2022 17:46:08'!
+canHandle: anEnvironmentVariable
+	^anEnvironmentVariable = #INTR! !
